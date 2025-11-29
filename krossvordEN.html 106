@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>New Year Crossword</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 20px;
+      color: #222;
+    }
+
+    h1 {
+      color: #b22222;
+    }
+
+    .crossword {
+      display: inline-block;
+      margin: 20px auto;
+      border: 2px solid #333;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .crossword td {
+      width: 36px;
+      height: 36px;
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid #888;
+      font-weight: bold;
+      font-size: 16px;
+      background-color: #fff;
+    }
+
+    .black {
+      background-color: #000;
+    }
+
+    .legend {
+      margin: 25px auto;
+      max-width: 500px;
+      text-align: left;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .legend h2 {
+      color: #b22222;
+      text-align: center;
+    }
+
+    .legend ol {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎄 New Year Crossword 🎄</h1>
+
+  <!-- Crossword grid: 10x10 -->
+  <table class="crossword">
+    <tr>
+      <td>f</td><td>i</td><td>r</td><td>e</td><td>w</td><td>o</td><td>r</td><td>k</td><td>s</td><td class="black"></td>
+    </tr>
+    <tr>
+      <td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td>i</td><td class="black"></td>
+    </tr>
+    <tr>
+      <td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td>g</td><td class="black"></td>
+    </tr>
+    <tr>
+      <td>h</td><td>o</td><td>l</td><td>i</td><td>d</td><td>a</td><td>y</td><td class="black"></td><td>f</td><td class="black"></td>
+    </tr>
+    <tr>
+      <td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td>t</td><td class="black"></td>
+    </tr>
+    <tr>
+      <td>s</td><td class="black"></td><td class="black"></td><td class="black"></td><td>s</td><td>h</td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td>
+    </tr>
+    <tr>
+      <td>a</td><td class="black"></td><td class="black"></td><td class="black"></td><td>n</td><td>o</td><td>w</td><td>m</td><td>a</td><td>n</td>
+    </tr>
+    <tr>
+      <td>n</td><td class="black"></td><td class="black"></td><td class="black"></td><td>t</td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td>
+    </tr>
+    <tr>
+      <td>t</td><td class="black"></td><td class="black"></td><td class="black"></td><td>a</td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td>
+    </tr>
+    <tr>
+      <td>a</td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td><td class="black"></td>
+    </tr>
+  </table>
+
+  <div class="legend">
+    <h2>Words in the crossword:</h2>
+    <ol>
+      <li>Holiday</li>
+      <li>Santa</li>
+      <li>snowman</li>
+      <li>gift</li>
+      <li>fireworks</li>
+    </ol>
+  </div>
+
+</body>
+</html>
