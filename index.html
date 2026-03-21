@@ -69,5 +69,130 @@ print(results
 4               10       97.619836
       <h2> 21 марта,2026</h2>
        Точность: 100.0%=0,69
+      import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import json
+from datetime import datetime
+import os
+
+print("=" * 50)
+print("🚗 Система страхования КАСКО")
+print("=" * 50)
+
+# ============================================
+# 1. ГЕНЕРАЦИЯ ДАТАСЕТА
+# ============================================
+np.random.seed(42)
+n_samples = 2000
+
+# Входные данные
+age = np.random.randint(18, 75, n_samples)  # Возраст 18-75 лет
+driving_exp = np.random.randint(0, 50, n_samples)  # Стаж 0-50 лет
+accidents = np.random.poisson(lam=1.2, size=n_samples)  # Число ДТП
+
+# Целевая переменная (логика страхования)
+# Одобрение если: возраст >= 21 И стаж >= 2 И ДТП <= 2
+approve = np.where(
+    (age >= 21) & 
+    (driving_exp >= 2) & 
+    (accidents <= 2), 
+    1, 0
+)
+
+# Добавляем 3% шума (реальные данные не идеальны)
+noise = np.random.random(n_samples) < 0.03
+approve[noise] = 1 - approve[noise]
+
+# Создаем DataFrame
+df = pd.DataFrame({
+    'age': age,
+    'driving_experience': driving_exp,
+    'accidents': accidents,
+    'approved': approve
+})
+
+# Сохраняем датасет
+df.to_csv('kasko_dataset.csv', index=False, encoding='utf-8')
+print(f"✅ Датасет сохранен: kasko_dataset.csv")
+print(f"📊 Записей: {len(df)}")
+print(f"📈 Одобрено: {approve.sum()} ({approve.mean()*100:.1f}%)")
+
+# ============================================
+# 2. ОБУЧЕНИЕ МОДЕЛИ
+# ============================================
+X = df[['age', 'driving_experience', 'accidents']]
+y = df['approved']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = RandomForestClassifier(n_estimators=100, random_state=42, max_depth=5)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+# ============================================
+# 3. РАСЧЕТ МЕТРИК
+# ============================================
+accuracy = round(accuracy_score(y_test, y_pred) * 100, 2)
+precision = round(precision_score(y_test, y_pred) * 100, 2)
+recall = round(recall_score(y_test, y_pred) * 100, 2)
+f1 = round(f1_score(y_test, y_pred) * 100, 2)
+
+print(f"\n🎯 ТОЧНОСТЬ МОДЕЛИ: {accuracy}%")
+print(f"📋 Precision: {precision}%")
+print(f"📋 Recall: {recall}%")
+print(f"📋 F1-Score: {f1}%")
+
+# ============================================
+# 4. СОХРАНЕНИЕ ДЛЯ САЙТА
+# ============================================
+metrics = {
+    "model_name": "КАСКО Insurance Model",
+    "accuracy": accuracy,
+    "precision": precision,
+    "recall": recall,
+    "f1_score": f1,
+    "total_samples": len(df),
+    "train_size": len(X_train),
+    "test_size": len(X_test),
+    "approval_rate": round(approve.mean() * 100, 2),
+    "features": ["age", "driving_experience", "accidents"],
+    "date_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "version": "1.0"
+}
+
+with open('metrics.json', 'w', encoding='utf-8') as f:
+    json.dump(metrics, f, ensure_ascii=False, indent=4)
+
+print(f"\n💾 Метрики сохранены: metrics.json")
+
+# Сохранение модели
+import joblib
+joblib.dump(model, 'kasko_model.pkl')
+print(f"📦 Модель сохранена: kasko_model.pkl")
+print("\n✅ Обучение завершено!")
+
+==================================================
+🚗 Система страхования КАСКО
+==================================================
+✅ Датасет сохранен: kasko_dataset.csv
+📊 Записей: 2000
+📈 Одобрено: 1587 (79.3%)
+
+🎯 ТОЧНОСТЬ МОДЕЛИ: 98.5%
+📋 Precision: 98.43%
+📋 Recall: 99.68%
+📋 F1-Score: 99.05%
+
+💾 Метрики сохранены: metrics.json
+📦 Модель сохранена: kasko_model.pkl
+
+✅ Обучение завершено!
+
 </html>
 
