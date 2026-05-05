@@ -1,24 +1,24 @@
-/* ===== 🎨 CSS Variables — RED THEME ===== */
+/* ===== 🎨 CSS Variables — BLUE THEME ===== */
 :root {
-    --primary: #e63946;
-    --primary-dark: #c1121f;
-    --primary-darker: #8b0000;
-    --secondary: #ff6b6b;
-    --accent: #d90429;
+    --primary: #0077b6;        /* Насыщенный синий */
+    --primary-dark: #005f8b;   /* Тёмно-синий */
+    --primary-darker: #003d5b; /* Глубокий синий */
+    --secondary: #48cae4;      /* Светло-голубой/циан */
+    --accent: #023e8a;         /* Акцентный тёмно-синий */
     
-    --bg-body: #fff5f5;
-    --bg-card: #ffffff;
-    --bg-code: #1e1e2e;
+    --bg-body: #f0f9ff;        /* Светло-голубой фон */
+    --bg-card: #ffffff;        /* Белый для карточек */
+    --bg-code: #0f172a;        /* Тёмный для кода */
     
-    --text-primary: #1a1a1a;
-    --text-secondary: #555555;
-    --text-light: #888888;
-    --text-white: #ffffff;
+    --text-primary: #0f172a;   /* Тёмно-синий текст */
+    --text-secondary: #475569; /* Серо-синий текст */
+    --text-light: #94a3b8;     /* Светло-серый */
+    --text-white: #ffffff;     /* Белый */
     
-    --border: #ffcdd2;
-    --shadow: 0 8px 30px rgba(230, 57, 70, 0.12);
-    --shadow-lg: 0 20px 60px rgba(230, 57, 70, 0.25);
-    --shadow-glow: 0 0 30px rgba(230, 57, 70, 0.4);
+    --border: #bae6fd;         /* Светло-голубая граница */
+    --shadow: 0 8px 30px rgba(0, 119, 182, 0.12);
+    --shadow-lg: 0 20px 60px rgba(0, 119, 182, 0.25);
+    --shadow-glow: 0 0 30px rgba(72, 202, 228, 0.4);
     
     --radius: 20px;
     --radius-sm: 12px;
@@ -28,15 +28,16 @@
     --font-code: 'Fira Code', monospace;
 }
 
-/* ===== 🌙 Dark Mode ===== */
+/* ===== 🌙 Dark Mode — Синяя тема ===== */
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-body: #0f0505;
-        --bg-card: #1a0a0a;
-        --text-primary: #fff5f5;
-        --text-secondary: #ffe0e0;
-        --text-light: #ffcdd2;
-        --border: #5c2a2a;
+        --bg-body: #0a1929;
+        --bg-card: #112240;
+        --bg-code: #0a1929;
+        --text-primary: #e6f1ff;
+        --text-secondary: #a8dadc;
+        --text-light: #8ecae6;
+        --border: #1e3a5f;
         --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     }
 }
@@ -58,7 +59,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ===== ✨ Анимированный фон ===== */
+/* ===== ✨ Анимированный фон — ГОЛУБЫЕ частицы ===== */
 .bg-animation {
     position: fixed;
     top: 0;
@@ -74,10 +75,11 @@ body {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: var(--primary);
+    background: var(--secondary);
     border-radius: 50%;
-    opacity: 0.3;
+    opacity: 0.4;
     animation: float 15s infinite ease-in-out;
+    box-shadow: 0 0 10px var(--secondary);
 }
 
 .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
@@ -87,11 +89,11 @@ body {
 .particle:nth-child(5) { top: 10%; left: 60%; animation-delay: 3s; }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-    50% { transform: translateY(-30px) translateX(20px); opacity: 0.6; }
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+    50% { transform: translateY(-30px) translateX(20px); opacity: 0.8; }
 }
 
-/* ===== 🧭 Header ===== */
+/* ===== 🧭 Header — Синий градиент ===== */
 .header {
     position: fixed;
     top: 0;
@@ -104,7 +106,10 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-    .header { background: rgba(26, 10, 10, 0.95); }
+    .header { 
+        background: rgba(10, 25, 41, 0.95); 
+        border-bottom-color: var(--secondary);
+    }
 }
 
 .nav {
@@ -125,7 +130,11 @@ body {
     color: var(--primary);
 }
 
-.logo i { font-size: 1.6rem; animation: pulse 2s infinite; }
+.logo i { 
+    font-size: 1.6rem; 
+    animation: pulse 2s infinite;
+    color: var(--secondary);
+}
 
 .nav-links {
     display: flex;
@@ -147,14 +156,14 @@ body {
 }
 
 .nav-links a:hover, .nav-links a.active {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     transform: translateY(-2px);
     box-shadow: var(--shadow);
 }
 
 .btn-email {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
     color: white !important;
     box-shadow: var(--shadow);
 }
@@ -174,7 +183,7 @@ body {
     padding: 0.5rem;
 }
 
-/* ===== 🦸 Hero Section ===== */
+/* ===== 🦸 Hero Section — СИНИЙ ГРАДИЕНТ ===== */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -182,7 +191,7 @@ body {
     justify-content: center;
     text-align: center;
     padding: 6rem 2rem 4rem;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 40%, var(--primary-darker) 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 40%, var(--primary-darker) 100%);
     position: relative;
     overflow: hidden;
 }
@@ -214,7 +223,7 @@ body {
 }
 
 .glow {
-    background: linear-gradient(135deg, #fff, #ffe0e0);
+    background: linear-gradient(135deg, #fff, #bae6fd);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -228,7 +237,7 @@ body {
 
 .pulse {
     animation: pulse 1.5s ease-in-out infinite;
-    color: #ff6b6b;
+    color: var(--secondary);
 }
 
 @keyframes pulse {
@@ -273,7 +282,7 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 15px 40px rgba(0, 119, 182, 0.4);
 }
 
 .btn-outline {
@@ -305,7 +314,7 @@ body {
     60% { transform: translateY(-10px); }
 }
 
-/* ===== 🔶 Плавающие фигуры ===== */
+/* ===== 🔷 Плавающие фигуры — ГОЛУБЫЕ ===== */
 .hero-shapes {
     position: absolute;
     width: 100%;
@@ -356,7 +365,7 @@ body {
     border-radius: 2px;
 }
 
-/* ===== 📝 Post Cards ===== */
+/* ===== 📝 Post Cards — Синие акценты ===== */
 .posts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -389,7 +398,7 @@ body {
 
 .post-card.featured {
     border-color: var(--primary);
-    background: linear-gradient(135deg, rgba(230,57,70,0.08), rgba(193,18,31,0.08));
+    background: linear-gradient(135deg, rgba(0,119,182,0.08), rgba(2,62,138,0.08));
 }
 
 .featured-badge {
@@ -432,14 +441,15 @@ body {
     gap: 0.3rem;
 }
 
-.post-category.crypto { background: rgba(108,92,231,0.15); color: #6c5ce7; }
-.post-category.tools { background: rgba(255,107,107,0.15); color: #c1121f; }
-.post-category.ml { background: rgba(230,57,70,0.15); color: var(--primary); }
-.post-category.data { background: rgba(0,184,148,0.15); color: #00b894; }
-.post-category.bot { background: rgba(253,121,168,0.15); color: #fd79a8; }
-.post-category.holiday { background: rgba(255,159,67,0.15); color: #ff9f43; }
-.post-category.ai { background: rgba(155,89,182,0.15); color: #9b59b6; }
-.post-category.db { background: rgba(52,152,219,0.15); color: #3498db; }
+/* Цвета категорий — голубая палитра */
+.post-category.crypto { background: rgba(0,119,182,0.15); color: var(--primary); }
+.post-category.tools { background: rgba(72,202,228,0.15); color: var(--secondary); }
+.post-category.ml { background: rgba(0,119,182,0.15); color: var(--primary); }
+.post-category.data { background: rgba(2,62,138,0.15); color: var(--accent); }
+.post-category.bot { background: rgba(72,202,228,0.15); color: var(--secondary); }
+.post-category.holiday { background: rgba(0,119,182,0.15); color: var(--primary); }
+.post-category.ai { background: rgba(2,62,138,0.15); color: var(--accent); }
+.post-category.db { background: rgba(0,119,182,0.15); color: var(--primary); }
 
 .post-card h3 {
     font-size: 1.35rem;
@@ -455,13 +465,13 @@ body {
     font-size: 0.95rem;
 }
 
-/* ===== 💻 Code Box ===== */
+/* ===== 💻 Code Box — Тёмный с голубыми акцентами ===== */
 .code-box {
     background: var(--bg-code);
     border-radius: var(--radius-sm);
     margin: 1rem 0;
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(72,202,228,0.2);
 }
 
 .code-header {
@@ -469,14 +479,14 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.8rem 1rem;
-    background: rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(72,202,228,0.1);
+    border-bottom: 1px solid rgba(72,202,228,0.2);
 }
 
 .code-dot { width: 12px; height: 12px; border-radius: 50%; }
-.code-dot.red { background: #ff5f57; }
-.code-dot.yellow { background: #ffbd2e; }
-.code-dot.green { background: #28ca41; }
+.code-dot.red { background: #ff6b9d; }
+.code-dot.yellow { background: #ffd93d; }
+.code-dot.green { background: #6bcb77; }
 
 .code-lang {
     margin-left: auto;
@@ -494,11 +504,11 @@ body {
 .code-box code {
     font-family: var(--font-code);
     font-size: 0.85rem;
-    color: #f8f8f2;
+    color: #a8dadc;
     line-height: 1.6;
 }
 
-/* ===== 📋 Code List ===== */
+/* ===== 📋 Code List — Голубые элементы ===== */
 .code-list {
     list-style: none;
     margin: 1rem 0;
@@ -511,7 +521,7 @@ body {
     border-radius: var(--radius-sm);
     margin: 0.4rem 0;
     font-size: 0.9rem;
-    border-left: 3px solid var(--primary);
+    border-left: 3px solid var(--secondary);
     transition: var(--transition);
 }
 
@@ -521,7 +531,7 @@ body {
     transform: translateX(5px);
 }
 
-/* ===== 📊 Metrics ===== */
+/* ===== 📊 Metrics — Синие цифры ===== */
 .metrics {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -532,7 +542,7 @@ body {
 .metric-card {
     text-align: center;
     padding: 1rem;
-    background: rgba(255,255,255,0.1);
+    background: rgba(0,119,182,0.1);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
 }
@@ -550,7 +560,7 @@ body {
     color: var(--text-secondary);
 }
 
-/* ===== 📈 Progress Bar ===== */
+/* ===== 📈 Progress Bar — Голубой градиент ===== */
 .progress-bar {
     margin: 1.2rem 0;
 }
@@ -584,7 +594,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(72,202,228,0.4), transparent);
     animation: shimmer 2s infinite;
 }
 
@@ -600,7 +610,7 @@ body {
     margin-top: 0.3rem;
 }
 
-/* ===== 💬 Chat Demo ===== */
+/* ===== 💬 Chat Demo — Синие пузыри ===== */
 .chat-demo {
     background: var(--bg-secondary);
     border-radius: var(--radius-sm);
@@ -654,12 +664,12 @@ body {
     margin-top: 0.2rem;
 }
 
-/* ===== 💭 Quote Box ===== */
+/* ===== 💭 Quote Box — Голубой акцент ===== */
 .quote-box {
-    border-left: 4px solid var(--primary);
+    border-left: 4px solid var(--secondary);
     padding: 1rem 1.5rem;
     margin: 1rem 0;
-    background: var(--bg-secondary);
+    background: rgba(72,202,228,0.1);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
@@ -673,7 +683,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* ===== 🖼️ Post Image ===== */
+/* ===== 🖼️ Post Image — Синяя рамка ===== */
 .post-image {
     margin: 1rem 0;
     text-align: center;
@@ -691,9 +701,10 @@ body {
 .post-image img:hover {
     transform: scale(1.03);
     box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
-/* ===== 🔗 Links & Tags ===== */
+/* ===== 🔗 Links & Tags — Голубые ссылки ===== */
 .link-arrow {
     color: var(--primary);
     text-decoration: none;
@@ -706,7 +717,7 @@ body {
 
 .link-arrow:hover {
     gap: 0.8rem;
-    color: var(--primary-dark);
+    color: var(--accent);
 }
 
 .read-more {
@@ -722,7 +733,7 @@ body {
 
 .read-more:hover {
     gap: 0.6rem;
-    color: var(--primary-dark);
+    color: var(--accent);
 }
 
 .post-footer {
@@ -731,7 +742,7 @@ body {
     border-top: 1px dashed var(--border);
 }
 
-/* ===== 🏷️ Tech Tags ===== */
+/* ===== 🏷️ Tech Tags — Синие теги ===== */
 .tech-tags {
     display: flex;
     flex-wrap: wrap;
@@ -741,14 +752,14 @@ body {
 
 .tech-tag {
     padding: 0.3rem 0.8rem;
-    background: var(--bg-secondary);
+    background: rgba(0,119,182,0.1);
     border-radius: 50px;
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--primary);
     border: 1px solid var(--border);
 }
 
-/* ===== 📋 Expandable ===== */
+/* ===== 📋 Expandable — Голубой акцент ===== */
 .expandable {
     margin: 0.8rem 0;
 }
@@ -774,13 +785,13 @@ body {
     border-left: 2px solid var(--border);
 }
 
-/* ===== 📥 Download Button ===== */
+/* ===== 📥 Download Button — Синяя кнопка ===== */
 .btn-download {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
     padding: 0.6rem 1.2rem;
-    background: var(--bg-secondary);
+    background: rgba(0,119,182,0.1);
     color: var(--primary);
     text-decoration: none;
     border-radius: 50px;
@@ -797,7 +808,7 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* ===== 📁 File Links ===== */
+/* ===== 📁 File Links — Голубые ссылки на файлы ===== */
 .file-links {
     display: flex;
     flex-wrap: wrap;
@@ -810,8 +821,8 @@ body {
     align-items: center;
     gap: 0.3rem;
     padding: 0.4rem 0.9rem;
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
+    background: rgba(0,119,182,0.1);
+    color: var(--primary);
     text-decoration: none;
     border-radius: 8px;
     font-size: 0.85rem;
@@ -825,9 +836,9 @@ body {
     border-color: var(--primary);
 }
 
-/* ===== 👤 About Section ===== */
+/* ===== 👤 About Section — Синяя тема ===== */
 .about-section {
-    background: var(--bg-secondary);
+    background: rgba(0,119,182,0.05);
     padding: 5rem 0;
     border-top: 3px solid var(--primary);
     border-bottom: 3px solid var(--primary);
@@ -848,7 +859,7 @@ body {
     width: 130px;
     height: 130px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, var(--primary), var(--accent));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -876,7 +887,7 @@ body {
     align-items: center;
     gap: 0.4rem;
     padding: 0.5rem 1rem;
-    background: var(--bg-secondary);
+    background: rgba(0,119,182,0.1);
     border-radius: 50px;
     font-size: 0.9rem;
     margin: 1rem 0;
@@ -907,18 +918,18 @@ body {
     border: 2px solid var(--border);
 }
 
-.social-btn.github { background: #333; color: white; border-color: #333; }
-.social-btn.github:hover { background: #24292e; transform: translateY(-3px); }
+.social-btn.github { background: #1a1a2e; color: white; border-color: #16213e; }
+.social-btn.github:hover { background: #0f3460; transform: translateY(-3px); }
 
 .social-btn.email { background: var(--primary); color: white; border-color: var(--primary); }
-.social-btn.email:hover { background: var(--primary-dark); transform: translateY(-3px); }
+.social-btn.email:hover { background: var(--accent); transform: translateY(-3px); }
 
-.social-btn.friend { background: var(--bg-secondary); color: var(--text-primary); }
+.social-btn.friend { background: rgba(0,119,182,0.1); color: var(--primary); border-color: var(--border); }
 .social-btn.friend:hover { background: var(--primary); color: white; transform: translateY(-3px); }
 
-/* ===== 🦶 Footer ===== */
+/* ===== 🦶 Footer — Тёмно-синий градиент ===== */
 .footer {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
+    background: linear-gradient(135deg, var(--accent), var(--primary-darker));
     color: white;
     padding: 4rem 0 2.5rem;
 }
@@ -937,7 +948,7 @@ body {
     margin-bottom: 1rem;
 }
 
-.footer-logo i { animation: pulse 2s infinite; }
+.footer-logo i { animation: pulse 2s infinite; color: var(--secondary); }
 
 .footer-quote {
     font-style: italic;
@@ -966,8 +977,9 @@ body {
 
 .footer-links a:hover {
     opacity: 1;
-    color: #ffe0e0;
+    color: var(--secondary);
     transform: translateY(-2px);
+    text-shadow: 0 0 15px rgba(72,202,228,0.5);
 }
 
 .copyright {
@@ -978,7 +990,7 @@ body {
     border-top: 1px solid rgba(255,255,255,0.2);
 }
 
-/* ===== 📱 Responsive ===== */
+/* ===== 📱 Responsive — Адаптивность ===== */
 @media (max-width: 768px) {
     .nav-links {
         position: fixed;
@@ -1015,7 +1027,7 @@ body {
     .footer-links { flex-direction: column; gap: 1rem; }
 }
 
-/* ===== ✨ Animations ===== */
+/* ===== ✨ Animations — Анимации ===== */
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
@@ -1030,7 +1042,7 @@ body {
     animation: fadeInUp 0.6s ease forwards;
 }
 
-/* ===== 🔥 Hover Effects ===== */
+/* ===== 💙 Hover Effects — Голубые эффекты при наведении ===== */
 .post-card::before {
     content: '';
     position: absolute;
@@ -1054,3 +1066,84 @@ body {
     0% { background-position: 0% 50%; }
     100% { background-position: 200% 50%; }
 }
+
+/* ===== 🌊 Дополнительные эффекты — ВОЛНЫ ===== */
+@keyframes wave {
+    0% { transform: translateX(0) translateZ(0) scaleY(1); }
+    50% { transform: translateX(-25%) translateZ(0) scaleY(0.85); }
+    100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+}
+
+/* Эффект свечения для кнопок */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(72,202,228,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
+}
+
+/* ===== 🎯 Эффект параллакса для частиц ===== */
+@media (min-width: 768px) {
+    .particle {
+        will-change: transform;
+    }
+}
+
+/* ===== 💫 Эффект "дыхания" для аватара ===== */
+.about-avatar {
+    animation: pulse 3s ease-in-out infinite, breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% { box-shadow: var(--shadow-lg); }
+    50% { box-shadow: 0 0 40px rgba(72,202,228,0.5); }
+}
+
+/* ===== ✨ Эффект появления текста ===== */
+.hero h1, .hero p, .hero-buttons {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.hero p { animation-delay: 0.2s; opacity: 0; }
+.hero-buttons { animation-delay: 0.4s; opacity: 0; }
+
+/* ===== 🌟 Эффект звёзд для фона (опционально) ===== */
+/* Раскомментируйте, если хотите добавить звёзды на фон */
+/*
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.3), transparent);
+    background-size: 200px 200px;
+    animation: twinkle 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+*/
