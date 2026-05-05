@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Мой блог | София</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Подключение стилей -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <!-- Шапка сайта -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-feather-alt"></i>
+                <span>Блог Софии</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home"><i class="fas fa-home"></i> Главная</a></li>
+                <li><a href="#posts"><i class="fas fa-newspaper"></i> Записи</a></li>
+                <li><a href="#about"><i class="fas fa-user"></i> Обо мне</a></li>
+                <li><a href="mailto:sofi.vasilek100@mail.ru" class="btn-contact"><i class="fas fa-envelope"></i> Написать</a></li>
+            </ul>
+            <button class="mobile-toggle" aria-label="Меню">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Герой-секция -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Привет! Я <span class="highlight">София</span> 👋</h1>
+            <p>Добро пожаловать в мой цифровой уголок. Здесь я делюсь мыслями, проектами и открытиями в мире технологий.</p>
+            <div class="hero-buttons">
+                <a href="#posts" class="btn btn-primary"><i class="fas fa-arrow-down"></i> Читать записи</a>
+                <a href="mailto:sofi.vasilek100@mail.ru" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Связаться</a>
+            </div>
+        </div>
+        <div class="hero-decoration">
+            <div class="floating-icon"><i class="fas fa-code"></i></div>
+            <div class="floating-icon"><i class="fas fa-lightbulb"></i></div>
+            <div class="floating-icon"><i class="fas fa-rocket"></i></div>
+        </div>
+    </section>
+
+    <!-- Блог-посты -->
+    <main id="posts" class="container">
+        <h2 class="section-title"><i class="fas fa-feather"></i> Последние записи</h2>
+        
+        <div class="posts-grid">
+
+            <!-- Пост 1 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-01-20">20 января 2026</time>
+                </div>
+                <h3>🔐 Криптография: Открытый и закрытый ключи</h3>
+                <div class="code-block">
+                    <pre><code>Открытый ключ: (n,e) = (33, 3)
+Закрытый ключ: (n,d) = (33, 7)
+
+⚠️ Реальное n:
+15234897610293847561029384756102938475610293847561029384756...
+                    </code></pre>
+                </div>
+                <p class="post-excerpt">Изучаем основы асимметричного шифрования на примере RSA.</p>
+                <span class="post-tag tag-crypto"><i class="fas fa-lock"></i> Криптография</span>
+            </article>
+
+            <!-- Пост 2 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-01-19">19 января 2026</time>
+                </div>
+                <h3>🍊 Генератор кодовых слов</h3>
+                <ul class="code-list">
+                    <li><code>АПЕЛЬСИН-САЦЬНВЩЮ-17</code></li>
+                    <li><code>АБРИКОС-ЫЬЛГЕЙМ-27</code></li>
+                    <li><code>ФХНЗКЧ-ПРИВЕТ-5</code></li>
+                    <li><code>ЦЩЕБФ-ВЕСНА-20</code></li>
+                    <li><code>Васильева-МКЫТХЖПМК-10</code></li>
+                </ul>
+                <p class="post-excerpt">Система генерации уникальных идентификаторов для проектов.</p>
+                <span class="post-tag tag-tools"><i class="fas fa-cog"></i> Инструменты</span>
+            </article>
+
+            <!-- Пост 3 -->
+            <article class="post-card featured">
+                <div class="post-badge">✨ Популярное</div>
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-03-21">21 марта 2026</time>
+                </div>
+                <h3>🚗 Система страхования КАСКО: Машинное обучение</h3>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-value">98.5%</span>
+                        <span class="metric-label">Точность</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">99.05%</span>
+                        <span class="metric-label">F1-Score</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">2000</span>
+                        <span class="metric-label">Записей</span>
+                    </div>
+                </div>
+                <p class="post-excerpt">Модель одобрения страховых заявок с высокой точностью. Датасет: <code>kasko_dataset.csv</code></p>
+                <span class="post-tag tag-ml"><i class="fas fa-brain"></i> Machine Learning</span>
+            </article>
+
+            <!-- Пост 4 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-03-16">16 марта 2026</time>
+                </div>
+                <h3>📊 Прогноз успеваемости студентов</h3>
+                <div class="code-block">
+                    <pre><code>new_student = pd.DataFrame({'Часы': [5]})
+prediction = regressor.predict(new_student)
+print(f"Прогноз баллов: {prediction[0]:.2f}")
+
+# Результаты:
+Часы подготовки  Прогноз баллов
+1                12.32
+3                31.28
+5                50.23 ✨
+7                69.19
+10               97.62
+                    </code></pre>
+                </div>
+                <p class="post-excerpt">Линейная регрессия для предсказания результатов экзамена.</p>
+                <span class="post-tag tag-data"><i class="fas fa-chart-line"></i> Data Science</span>
+            </article>
+
+            <!-- Пост 5 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-02-25">25 февраля 2026</time>
+                </div>
+                <h3>🤖 FAQ-бот: Обработка запросов</h3>
+                <div class="chat-preview">
+                    <div class="chat-message user">
+                        <i class="fas fa-user"></i>
+                        <p>Сколько ждать мой заказ?</p>
+                    </div>
+                    <div class="chat-message bot">
+                        <i class="fas fa-robot"></i>
+                        <p>Наш стандартный срок доставки — 3–5 рабочих дней. <small>(sim=0.706)</small></p>
+                    </div>
+                </div>
+                <p class="post-excerpt">Реализация бота для автоматических ответов на частые вопросы.</p>
+                <span class="post-tag tag-bot"><i class="fas fa-robot"></i> Chatbot</span>
+            </article>
+
+            <!-- Пост 6 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2025-12-01">1 декабря 2025</time>
+                </div>
+                <h3>🎄 Поздравление с Новым 2026 годом!</h3>
+                <blockquote class="quote">
+                    <i class="fas fa-quote-left"></i>
+                    <p>Путешествие в тысячу миль начинается с одного шага.</p>
+                    <cite>— Лао Цзы</cite>
+                </blockquote>
+                <div class="post-media">
+                    <img src="Icons/tree.png" alt="Новогодняя ёлка" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3081/3081988.png'">
+                </div>
+                <p><a href="Congratulations2026.html" class="link-arrow">Читать поздравление →</a></p>
+                <span class="post-tag tag-holiday"><i class="fas fa-gift"></i> Праздник</span>
+            </article>
+
+            <!-- Пост 7 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-01-20">20 января 2026</time>
+                </div>
+                <h3>🗄️ Проект: База данных</h3>
+                <p class="post-excerpt">Схема и документация проекта по проектированию реляционной базы данных.</p>
+                <a href="pac.png" class="btn btn-small" download>
+                    <i class="fas fa-download"></i> Скачать схему
+                </a>
+                <span class="post-tag tag-db"><i class="fas fa-database"></i> Базы данных</span>
+            </article>
+
+            <!-- Пост 8 -->
+            <article class="post-card">
+                <div class="post-date">
+                    <i class="far fa-calendar"></i>
+                    <time datetime="2026-01-20">20 января 2026</time>
+                </div>
+                <h3>🧠 Нейронные сети простыми словами</h3>
+                <p class="post-excerpt">Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов, каждый из которых ищет свой паттерн в данных.</p>
+                <details class="post-details">
+                    <summary><i class="fas fa-plus-circle"></i> Читать подробнее</summary>
+                    <p>Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше, позволяя сети описывать сложные зависимости. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза.</p>
+                </details>
+                <span class="post-tag tag-ai"><i class="fas fa-brain"></i> Искусственный интеллект</span>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- Секция "Обо мне" -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-user-circle"></i> Обо мне</h2>
+            <div class="about-card">
+                <div class="about-avatar">
+                    <i class="fas fa-user-astronaut"></i>
+                </div>
+                <div class="about-content">
+                    <h3>София Васильева</h3>
+                    <p class="about-role"><i class="fas fa-graduation-cap"></i> Студент | Исследователь | Разработчик</p>
+                    <p>Оставляю в прошлом скучную локальную файловую систему ради Всемирной паутины. 🌐</p>
+                    <div class="about-links">
+                        <a href="https://github.com/Sofia-a-cell" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="mailto:sofi.vasilek100@mail.ru" class="social-link">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                    </div>
+                    <p class="domain-note">
+                        <i class="fas fa-globe"></i>
+                        Домен: <code>Sofia-a-cell.github.io</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 <strong>Блог Софии</strong>. Все права защищены.</p>
+                <p class="footer-quote">«Путешествие в тысячу миль начинается с одного шага» — Лао Цзы</p>
+                <div class="footer-links">
+                    <a href="#home">Наверх ↑</a>
+                    <a href="https://github.com/OLYAKL/dem.github.io" target="_blank">Сайт друга</a>
+                    <a href
