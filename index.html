@@ -1,412 +1,1056 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Блог Софьи | Технологии и код</title>
+/* ===== 🎨 CSS Variables — RED THEME ===== */
+:root {
+    --primary: #e63946;
+    --primary-dark: #c1121f;
+    --primary-darker: #8b0000;
+    --secondary: #ff6b6b;
+    --accent: #d90429;
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    --bg-body: #fff5f5;
+    --bg-card: #ffffff;
+    --bg-code: #1e1e2e;
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    --text-primary: #1a1a1a;
+    --text-secondary: #555555;
+    --text-light: #888888;
+    --text-white: #ffffff;
     
-    <!-- Стили -->
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    --border: #ffcdd2;
+    --shadow: 0 8px 30px rgba(230, 57, 70, 0.12);
+    --shadow-lg: 0 20px 60px rgba(230, 57, 70, 0.25);
+    --shadow-glow: 0 0 30px rgba(230, 57, 70, 0.4);
+    
+    --radius: 20px;
+    --radius-sm: 12px;
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    --font-main: 'Montserrat', sans-serif;
+    --font-code: 'Fira Code', monospace;
+}
 
-    <!-- Анимированный фон -->
-    <div class="bg-animation">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
+/* ===== 🌙 Dark Mode ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-body: #0f0505;
+        --bg-card: #1a0a0a;
+        --text-primary: #fff5f5;
+        --text-secondary: #ffe0e0;
+        --text-light: #ffcdd2;
+        --border: #5c2a2a;
+        --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+}
 
-    <!-- Шапка -->
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">
-                <i class="fas fa-fire"></i>
-                <span>Блог Софьи</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home" class="active"><i class="fas fa-home"></i> Главная</a></li>
-                <li><a href="#posts"><i class="fas fa-newspaper"></i> Записи</a></li>
-                <li><a href="#about"><i class="fas fa-user"></i> Обо мне</a></li>
-                <li><a href="mailto:sofi.vasilek100@mail.ru" class="btn-email"><i class="fas fa-envelope"></i> Написать</a></li>
-            </ul>
-            <button class="mobile-toggle"><i class="fas fa-bars"></i></button>
-        </nav>
-    </header>
+/* ===== 🔄 Reset & Base ===== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    <!-- Герой -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">✨ Новый дизайн</div>
-            <h1>Привет! Я <span class="glow">Софья</span> <i class="fas fa-heart pulse"></i></h1>
-            <p>Добро пожаловать в мой цифровой уголок. Здесь я делюсь кодом, идеями и открытиями в мире технологий.</p>
-            <div class="hero-buttons">
-                <a href="#posts" class="btn btn-primary">
-                    <i class="fas fa-arrow-down"></i> Читать записи
-                </a>
-                <a href="mailto:sofi.vasilek100@mail.ru" class="btn btn-outline">
-                    <i class="fas fa-paper-plane"></i> Связаться
-                </a>
-            </div>
-            <div class="scroll-indicator">
-                <i class="fas fa-chevron-down bounce"></i>
-            </div>
-        </div>
-        <div class="hero-shapes">
-            <div class="shape shape-1"><i class="fas fa-code"></i></div>
-            <div class="shape shape-2"><i class="fas fa-brain"></i></div>
-            <div class="shape shape-3"><i class="fas fa-rocket"></i></div>
-        </div>
-    </section>
+html { scroll-behavior: smooth; }
 
-    <!-- Посты -->
-    <main id="posts" class="container">
-        <h2 class="section-title">
-            <i class="fas fa-feather-alt"></i>
-            Последние записи
-            <span class="title-underline"></span>
-        </h2>
+body {
+    font-family: var(--font-main);
+    line-height: 1.7;
+    color: var(--text-primary);
+    background: var(--bg-body);
+    overflow-x: hidden;
+}
 
-        <div class="posts-grid">
+/* ===== ✨ Анимированный фон ===== */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
 
-            <!-- Пост: Криптография -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 20 января 2026</span>
-                    <span class="post-category crypto"><i class="fas fa-lock"></i> Криптография</span>
-                </div>
-                <h3>🔐 RSA: Открытый и закрытый ключи</h3>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span class="code-dot red"></span>
-                        <span class="code-dot yellow"></span>
-                        <span class="code-dot green"></span>
-                        <span class="code-lang">keys.txt</span>
-                    </div>
-                    <pre><code>Открытый ключ:  (n,e) = (33, 3)
-Закрытый ключ:  (n,d) = (33, 7)
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 15s infinite ease-in-out;
+}
 
-⚠️ Реальное n (256 бит):
-152348976102938475610293847561029384756...
-                    </code></pre>
-                </div>
-                <p class="post-excerpt">Изучаем основы асимметричного шифрования на примере алгоритма RSA.</p>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+.particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; width: 10px; height: 10px; }
+.particle:nth-child(3) { top: 40%; left: 40%; animation-delay: 4s; }
+.particle:nth-child(4) { top: 80%; left: 20%; animation-delay: 1s; width: 8px; height: 8px; }
+.particle:nth-child(5) { top: 10%; left: 60%; animation-delay: 3s; }
 
-            <!-- Пост: Генератор кодов -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 19 января 2026</span>
-                    <span class="post-category tools"><i class="fas fa-cog"></i> Инструменты</span>
-                </div>
-                <h3>🍊 Генератор уникальных кодов</h3>
-                <ul class="code-list">
-                    <li><code>АПЕЛЬСИН-САЦЬНВЩЮ-17</code></li>
-                    <li><code>АБРИКОС-ЫЬЛГЕЙМ-27</code></li>
-                    <li><code>ФХНЗКЧ-ПРИВЕТ-5</code></li>
-                    <li><code>ЦЩЕБФ-ВЕСНА-20</code></li>
-                    <li><code>Васильева-МКЫТХЖПМК-10</code></li>
-                </ul>
-                <p class="post-excerpt">Система генерации безопасных идентификаторов для проектов и тестирования.</p>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+    50% { transform: translateY(-30px) translateX(20px); opacity: 0.6; }
+}
 
-            <!-- Пост: КАСКО (выделенный) -->
-            <article class="post-card featured reveal">
-                <div class="featured-badge"><i class="fas fa-star"></i> Популярное</div>
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 21 марта 2026</span>
-                    <span class="post-category ml"><i class="fas fa-brain"></i> Machine Learning</span>
-                </div>
-                <h3>🚗 Система страхования КАСКО</h3>
-                
-                <div class="metrics">
-                    <div class="metric-card">
-                        <span class="metric-value" data-value="98.5">0</span>%
-                        <span class="metric-label">Точность</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value" data-value="99.05">0</span>%
-                        <span class="metric-label">F1-Score</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value" data-value="2000">0</span>
-                        <span class="metric-label">Записей</span>
-                    </div>
-                </div>
+/* ===== 🧭 Header ===== */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 2px solid var(--primary);
+    z-index: 1000;
+    transition: var(--transition);
+}
 
-                <div class="progress-bar">
-                    <span class="progress-label">Одобрено заявок</span>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width: 79.3%"></div>
-                    </div>
-                    <span class="progress-value">79.3% (1587/2000)</span>
-                </div>
+@media (prefers-color-scheme: dark) {
+    .header { background: rgba(26, 10, 10, 0.95); }
+}
 
-                <p class="post-excerpt">Модель машинного обучения для автоматического одобрения страховых заявок.</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">scikit-learn</span>
-                    <span class="tech-tag">pandas</span>
-                </div>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+.nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-            <!-- Пост: Прогноз успеваемости -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 16 марта 2026</span>
-                    <span class="post-category data"><i class="fas fa-chart-line"></i> Data Science</span>
-                </div>
-                <h3>📊 Прогноз баллов студентов</h3>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
-                        <span class="code-lang">prediction.py</span>
-                    </div>
-                    <pre><code>new_student = pd.DataFrame({'Часы': [5]})
-prediction = regressor.predict(new_student)
-print(f"Прогноз: {prediction[0]:.2f} баллов")
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+}
 
-# Результаты модели:
-Часы  │ Прогноз
-──────┼────────
-  1   │   12.32
-  3   │   31.28
-  5   │   50.23 ✨
-  7   │   69.19
- 10   │   97.62
-                    </code></pre>
-                </div>
-                <p class="post-excerpt">Линейная регрессия для предсказания результатов экзамена по часам подготовки.</p>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+.logo i { font-size: 1.6rem; animation: pulse 2s infinite; }
 
-            <!-- Пост: FAQ-бот -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 25 февраля 2026</span>
-                    <span class="post-category bot"><i class="fas fa-robot"></i> Chatbot</span>
-                </div>
-                <h3>🤖 FAQ-бот: Умные ответы</h3>
-                <div class="chat-demo">
-                    <div class="chat-bubble user">
-                        <i class="fas fa-user"></i>
-                        <p>Сколько ждать мой заказ?</p>
-                    </div>
-                    <div class="chat-bubble bot">
-                        <i class="fas fa-robot"></i>
-                        <p>Наш стандартный срок доставки — 3–5 рабочих дней. <small>(similarity: 0.706)</small></p>
-                    </div>
-                </div>
-                <p class="post-excerpt">Реализация бота для автоматических ответов на частые вопросы клиентов.</p>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    align-items: center;
+}
 
-            <!-- Пост: Новый год -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 1 декабря 2025</span>
-                    <span class="post-category holiday"><i class="fas fa-gift"></i> Праздник</span>
-                </div>
-                <h3>🎄 С Новым 2026 годом!</h3>
-                <blockquote class="quote-box">
-                    <i class="fas fa-quote-left"></i>
-                    <p>Путешествие в тысячу миль начинается с одного шага.</p>
-                    <cite>— Лао Цзы</cite>
-                </blockquote>
-                <div class="post-image">
-                    <img src="Icons/tree.png" alt="Ёлка" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3081/3081988.png'">
-                </div>
-                <p><a href="Congratulations2026.html" class="link-arrow">Читать поздравление <i class="fas fa-arrow-right"></i></a></p>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+.nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 50px;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
 
-            <!-- Пост: Нейросети -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 20 января 2026</span>
-                    <span class="post-category ai"><i class="fas fa-brain"></i> AI</span>
-                </div>
-                <h3>🧠 Нейронные сети просто</h3>
-                <p class="post-excerpt">Если линейная регрессия — формула, а дерево решений — вопросы «если/то», то нейросеть — команда экспертов, ищущих паттерны в данных.</p>
-                <details class="expandable">
-                    <summary><i class="fas fa-plus-circle"></i> Читать подробнее</summary>
-                    <p>Каждый нейрон взвешивает признаки, применяет нелинейную функцию активации и передаёт результат дальше. Обучаясь, сеть настраивает веса, минимизируя ошибку прогноза.</p>
-                </details>
-                <div class="post-footer">
-                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+.nav-links a:hover, .nav-links a.active {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
 
-            <!-- Пост: База данных -->
-            <article class="post-card reveal">
-                <div class="post-header">
-                    <span class="post-date"><i class="far fa-calendar"></i> 20 января 2026</span>
-                    <span class="post-category db"><i class="fas fa-database"></i> БД</span>
-                </div>
-                <h3>🗄️ Проект: Реляционная БД</h3>
-                <p class="post-excerpt">Схема и документация проекта по проектированию базы данных для учебного портала.</p>
-                <a href="pac.png" class="btn-download" download>
-                    <i class="fas fa-download"></i> Скачать схему (PNG)
-                </a>
-                <div class="file-links">
-                    <a href="106С таблица.ods" class="file-link"><i class="fas fa-file-excel"></i> Таблица 1</a>
-                    <a href="таблица 2.ods" class="file-link"><i class="fas fa-file-excel"></i> Таблица 2</a>
-                    <a href="Таблица106CS.ods" class="file-link"><i class="fas fa-file-excel"></i> Таблица 3</a>
-                </div>
-            </article>
+.btn-email {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+    color: white !important;
+    box-shadow: var(--shadow);
+}
 
-        </div>
-    </main>
+.btn-email:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
 
-    <!-- Обо мне -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <h2 class="section-title">
-                <i class="fas fa-user-astronaut"></i>
-                Обо мне
-                <span class="title-underline"></span>
-            </h2>
-            <div class="about-card reveal">
-                <div class="about-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="about-content">
-                    <h3>Софья Васильева</h3>
-                    <p class="about-role"><i class="fas fa-graduation-cap"></i> Студент • Разработчик • Исследователь</p>
-                    <p>Оставляю в прошлом скучную локальную файловую систему ради Всемирной паутины. 🌐</p>
-                    <p class="domain-badge">
-                        <i class="fas fa-globe"></i>
-                        <code>Sofia-a-cell.github.io</code>
-                    </p>
-                    <div class="social-links">
-                        <a href="https://github.com/Sofia-a-cell" target="_blank" class="social-btn github">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                        <a href="mailto:sofi.vasilek100@mail.ru" class="social-btn email">
-                            <i class="fas fa-envelope"></i> Email
-                        </a>
-                        <a href="https://github.com/OLYAKL/dem.github.io" target="_blank" class="social-btn friend">
-                            <i class="fas fa-user-friends"></i> Сайт друга
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+}
 
-    <!-- Футер -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-fire"></i>
-                    <span>Блог Софьи</span>
-                </div>
-                <p class="footer-quote">«Путешествие в тысячу миль начинается с одного шага» — Лао Цзы</p>
-                <div class="footer-links">
-                    <a href="#home"><i class="fas fa-arrow-up"></i> Наверх</a>
-                    <a href="#posts"><i class="fas fa-newspaper"></i> Записи</a>
-                    <a href="#about"><i class="fas fa-user"></i> Контакты</a>
-                </div>
-                <p class="copyright">&copy; 2026 <strong>Софья Васильева</strong>. Все права защищены.</p>
-            </div>
-        </div>
-    </footer>
+/* ===== 🦸 Hero Section ===== */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 40%, var(--primary-darker) 100%);
+    position: relative;
+    overflow: hidden;
+}
 
-    <!-- Скрипты -->
-    <script>
-        // Мобильное меню
-        document.querySelector('.mobile-toggle')?.addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-            this.querySelector('i').classList.toggle('fa-bars');
-            this.querySelector('i').classList.toggle('fa-times');
-        });
+.hero-content {
+    max-width: 750px;
+    z-index: 2;
+    animation: fadeInUp 1s ease;
+}
 
-        // Плавная прокрутка
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    document.querySelector('.nav-links')?.classList.remove('active');
-                }
-            });
-        });
+.hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
 
-        // Анимация появления при скролле
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealOnScroll = () => {
-            revealElements.forEach(el => {
-                const elTop = el.getBoundingClientRect().top;
-                if (elTop < window.innerHeight - 100) {
-                    el.classList.add('revealed');
-                }
-            });
-        };
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Проверить при загрузке
+.hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    line-height: 1.1;
+    color: white;
+}
 
-        // Анимация счётчиков метрик
-        const animateValue = (el, start, end, duration) => {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const value = Math.floor(progress * (end - start) + start);
-                el.textContent = value.toFixed(el.dataset.decimals || 0);
-                if (progress < 1) window.requestAnimationFrame(step);
-            };
-            window.requestAnimationFrame(step);
-        };
+.glow {
+    background: linear-gradient(135deg, #fff, #ffe0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2.5s ease-in-out infinite alternate;
+}
 
-        // Запуск анимации метрик при появлении
-        const metrics = document.querySelectorAll('.metric-value');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const end = parseFloat(el.dataset.value);
-                    animateValue(el, 0, end, 2000);
-                    observer.unobserve(el);
-                }
-            });
-        }, { threshold: 0.5 });
-        metrics.forEach(m => observer.observe(m));
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+    to { text-shadow: 0 0 40px rgba(255,255,255,0.9), 0 0 60px var(--secondary); }
+}
 
-        // Эффект параллакса для частиц фона
-        document.addEventListener('mousemove', (e) => {
-            const particles = document.querySelectorAll('.particle');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            particles.forEach((p, i) => {
-                const speed = (i + 1) * 20;
-                p.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
-            });
-        });
-    </script>
-</body>
-</html>
+.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+    color: #ff6b6b;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: white;
+    color: var(--primary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: var(--primary);
+    transform: translateY(-4px);
+}
+
+.scroll-indicator {
+    margin-top: 2rem;
+    animation: bounce 2s infinite;
+}
+
+.scroll-indicator i {
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-15px); }
+    60% { transform: translateY(-10px); }
+}
+
+/* ===== 🔶 Плавающие фигуры ===== */
+.hero-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    font-size: 3rem;
+    color: rgba(255,255,255,0.1);
+    animation: floatShape 8s ease-in-out infinite;
+}
+
+.shape-1 { top: 15%; left: 10%; animation-delay: 0s; }
+.shape-2 { top: 70%; right: 15%; animation-delay: 2s; font-size: 4rem; }
+.shape-3 { bottom: 20%; left: 20%; animation-delay: 4s; }
+
+@keyframes floatShape {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-25px) rotate(10deg); }
+}
+
+/* ===== 📦 Container ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 5rem 0 2.5rem;
+    text-align: center;
+    position: relative;
+    color: var(--text-primary);
+}
+
+.section-title i { color: var(--primary); margin-right: 0.5rem; }
+
+.title-underline {
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    margin: 0.8rem auto 0;
+    border-radius: 2px;
+}
+
+/* ===== 📝 Post Cards ===== */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.8rem;
+    margin-bottom: 5rem;
+}
+
+.post-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 2px solid transparent;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.post-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.post-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.post-card.featured {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, rgba(230,57,70,0.08), rgba(193,18,31,0.08));
+}
+
+.featured-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.post-date {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.post-category {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 50px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.post-category.crypto { background: rgba(108,92,231,0.15); color: #6c5ce7; }
+.post-category.tools { background: rgba(255,107,107,0.15); color: #c1121f; }
+.post-category.ml { background: rgba(230,57,70,0.15); color: var(--primary); }
+.post-category.data { background: rgba(0,184,148,0.15); color: #00b894; }
+.post-category.bot { background: rgba(253,121,168,0.15); color: #fd79a8; }
+.post-category.holiday { background: rgba(255,159,67,0.15); color: #ff9f43; }
+.post-category.ai { background: rgba(155,89,182,0.15); color: #9b59b6; }
+.post-category.db { background: rgba(52,152,219,0.15); color: #3498db; }
+
+.post-card h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+}
+
+.post-excerpt {
+    color: var(--text-secondary);
+    margin: 1rem 0;
+    font-size: 0.95rem;
+}
+
+/* ===== 💻 Code Box ===== */
+.code-box {
+    background: var(--bg-code);
+    border-radius: var(--radius-sm);
+    margin: 1rem 0;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.code-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.code-dot { width: 12px; height: 12px; border-radius: 50%; }
+.code-dot.red { background: #ff5f57; }
+.code-dot.yellow { background: #ffbd2e; }
+.code-dot.green { background: #28ca41; }
+
+.code-lang {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-family: var(--font-code);
+}
+
+.code-box pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.code-box code {
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    color: #f8f8f2;
+    line-height: 1.6;
+}
+
+/* ===== 📋 Code List ===== */
+.code-list {
+    list-style: none;
+    margin: 1rem 0;
+}
+
+.code-list li {
+    font-family: var(--font-code);
+    background: var(--bg-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    margin: 0.4rem 0;
+    font-size: 0.9rem;
+    border-left: 3px solid var(--primary);
+    transition: var(--transition);
+}
+
+.code-list li:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateX(5px);
+}
+
+/* ===== 📊 Metrics ===== */
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.2rem 0;
+}
+
+.metric-card {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+.metric-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* ===== 📈 Progress Bar ===== */
+.progress-bar {
+    margin: 1.2rem 0;
+}
+
+.progress-label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: var(--text-secondary);
+}
+
+.progress-track {
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 5px;
+    transition: width 1.5s ease-out;
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-value {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.3rem;
+}
+
+/* ===== 💬 Chat Demo ===== */
+.chat-demo {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+}
+
+.chat-bubble {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 0.6rem 0;
+    max-width: 90%;
+}
+
+.chat-bubble.user {
+    margin-left: auto;
+    flex-direction: row-reverse;
+}
+
+.chat-bubble i {
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+    color: var(--primary);
+}
+
+.chat-bubble p {
+    padding: 0.6rem 1rem;
+    border-radius: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.chat-bubble.user p {
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: 0.4rem;
+}
+
+.chat-bubble.bot p {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 0.4rem;
+}
+
+.chat-bubble small {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: 0.2rem;
+}
+
+/* ===== 💭 Quote Box ===== */
+.quote-box {
+    border-left: 4px solid var(--primary);
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    background: var(--bg-secondary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.quote-box p {
+    font-style: italic;
+    margin-bottom: 0.4rem;
+}
+
+.quote-box cite {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ===== 🖼️ Post Image ===== */
+.post-image {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.post-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    border: 3px solid var(--border);
+    transition: var(--transition);
+}
+
+.post-image img:hover {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ===== 🔗 Links & Tags ===== */
+.link-arrow {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition);
+}
+
+.link-arrow:hover {
+    gap: 0.8rem;
+    color: var(--primary-dark);
+}
+
+.read-more {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.read-more:hover {
+    gap: 0.6rem;
+    color: var(--primary-dark);
+}
+
+.post-footer {
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+}
+
+/* ===== 🏷️ Tech Tags ===== */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.tech-tag {
+    padding: 0.3rem 0.8rem;
+    background: var(--bg-secondary);
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+/* ===== 📋 Expandable ===== */
+.expandable {
+    margin: 0.8rem 0;
+}
+
+.expandable summary {
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: 500;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+}
+
+.expandable summary::-webkit-details-marker { display: none; }
+
+.expandable p {
+    margin-top: 0.8rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--border);
+}
+
+/* ===== 📥 Download Button ===== */
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--bg-secondary);
+    color: var(--primary);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 500;
+    margin: 0.8rem 0;
+    transition: var(--transition);
+    border: 2px solid var(--border);
+}
+
+.btn-download:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* ===== 📁 File Links ===== */
+.file-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.file-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+.file-link:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* ===== 👤 About Section ===== */
+.about-section {
+    background: var(--bg-secondary);
+    padding: 5rem 0;
+    border-top: 3px solid var(--primary);
+    border-bottom: 3px solid var(--primary);
+}
+
+.about-card {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border);
+}
+
+.about-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-lg);
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.about-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+}
+
+.about-role {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.domain-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+}
+
+.domain-badge code {
+    font-family: var(--font-code);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.social-links {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.3rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    border: 2px solid var(--border);
+}
+
+.social-btn.github { background: #333; color: white; border-color: #333; }
+.social-btn.github:hover { background: #24292e; transform: translateY(-3px); }
+
+.social-btn.email { background: var(--primary); color: white; border-color: var(--primary); }
+.social-btn.email:hover { background: var(--primary-dark); transform: translateY(-3px); }
+
+.social-btn.friend { background: var(--bg-secondary); color: var(--text-primary); }
+.social-btn.friend:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+
+/* ===== 🦶 Footer ===== */
+.footer {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
+    color: white;
+    padding: 4rem 0 2.5rem;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-logo i { animation: pulse 2s infinite; }
+
+.footer-quote {
+    font-style: italic;
+    opacity: 0.9;
+    margin: 1.5rem 0;
+    font-size: 1.1rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.9;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: #ffe0e0;
+    transform: translateY(-2px);
+}
+
+.copyright {
+    opacity: 0.8;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ===== 📱 Responsive ===== */
+@media (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: var(--bg-card);
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 0.5rem;
+        border-bottom: 2px solid var(--primary);
+        transform: translateY(-150%);
+        transition: var(--transition);
+        z-index: 999;
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .nav-links.active { transform: translateY(0); }
+    
+    .mobile-toggle { display: block; }
+    
+    .hero { padding-top: 5rem; }
+    
+    .hero-buttons { flex-direction: column; align-items: center; }
+    
+    .posts-grid { grid-template-columns: 1fr; }
+    
+    .metrics { grid-template-columns: 1fr; }
+    
+    .about-card { flex-direction: column; text-align: center; }
+    
+    .social-links { justify-content: center; }
+    
+    .footer-links { flex-direction: column; gap: 1rem; }
+}
+
+/* ===== ✨ Animations ===== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.reveal {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ===== 🔥 Hover Effects ===== */
+.post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+    background-size: 200% 100%;
+    border-radius: var(--radius) var(--radius) 0 0;
+    transition: var(--transition);
+    opacity: 0;
+}
+
+.post-card:hover::before {
+    opacity: 1;
+    animation: gradientMove 2s linear infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
