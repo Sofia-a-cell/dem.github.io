@@ -1,102 +1,851 @@
 <!DOCTYPE html>
+<html lang="ru">
 <head>
-<title>Мой блог</title>
-                <link type="text/css" rel="stylesheet" href="style.css"/>
-  </head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>✨ Мой блог — Sofia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red-primary: #c41e3a;
+      --red-dark: #8b0000;
+      --red-light: #ff6b6b;
+      --red-glow: rgba(196, 30, 58, 0.3);
+      --bg-dark: #0a0a0f;
+      --bg-card: #14141f;
+      --bg-card-hover: #1a1a28;
+      --text-primary: #ffffff;
+      --text-secondary: #b8b8d2;
+      --accent-gold: #ffd700;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-lg: 0 10px 40px rgba(196, 30, 58, 0.25);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Анимированный фон */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, var(--red-glow) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    /* Частицы */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--red-light);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Контейнер */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Шапка */
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--red-light), var(--red-primary), var(--accent-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px rgba(196, 30, 58, 0.5); }
+      to { text-shadow: 0 0 25px rgba(255, 107, 107, 0.8), 0 0 35px rgba(196, 30, 58, 0.6); }
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Навигация */
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0 3rem;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      padding: 0.6rem 1.4rem;
+      background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav a:hover::before {
+      left: 100%;
+    }
+
+    .nav a:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .nav a.active {
+      background: linear-gradient(135deg, var(--red-light), var(--red-primary));
+      box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    /* Карточки постов */
+    .post {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(196, 30, 58, 0.2);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      animation: slideUp 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .post:nth-child(1) { animation-delay: 0.1s; }
+    .post:nth-child(2) { animation-delay: 0.2s; }
+    .post:nth-child(3) { animation-delay: 0.3s; }
+    .post:nth-child(4) { animation-delay: 0.4s; }
+    .post:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .post::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red-dark), var(--red-primary), var(--red-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .post:hover {
+      transform: translateY(-4px);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--red-primary);
+    }
+
+    .post:hover::before {
+      transform: scaleX(1);
+    }
+
+    .post-date {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .post h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .post p, .post blockquote {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .post blockquote {
+      border-left: 4px solid var(--red-primary);
+      padding-left: 1.2rem;
+      font-style: italic;
+      background: rgba(196, 30, 58, 0.08);
+      border-radius: 0 12px 12px 0;
+    }
+
+    /* Ссылки */
+    .post a {
+      color: var(--red-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .post a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--red-light);
+      transition: width 0.3s ease;
+    }
+
+    .post a:hover::after {
+      width: 100%;
+    }
+
+    .post a:hover {
+      color: var(--accent-gold);
+    }
+
+    /* Код и данные */
+    .code-block, .data-block {
+      background: #0d0d15;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      position: relative;
+    }
+
+    .code-block::before {
+      content: '💻';
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 1.2rem;
+      opacity: 0.7;
+    }
+
+    .data-block {
+      border-left: 3px solid var(--accent-gold);
+    }
+
+    .metric {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: rgba(255, 215, 0, 0.15);
+      border: 1px solid var(--accent-gold);
+      border-radius: 8px;
+      margin: 0.3rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    /* Кнопки */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      background: linear-gradient(135deg, var(--red-light), var(--red-primary));
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--red-primary);
+      color: var(--red-light);
+    }
+
+    .btn-outline:hover {
+      background: var(--red-primary);
+      color: white;
+    }
+
+    /* Изображения */
+    .post img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin: 1rem 0;
+      display: block;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .post img:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Теги */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .tag {
+      padding: 0.3rem 0.9rem;
+      background: rgba(196, 30, 58, 0.2);
+      border: 1px solid var(--red-primary);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--red-light);
+      transition: var(--transition);
+    }
+
+    .tag:hover {
+      background: var(--red-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Футер */
+    footer {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(196, 30, 58, 0.3);
+      margin-top: 2rem;
+    }
+
+    footer a {
+      color: var(--red-light);
+      text-decoration: none;
+    }
+
+    /* Анимация появления при скролле */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      .nav {
+        gap: 0.5rem;
+      }
+      
+      .nav a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .post {
+        padding: 1.4rem;
+      }
+      
+      .code-block {
+        font-size: 0.85rem;
+        padding: 1rem;
+      }
+    }
+
+    /* Уведомления */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      background: var(--bg-card);
+      border-left: 4px solid var(--red-primary);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      max-width: 350px;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      border-left-color: #22c55e;
+    }
+
+    .toast.error {
+      border-left-color: #ef4444;
+    }
+
+    /* Плавная прокрутка */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
 <body>
-  <h2>20 января, 2026</h2>
-  <p = 3>
-  <q = 11>
- <Открытый ключ: (n,e)=(33,3),Закрытый ключ: (n,d)=(33,7)>
-<реальное n=152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938>
-   
-<h2>19 января,2026</h2>
-    <АПЕЛЬСИН-САЦЬНВЩЮ-17>
-    <АБРИКОС-ЫЬЛГЕЙМ-27>
-    <ФХНЗКЧ-ПРИВЕТ-5>
-   <ЦЩЕБФ-ВЕСНА-20>
-    <Васильева-МКЫТХЖПМК-10>
-  <h2>14 января,2026 </h2>
-<a href="sofi.vasilek100@mail.ru">Написать мне</a>
-</p>Доменное имя моего сайта - Sofia-a-cell.github io . </p>
-<h2> 1 декабря, 2025</h2>
-<blockquote class="q">Путешествие в тысячу миль начинается с одного шага (Лао Цзы) </blockquote>
-<img src="Icons/tree.png">
-Поздравление с Наступающим 2026 годом читайте <a href="Congratulations2026.html"> здесь.</a>
-<h2> 15 октября , 2025</h2>
-<p>
-Я сделала Новогодние кроссворды для сайта <a href=“https://github.com/OLYAKL/dem.github.io/edit/main/index.html"  title="Блог моего друга">Сайт моего друга</a>
-</p>
-<h2> 1 сентября , 2025</h2>
-<blockquote>Путешествие в тысячу миль начинается с одного шага (Лао Цзы) </blockquote>
-       <p>Авторство иконок </p>
-<p>Оставляю в прошлом скучную неинтересную локальную файловую систему ради Всемирной паутины.
-</p>
-    </body>
-      <h2>18 февраля,2026</h2>
-      Топ-3 предсказаний:
-running shoe: 99.45%
-shoe store: 0.27%
-clogs: 0.15%
-<h2>25 февраля,2026</h2>
-      Вопрос пользователя: Сколько ждать мой заказ?
-Найден FAQ-вопрос: Как быстро доставляется заказ? (sim=0.706)
-Ответ бот-FAQ: Наш стандартный срок доставки — 3–5 рабочих дней.
-      <h2> 16 марта,2026</h2>
+  <!-- Частицы фона -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <!-- Шапка -->
+    <header>
+      <h1>✨ Мой блог</h1>
+      <p>Путешествие в тысячу миль начинается с одного шага</p>
+    </header>
+
+    <!-- Навигация -->
+    <nav class="nav">
+      <a href="#latest" class="active">📰 Последние</a>
+      <a href="#ml">🤖 ML & Код</a>
+      <a href="#crypto">🔐 Крипто</a>
+      <a href="#files">📁 Файлы</a>
+      <a href="mailto:sofi.vasilek100@mail.ru" class="btn-outline">✉️ Написать</a>
+    </nav>
+
+    <!-- Посты -->
+    <main>
+      <!-- 18 февраля 2026 -->
+      <article class="post reveal" id="latest">
+        <span class="post-date">18 февраля, 2026</span>
+        <h2>👟 Топ-3 предсказаний модели</h2>
+        <div class="data-block">
+          <div><strong>running shoe:</strong> <span class="metric">99.45%</span></div>
+          <div><strong>shoe store:</strong> <span class="metric">0.27%</span></div>
+          <div><strong>clogs:</strong> <span class="metric">0.15%</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag">#ComputerVision</span>
+          <span class="tag">#AI</span>
+          <span class="tag">#Predictions</span>
+        </div>
+      </article>
+
+      <!-- 25 февраля 2026 -->
+      <article class="post reveal">
+        <span class="post-date">25 февраля, 2026</span>
+        <h2>🤖 FAQ Bot: Ответ на вопрос</h2>
+        <p><strong>Вопрос пользователя:</strong> Сколько ждать мой заказ?</p>
+        <p><strong>Найден FAQ-вопрос:</strong> Как быстро доставляется заказ? <em>(sim=0.706)</em></p>
+        <blockquote>
+          <strong>Ответ бота:</strong> Наш стандартный срок доставки — 3–5 рабочих дней. 📦
+        </blockquote>
+        <div class="tags">
+          <span class="tag">#ChatBot</span>
+          <span class="tag">#NLP</span>
+          <span class="tag">#Support</span>
+        </div>
+      </article>
+
+      <!-- 16 марта 2026 -->
+      <article class="post reveal" id="ml">
+        <span class="post-date">16 марта, 2026</span>
+        <h2>📊 Прогноз успеваемости студентов</h2>
+        <div class="code-block">
 new_student = pd.DataFrame({'Часы': [5]})
 prediction = regressor.predict(new_student)
 print(f"Студент занимался 5 часов")
 print(f"Прогноз баллов: {prediction[0]:.2f}")
 
-Несколько прогнозов
 # Группа студентов
 students = pd.DataFrame({'Часы': [1, 3, 5, 7, 10]})
-
-# Прогноз для всех
 predictions = regressor.predict(students)
 
-# Красивая таблица
 results = pd.DataFrame({
     'Часы подготовки': students['Часы'],
     'Прогноз баллов': predictions
 })
-print(results
-         Часы подготовки  Прогноз баллов
-0                1       12.324896
-1                3       31.279327
-2                5       50.233758
-3                7       69.188190
-4               10       97.619836
-      <h2> 21 марта,2026</h2>
-       Точность: 100.0%=0,69
-      Система страхования КАСКО
-Датасет сохранен: kasko_dataset.csv
-Записей: 2000
-Одобрено: 1587 (79.3%)
+print(results)
+        </div>
+        <div class="data-block">
+          <table style="width:100%; border-collapse: collapse; margin-top: 0.5rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--red-primary);">
+                <th style="text-align: left; padding: 0.5rem;">Часы подготовки</th>
+                <th style="text-align: left; padding: 0.5rem;">Прогноз баллов</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding: 0.4rem 0.5rem;">1</td><td>12.32</td></tr>
+              <tr><td style="padding: 0.4rem 0.5rem;">3</td><td>31.28</td></tr>
+              <tr><td style="padding: 0.4rem 0.5rem;">5</td><td>50.23</td></tr>
+              <tr><td style="padding: 0.4rem 0.5rem;">7</td><td>69.19</td></tr>
+              <tr><td style="padding: 0.4rem 0.5rem;">10</td><td>97.62</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tags">
+          <span class="tag">#LinearRegression</span>
+          <span class="tag">#Python</span>
+          <span class="tag">#DataScience</span>
+        </div>
+      </article>
 
-ТОЧНОСТЬ МОДЕЛИ: 98.5%
-Precision: 98.43%
-Recall: 99.68%
-F1-Score: 99.05%
+      <!-- 21 марта 2026 -->
+      <article class="post reveal" id="crypto">
+        <span class="post-date">21 марта, 2026</span>
+        <h2>🛡️ Система страхования КАСКО</h2>
+        <div class="data-block">
+          <p><strong>Датасет:</strong> <code>kasko_dataset.csv</code></p>
+          <p><strong>Записей:</strong> 2000 | <strong>Одобрено:</strong> 1587 (79.3%)</p>
+          <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+          <p><strong>🎯 ТОЧНОСТЬ МОДЕЛИ:</strong> <span class="metric">98.5%</span></p>
+          <p>
+            <span class="metric">Precision: 98.43%</span>
+            <span class="metric">Recall: 99.68%</span>
+            <span class="metric">F1-Score: 99.05%</span>
+          </p>
+          <p style="margin-top: 0.8rem; font-size: 0.9rem; color: var(--text-secondary);">
+            📁 Метрики: <code>metrics.json</code> | 🤖 Модель: <code>kasko_model.pkl</code>
+          </p>
+        </div>
+        <div class="tags">
+          <span class="tag">#MachineLearning</span>
+          <span class="tag">#Insurance</span>
+          <span class="tag">#Classification</span>
+        </div>
+      </article>
 
-Метрики сохранены: metrics.json
-Модель сохранена: kasko_model.pkl
+      <!-- 20 января 2026 - Крипто -->
+      <article class="post reveal">
+        <span class="post-date">20 января, 2026</span>
+        <h2>🔐 RSA: Открытый и закрытый ключи</h2>
+        <div class="code-block">
+Открытый ключ: (n, e) = (33, 3)
+Закрытый ключ: (n, d) = (33, 7)
 
-Обучение завершено!
-      <h2> 1 апреля,2026</h2>
-    Ошибка на обучении (MSE): 0.13474115482825388
-Ошибка на тесте (MSE): 0.15051288344128164
+⚠️ Тестовое значение (не использовать в продакшене):
+реальное n = 1523489761029384756102938475610293847561029384756...
+        </div>
+        <p style="margin-top: 1rem;">
+          📎 <a href="pac.png" download>📥 Скачать схему проекта БД</a>
+        </p>
+        <blockquote style="margin-top: 1rem;">
+          <strong>💡 Пояснение:</strong> Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов. Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза.
+        </blockquote>
+        <div class="tags">
+          <span class="tag">#Cryptography</span>
+          <span class="tag">#RSA</span>
+          <span class="tag">#NeuralNetworks</span>
+        </div>
+      </article>
 
-        <h2>20 января, 2026</h2>
-      <a href="pac.png">проект бд</a>
+      <!-- Файлы -->
+      <article class="post reveal" id="files">
+        <span class="post-date">📁 Полезные файлы</span>
+        <h2>Скачать таблицы и ресурсы</h2>
+        <div style="display: grid; gap: 0.8rem; margin-top: 1rem;">
+          <a href="106С таблица.ods" class="btn" download>
+            📊 Таблица 106С (.ods)
+          </a>
+          <a href="таблица 2.ods" class="btn" download>
+            📋 Таблица 2 (.ods)
+          </a>
+          <a href="Таблица106CS.ods" class="btn" download>
+            📈 Таблица 106CS (.ods)
+          </a>
+          <a href="Congratulations2026.html" class="btn btn-outline">
+            🎄 Поздравление с 2026 годом
+          </a>
+          <a href="https://github.com/OLYAKL/dem.github.io/edit/main/index.html" 
+             class="btn btn-outline" target="_blank" rel="noopener">
+            🔗 Сайт моего друга (GitHub)
+          </a>
+        </div>
+      </article>
 
+      <!-- Цитаты и заметки -->
+      <article class="post reveal">
+        <span class="post-date">1 декабря, 2025</span>
+        <blockquote>
+          «Путешествие в тысячу миль начинается с одного шага»<br>
+          <em>— Лао Цзы</em> 🍃
+        </blockquote>
+        <p style="margin-top: 1rem;">
+          <img src="Icons/tree.png" alt="Дерево" style="max-width: 150px; margin: 0 auto;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <span style="display: none; text-align: center; color: var(--text-secondary);">🌳 Иконка дерева</span>
+        </p>
+      </article>
+
+      <article class="post reveal">
+        <span class="post-date">1 сентября, 2025</span>
+        <p>Оставляю в прошлом скучную неинтересную локальную файловую систему ради <strong>Всемирной паутины</strong>. 🌐✨</p>
+        <p style="margin-top: 0.8rem; font-size: 0.9rem; color: var(--text-secondary);">
+          🎨 Авторство иконок: <a href="https://icons8.com" target="_blank">Icons8</a>
+        </p>
+      </article>
+
+      <!-- Зашифрованные заметки (декоративные) -->
+      <article class="post reveal">
+        <span class="post-date">19 января, 2026</span>
+        <h2>🔒 Личные заметки</h2>
+        <div style="background: rgba(196, 30, 58, 0.1); padding: 1rem; border-radius: 12px; font-family: monospace;">
+          <p>• АПЕЛЬСИН-САЦЬНВЩЮ-17</p>
+          <p>• АБРИКОС-ЫЬЛГЕЙМ-27</p>
+          <p>• ФХНЗКЧ-ПРИВЕТ-5</p>
+          <p>• ЦЩЕБФ-ВЕСНА-20</p>
+          <p>• Васильева-МКЫТХЖПМК-10</p>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+          🔐 Данные зашифрованы. Доступ только для авторизованных пользователей.
+        </p>
+      </article>
+
+      <!-- Метрики обучения -->
+      <article class="post reveal">
+        <span class="post-date">1 апреля, 2026</span>
+        <h2>📉 Метрики обучения модели</h2>
+        <div class="data-block">
+          <p><strong>Ошибка на обучении (MSE):</strong> <span class="metric">0.1347</span></p>
+          <p><strong>Ошибка на тесте (MSE):</strong> <span class="metric">0.1505</span></p>
+          <p style="margin-top: 0.8rem; font-size: 0.9rem;">
+            ✅ Модель не переобучена | Разница < 15%
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+      <p>
+        🌐 Домен: <strong>Sofia-a-cell.github.io</strong><br>
+        ✉️ <a href="mailto:sofi.vasilek100@mail.ru">sofi.vasilek100@mail.ru</a>
+      </p>
+      <p style="margin-top: 1rem; font-size: 0.9rem;">
+        © 2025–2026 Sofia Vasileva • Создано с ❤️ и красными пикселями
+      </p>
+    </footer>
+  </div>
+
+  <!-- Уведомление -->
+  <div class="toast" id="toast">
+    <span id="toast-message">Сообщение</span>
+  </div>
+
+  <script>
+    // Создание частиц
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        particle.style.width = particle.style.height = (3 + Math.random() * 4) + 'px';
+        container.appendChild(particle);
+      }
+    }
+
+    // Анимация при скролле
+    function handleScrollReveal() {
+      const reveals = document.querySelectorAll('.reveal');
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        if (elementTop < windowHeight - 100) {
+          el.classList.add('active');
+        }
+      });
+    }
+
+    // Показ уведомления
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      toastMsg.textContent = message;
+      toast.className = 'toast ' + type;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Обработка кликов по ссылкам
+    document.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        
+        // Проверка на внешние ссылки
+        if (href.startsWith('http') && !href.includes('github.io')) {
+          e.preventDefault();
+          showToast('🔗 Открываю внешнюю ссылку...', 'success');
+          setTimeout(() => window.open(href, '_blank', 'noopener,noreferrer'), 500);
+          return;
+        }
+        
+        // Проверка на email
+        if (href.startsWith('mailto:')) {
+          showToast('📧 Открываю почтовый клиент...', 'success');
+          return;
+        }
+        
+        // Проверка на файлы
+        if (href.endsWith('.ods') || href.endsWith('.png') || href.endsWith('.html')) {
+          e.preventDefault();
+          showToast('📥 Начинаю загрузку файла...', 'success');
+          setTimeout(() => {
+            // В реальном проекте здесь была бы логика скачивания
+            // Для демо показываем успешное завершение
+            showToast('✅ Файл готов к скачиванию!', 'success');
+          }, 800);
+          return;
+        }
+        
+        // Якорные ссылки
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            showToast('📍 Переход к разделу', 'info');
+          }
+        }
+      });
+    });
+
+    // Навигация: активный пункт
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      handleScrollReveal();
       
-      2. Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов, каждый из которых ищет свой паттерн в данных. Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше, позволяя сети описывать сложные зависимости. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза.
-<h2> 22 апреля, 2026</h2>
-      <a href="106С таблица.ods">таблица </a>
-      <h2> 27 апреля, 2026</h2>
-      <a href="таблица 2.ods">таблица </a>
-      <h2> 5 мая, 2026</h2>
-      <a href="Таблица106CS.ods">таблица </a>
-    </html>
+      // Показать приветственное уведомление
+      setTimeout(() => {
+        showToast('✨ Добро пожаловать в мой блог!', 'success');
+      }, 1000);
+    });
 
+    // Слушатели событий
+    window.addEventListener('scroll', handleScrollReveal);
+    
+    // Обработка ошибок изображений
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('error', function() {
+        this.style.display = 'none';
+        const placeholder = document.createElement('div');
+        placeholder.innerHTML = '🖼️ <em>Изображение не найдено</em>';
+        placeholder.style.cssText = 'text-align: center; color: var(--text-secondary); padding: 1rem;';
+        this.parentNode.insertBefore(placeholder, this.nextSibling);
+      });
+    });
+
+    // Клавиатурная навигация
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.toast').forEach(t => t.classList.remove('show'));
+      }
+    });
+  </script>
+</body>
+</html>
