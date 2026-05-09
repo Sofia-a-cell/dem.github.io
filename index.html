@@ -1,224 +1,1047 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>💙 Мой блог — Sofia</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --blue-primary: #3b82f6;
-      --blue-dark: #1e40af;
-      --blue-light: #60a5fa;
-      --blue-glow: rgba(59, 130, 246, 0.3);
-      --cyan-accent: #06b6d4;
-      --bg-dark: #0f172a;
-      --bg-card: #1e293b;
-      --bg-card-hover: #334155;
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --accent-gold: #fbbf24;
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-      --shadow-lg: 0 10px 40px rgba(59, 130, 246, 0.25);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог Софьи | Технологии и Код</title>
+    
+    <!-- Шрифты Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Иконки Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <style>
+        /* ===== 🎨 НАСТРОЙКИ ЦВЕТОВ (КРАСНАЯ ТЕМА) ===== */
+        :root {
+            --primary: #dc2626;           /* Насыщенный красный */
+            --primary-light: #ef4444;     /* Яркий красный */
+            --secondary: #f87171;         /* Светло-красный */
+            --accent: #991b1b;            /* Тёмно-красный акцент */
+            --accent-dark: #7f1d1d;       /* Очень тёмный красный */
+            --bg-body: #fef2f2;           /* Светло-розовый фон */
+            --bg-card: #ffffff;           /* Белые карточки */
+            --text-main: #1f2937;         /* Тёмный текст */
+            --text-light: #6b7280;        /* Серый текст */
+            --border: #fecaca;            /* Светлая граница */
+            --shadow: 0 10px 40px rgba(220, 38, 38, 0.15);
+            --shadow-hover: 0 20px 60px rgba(220, 38, 38, 0.25);
+            --radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, var(--bg-dark) 0%, #1e3a5f 100%);
-      color: var(--text-primary);
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
+        /* Сброс стилей */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    /* Анимированный фон */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: 
-        radial-gradient(circle at 15% 85%, var(--blue-glow) 0%, transparent 50%),
-        radial-gradient(circle at 85% 15%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-      animation: pulse 10s ease-in-out infinite;
-    }
+        /* ===== АНИМИРОВАННЫЙ ФОН С ЧАСТИЦАМИ ===== */
+        .bg-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--primary-light), transparent 70%);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            filter: blur(2px);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
-    }
+        /* ===== ПЛАВНЫЙ СКРОЛЛ И ПРОГРЕСС-БАР ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 2000;
+            transition: width 0.1s;
+        }
 
-    /* Волны на фоне */
-    .waves {
-      position: fixed;
-      bottom: 0; left: 0;
-      width: 100%; height: 120px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%231e40af' fill-opacity='0.15' d='M0,64L48,74.7C96,85,192,107,288,106.7C384,107,480,85,576,80C672,75,768,85,864,96C960,107,1056,117,1152,112C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") repeat-x;
-      background-size: 1440px 120px;
-      animation: wave 20s linear infinite;
-      z-index: -1;
-      opacity: 0.5;
-    }
+        /* ===== ШАПКА С ЭФФЕКТОМ СТЕКЛА ===== */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        header.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .logo:hover { transform: scale(1.05); }
+        .logo i { font-size: 1.8rem; }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 0; height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 70%; }
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--primary); }
+        
+        .btn-contact {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white !important;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            transition: var(--transition);
+        }
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        }
 
-    @keyframes wave {
-      0% { background-position-x: 0; }
-      100% { background-position-x: 1440px; }
-    }
+        /* Мобильное меню */
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
 
-    /* Частицы */
-    .particles {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: -1;
-      overflow: hidden;
-    }
+        /* ===== ГЕРОЙ-СЕКЦИЯ С ПАРАЛЛАКС-ЭФФЕКТОМ ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 8s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            line-height: 1.1;
+        }
+        .hero h1 span {
+            background: linear-gradient(45deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.6);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: white;
+            transform: translateY(-4px);
+        }
 
-    .particle {
-      position: absolute;
-      width: 3px; height: 3px;
-      background: var(--cyan-accent);
-      border-radius: 50%;
-      opacity: 0.7;
-      animation: float 18s infinite linear;
-      box-shadow: 0 0 10px var(--cyan-accent);
-    }
+        /* ===== СЕКЦИЯ СТАТЕЙ ===== */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left: 50%;
+            width: 60px; height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            transform: translateX(-50%);
+        }
+        .section-title p {
+            color: var(--text-light);
+            margin-top: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.7; }
-      90% { opacity: 0.7; }
-      100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
-    }
+        /* ===== КАРТОЧКИ СТАТЕЙ С ЭФФЕКТАМИ ===== */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .post-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .post-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .post-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        .post-card:hover::before { transform: scaleX(1); }
+        
+        .post-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .post-image::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 6s infinite;
+        }
+        .post-content {
+            padding: 1.8rem;
+        }
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+        .post-card:hover h3 { color: var(--primary); }
+        .post-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition);
+        }
+        .read-more:hover {
+            gap: 0.8rem;
+            color: var(--accent);
+        }
 
-    .container {
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-    }
+        /* ===== СЕКЦИЯ ОБО МНЕ ===== */
+        .about-section {
+            background: linear-gradient(135deg, rgba(220,38,38,0.05), rgba(153,27,27,0.05));
+            border-radius: var(--radius);
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+            margin: 2rem auto;
+            max-width: 1000px;
+        }
+        .about-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.3);
+            position: relative;
+            animation: float 6s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .about-content h3 {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+        .skill-tag {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        .skill-tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
 
-    /* Шапка */
-    header {
-      text-align: center;
-      padding: 3rem 1rem 2.5rem;
-      position: relative;
-    }
+        /* ===== КОНТАКТНАЯ ФОРМА ===== */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--bg-body);
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
+        }
+        .submit-btn:active { transform: translateY(-1px); }
 
-    header h1 {
-      font-size: 2.6rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--cyan-accent), var(--blue-light), var(--blue-primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.5rem;
-      animation: glow 2.5s ease-in-out infinite alternate;
-      text-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
-    }
+        /* ===== ФУТЕР ===== */
+        footer {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+            color: white;
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            text-align: left;
+        }
+        .footer-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 40px; height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        .footer-section p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        .social-links a:hover {
+            background: var(--primary-light);
+            transform: translateY(-4px);
+        }
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
 
-    @keyframes glow {
-      from { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-      to { text-shadow: 0 0 35px rgba(6, 182, 212, 0.9), 0 0 50px rgba(59, 130, 246, 0.6); }
-    }
+        /* ===== АНИМАЦИИ ПРИ СКРОЛЛЕ ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-on-scroll {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+        .animate-on-scroll:nth-child(1) { animation-delay: 0.1s; }
+        .animate-on-scroll:nth-child(2) { animation-delay: 0.2s; }
+        .animate-on-scroll:nth-child(3) { animation-delay: 0.3s; }
 
-    header p {
-      color: var(--text-secondary);
-      font-size: 1.15rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 900px) {
+            .about-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .about-image { margin: 0 auto 2rem; }
+            .skills { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 70px; left: 0; right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 0.5rem;
+                box-shadow: var(--shadow);
+                transform: translateY(-150%);
+                transition: var(--transition);
+                border-radius: 0 0 var(--radius) var(--radius);
+            }
+            .nav-links.active { transform: translateY(0); }
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 0.8rem;
+            }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .section { padding: 4rem 1.5rem; }
+            .section-title h2 { font-size: 2rem; }
+        }
 
-    /* Навигация */
-    .nav {
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      margin: 1.5rem 0 3rem;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 1rem;
-      z-index: 100;
-      padding: 0.5rem;
-      background: rgba(30, 41, 59, 0.8);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-    }
+        /* ===== УВЕДОМЛЕНИЕ ОБ ОТПРАВКЕ ===== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            z-index: 3000;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast.show { transform: translateX(0); }
+        .toast i { font-size: 1.3rem; }
 
-    .nav a {
-      padding: 0.65rem 1.3rem;
-      background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
-      color: white;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 500;
-      font-size: 0.92rem;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-      white-space: nowrap;
-    }
+        /* ===== ЭФФЕКТ ПРИ НАВЕДЕНИИ НА ССЫЛКИ ===== */
+        a {
+            position: relative;
+        }
+        a:not(.btn-primary):not(.btn-secondary):not(.social-links a):not(.logo)::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+        a:not(.btn-primary):not(.btn-secondary):not(.social-links a):not(.logo):hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Прогресс-бар скролла -->
+    <div class="scroll-progress" id="scrollProgress"></div>
 
-    .nav a::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-      transition: left 0.5s;
-    }
+    <!-- Анимированный фон -->
+    <div class="bg-particles" id="particles"></div>
 
-    .nav a:hover::before { left: 100%; }
-    .nav a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-      background: linear-gradient(135deg, var(--blue-light), var(--blue-primary));
-    }
+    <!-- Шапка сайта -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">
+                <i class="fas fa-code"></i>
+                <span>Софья.Код</span>
+            </a>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="active">Главная</a>
+                <a href="#articles">Статьи</a>
+                <a href="#about">Обо мне</a>
+                <a href="#contact" class="btn-contact">Связаться</a>
+            </div>
+        </nav>
+    </header>
 
-    .nav a.active {
-      background: linear-gradient(135deg, var(--cyan-accent), var(--blue-primary));
-      box-shadow: 0 5px 25px rgba(6, 182, 212, 0.5);
-    }
+    <!-- Герой-секция -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Привет! Я <span>Софья</span><br>Разработчик & Блогер</h1>
+            <p>Делюсь знаниями о веб-разработке, современных технологиях и создании красивых цифровых продуктов. Присоединяйтесь к путешествию в мир кода! ✨</p>
+            <div class="hero-buttons">
+                <a href="#articles" class="btn-primary">
+                    <i class="fas fa-book-open"></i> Читать статьи
+                </a>
+                <a href="#contact" class="btn-secondary">
+                    <i class="fas fa-paper-plane"></i> Написать мне
+                </a>
+            </div>
+        </div>
+    </section>
 
-    /* Карточки постов */
-    .post {
-      background: var(--bg-card);
-      border-radius: 20px;
-      padding: 1.9rem;
-      margin-bottom: 1.4rem;
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-      animation: slideUp 0.6s ease-out forwards;
-      opacity: 0;
-    }
+    <!-- Секция статей -->
+    <section class="section" id="articles">
+        <div class="section-title">
+            <h2>Последние статьи</h2>
+            <p>Свежие материалы о программировании, дизайне и технологиях, которые помогут вам расти</p>
+        </div>
+        <div class="posts-grid">
+            <!-- Статья 1 -->
+            <article class="post-card animate-on-scroll">
+                <div class="post-image">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 12 мая 2026</span>
+                        <span><i class="far fa-clock"></i> 8 мин</span>
+                    </div>
+                    <h3>Как создать анимированный сайт с нуля</h3>
+                    <p>Пошаговое руководство по добавлению современных анимаций и эффектов без использования тяжелых библиотек.</p>
+                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
 
-    .post:nth-child(1) { animation-delay: 0.1s; }
-    .post:nth-child(2) { animation-delay: 0.15s; }
-    .post:nth-child(3) { animation-delay: 0.2s; }
-    .post:nth-child(4) { animation-delay: 0.25s; }
-    .post:nth-child(5) { animation-delay: 0.3s; }
+            <!-- Статья 2 -->
+            <article class="post-card animate-on-scroll">
+                <div class="post-image">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 8 мая 2026</span>
+                        <span><i class="far fa-clock"></i> 12 мин</span>
+                    </div>
+                    <h3>Психология цвета в веб-дизайне</h3>
+                    <p>Как правильно подбирать цветовую палитру для сайта, чтобы вызывать нужные эмоции у пользователей.</p>
+                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(35px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+            <!-- Статья 3 -->
+            <article class="post-card animate-on-scroll">
+                <div class="post-image">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 3 мая 2026</span>
+                        <span><i class="far fa-clock"></i> 15 мин</span>
+                    </div>
+                    <h3>AI в веб-разработке: тренды 2026</h3>
+                    <p>Обзор современных инструментов на основе искусственного интеллекта, которые ускоряют разработку.</p>
+                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </div>
+    </section>
 
-    .post::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--blue-dark), var(--blue-primary), var(--cyan-accent));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.45s ease;
+    <!-- Секция Обо мне -->
+    <section class="section" id="about">
+        <div class="about-section">
+            <div class="about-image">
+                <i class="fas fa-user-astronaut"></i>
+            </div>
+            <div class="about-content">
+                <h3>Привет, я Софья! 👋</h3>
+                <p>Frontend-разработчик с 5-летним опытом создания современных веб-приложений. Люблю превращать сложные идеи в интуитивно понятные интерфейсы.</p>
+                <p>В этом блоге я делюсь практическими советами, разборками кода и инсайтами из мира технологий. Моя цель — сделать разработку доступной и увлекательной для каждого!</p>
+                <div class="skills">
+                    <span class="skill-tag">HTML5 & CSS3</span>
+                    <span class="skill-tag">JavaScript / TypeScript</span>
+                    <span class="skill-tag">React & Vue</span>
+                    <span class="skill-tag">UI/UX Дизайн</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">Git & DevOps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контактная форма -->
+    <section class="section" id="contact">
+        <div class="section-title">
+            <h2>Напишите мне</h2>
+            <p>Есть вопрос, идея для статьи или предложение о сотрудничестве? Буду рада услышать вас!</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+            <div class="form-group">
+                <label for="name">Ваше имя</label>
+                <input type="text" id="name" name="name" required placeholder="Как к вам обращаться?">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="message">Сообщение</label>
+                <textarea id="message" name="message" required placeholder="Расскажите, чем могу помочь..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Отправить сообщение
+            </button>
+        </form>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Софья.Код</h4>
+                <p>Блог о веб-разработке, дизайне и технологиях. Создаю контент, который помогает расти.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Навигация</h4>
+                <p><a href="#home" style="color:white;text-decoration:none">🏠 Главная</a></p>
+                <p><a href="#articles" style="color:white;text-decoration:none">📚 Статьи</a></p>
+                <p><a href="#about" style="color:white;text-decoration:none">👤 Обо мне</a></p>
+                <p><a href="#contact" style="color:white;text-decoration:none">✉️ Контакты</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Подписка</h4>
+                <p>Получайте новые статьи прямо на почту. Никакого спама, только полезный контент.</p>
+                <form style="display:flex;gap:0.5rem;margin-top:1rem">
+                    <input type="email" placeholder="Ваш email" style="flex:1;padding:0.7rem 1rem;border-radius:50px;border:none;outline:none">
+                    <button type="submit" style="background:var(--primary-light);color:white;border:none;padding:0.7rem 1.2rem;border-radius:50px;cursor:pointer;font-weight:600">OK</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Блог Софьи. Все права защищены. Сделано с ❤️ и красным цветом</p>
+        </div>
+    </footer>
+
+    <!-- Уведомление -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Сообщение отправлено! Спасибо за связь 🎉</span>
+    </div>
+
+    <script>
+        // ===== ГЕНЕРАЦИЯ ЧАСТИЦ ФОНА =====
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = window.innerWidth > 768 ? 25 : 12;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Случайные параметры
+                const size = Math.random() * 60 + 20;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = Math.random() * 15 + 15;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.bottom = `-${size}px`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // ===== ПРОГРЕСС-БАР СКРОЛЛА =====
+        function updateScrollProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollProgress').style.width = `${scrollPercent}%`;
+        }
+
+        // ===== МОБИЛЬНОЕ МЕНЮ =====
+        function initMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+            
+            // Закрыть меню при клике на ссылку
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    menuToggle.querySelector('i').classList.add('fa-bars');
+                    menuToggle.querySelector('i').classList.remove('fa-times');
+                });
+            });
+        }
+
+        // ===== АНИМАЦИЯ ПРИ СКРОЛЛЕ =====
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.post-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // ===== ПЛАВНЫЙ СКРОЛЛ ПО ЯКОРЯМ =====
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        const headerOffset = 80;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // ===== ОБРАБОТКА ФОРМЫ =====
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            const toast = document.getElementById('toast');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Имитация отправки
+                const submitBtn = form.querySelector('.submit-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    // Показать уведомление
+                    toast.classList.add('show');
+                    
+                    // Сбросить форму
+                    form.reset();
+                    
+                    // Вернуть кнопку
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    // Скрыть уведомление через 4 секунды
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 4000);
+                }, 1500);
+            });
+        }
+
+        // ===== ЭФФЕКТ ШАПКИ ПРИ СКРОЛЛЕ =====
+        function initHeaderEffect() {
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                updateScrollProgress();
+            });
+        }
+
+        // ===== АКТИВНАЯ ССЫЛКА В МЕНЮ ПРИ СКРОЛЛЕ =====
+        function initActiveNavLink() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // ===== ИНИЦИАЛИЗАЦИЯ ВСЕГО =====
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            initMobileMenu();
+            initScrollAnimations();
+            initSmoothScroll();
+            initContactForm();
+            initHeaderEffect();
+            initActiveNavLink();
+            
+            // Показать карточки с небольшой задержкой для анимации
+            setTimeout(() => {
+                document.querySelectorAll('.post-card').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 150);
+                });
+            }, 300);
+        });
+
+        // ===== ПАРАЛЛАКС-ЭФФЕКТ ДЛЯ ГЕРОЯ =====
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero');
+            const scrolled = window.pageYOffset;
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.backgroundPositionY = `${scrolled * 0.3}px`;
+            }
+        });
+    </script>
+</body>
+</html>
