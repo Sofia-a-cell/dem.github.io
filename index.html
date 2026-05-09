@@ -6,4 +6,953 @@
     <title>Блог Софьи | Технологии и Код</title>
     
     <!-- Шрифты Google -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Fira+Code
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Иконки Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ===== 🎨 НАСТРОЙКИ ЦВЕТОВ (ГОЛУБАЯ ТЕМА) ===== */
+        :root {
+            --primary: #0077b6;
+            --secondary: #48cae4;
+            --accent: #023e8a;
+            --accent-dark: #005f8a;
+            --bg-body: #f0f9ff;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-light: #64748b;
+            --border: #bae6fd;
+            --shadow: 0 10px 40px rgba(0, 119, 182, 0.12);
+            --shadow-hover: 0 20px 60px rgba(0, 119, 182, 0.2);
+            --radius: 20px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Сброс стилей */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== ПРОГРЕСС-БАР СКРОЛЛА ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 2000;
+            transition: width 0.1s;
+        }
+
+        /* ===== АНИМИРОВАННЫЙ ФОН С ЧАСТИЦАМИ ===== */
+        .bg-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--secondary), transparent 70%);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            filter: blur(2px);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        }
+
+        /* ===== ШАПКА С ЭФФЕКТОМ СТЕКЛА ===== */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 119, 182, 0.15);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        header.scrolled {
+            padding: 0.3rem 0;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .logo:hover { transform: scale(1.05); }
+        .logo i { font-size: 1.8rem; }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 0; height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 70%; }
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--primary); }
+        
+        .btn-contact {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white !important;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
+            transition: var(--transition);
+        }
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 119, 182, 0.4);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* ===== ГЕРОЙ-СЕКЦИЯ С ПАРАЛЛАКС-ЭФФЕКТОМ ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 8s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            line-height: 1.1;
+        }
+        .hero h1 span {
+            background: linear-gradient(45deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.6);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: white;
+            transform: translateY(-4px);
+        }
+
+        /* ===== СЕКЦИИ ===== */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left: 50%;
+            width: 60px; height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            transform: translateX(-50%);
+        }
+        .section-title p {
+            color: var(--text-light);
+            margin-top: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== КАРТОЧКИ СТАТЕЙ ===== */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .post-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .post-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .post-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        .post-card:hover::before { transform: scaleX(1); }
+        
+        .post-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .post-image::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 6s infinite;
+        }
+        .post-content {
+            padding: 1.8rem;
+        }
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+        .post-card:hover h3 { color: var(--primary); }
+        .post-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition);
+        }
+        .read-more:hover {
+            gap: 0.8rem;
+            color: var(--accent);
+        }
+
+        /* ===== СЕКЦИЯ ОБО МНЕ ===== */
+        .about-section {
+            background: linear-gradient(135deg, rgba(0,119,182,0.05), rgba(2,62,138,0.05));
+            border-radius: var(--radius);
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+            margin: 2rem auto;
+            max-width: 1000px;
+        }
+        .about-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            box-shadow: 0 10px 40px rgba(0, 119, 182, 0.3);
+            position: relative;
+            animation: float 6s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .about-content h3 {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+        .skill-tag {
+            background: rgba(0, 119, 182, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        .skill-tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* ===== КОНТАКТНАЯ ФОРМА ===== */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--bg-body);
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.1);
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 119, 182, 0.4);
+        }
+
+        /* ===== ФУТЕР ===== */
+        footer {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+            color: white;
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            text-align: left;
+        }
+        .footer-section h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 40px; height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        .footer-section p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-4px);
+        }
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        /* ===== АНИМАЦИИ И УВЕДОМЛЕНИЯ ===== */
+        .animate-on-scroll {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+        .animate-on-scroll:nth-child(1) { animation-delay: 0.1s; }
+        .animate-on-scroll:nth-child(2) { animation-delay: 0.2s; }
+        .animate-on-scroll:nth-child(3) { animation-delay: 0.3s; }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            z-index: 3000;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast.show { transform: translateX(0); }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 900px) {
+            .about-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .about-image { margin: 0 auto 2rem; }
+            .skills { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 70px; left: 0; right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 0.5rem;
+                box-shadow: var(--shadow);
+                transform: translateY(-150%);
+                transition: var(--transition);
+                border-radius: 0 0 var(--radius) var(--radius);
+            }
+            .nav-links.active { transform: translateY(0); }
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+                padding: 0.8rem;
+            }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .section { padding: 4rem 1.5rem; }
+            .section-title h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Прогресс-бар скролла -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Анимированный фон -->
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Шапка сайта -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">
+                <i class="fas fa-code"></i>
+                <span>Софья.Код</span>
+            </a>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="active">Главная</a>
+                <a href="#articles">Статьи</a>
+                <a href="#about">Обо мне</a>
+                <a href="#contact" class="btn-contact">Связаться</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Герой-секция -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Привет! Я <span>Софья</span><br>Разработчик & Блогер</h1>
+            <p>Делюсь знаниями о веб-разработке, современных технологиях и создании красивых цифровых продуктов. Присоединяйтесь к путешествию в мир кода! ✨</p>
+            <div class="hero-buttons">
+                <a href="#articles" class="btn-primary">
+                    <i class="fas fa-book-open"></i> Читать статьи
+                </a>
+                <a href="#contact" class="btn-secondary">
+                    <i class="fas fa-paper-plane"></i> Написать мне
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция статей -->
+    <section class="section" id="articles">
+        <div class="section-title">
+            <h2>Последние статьи</h2>
+            <p>Свежие материалы о программировании, дизайне и технологиях, которые помогут вам расти</p>
+        </div>
+        <div class="posts-grid">
+            <article class="post-card animate-on-scroll">
+                <div class="post-image"><i class="fas fa-rocket"></i></div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 12 мая 2026</span>
+                        <span><i class="far fa-clock"></i> 8 мин</span>
+                    </div>
+                    <h3>Как создать анимированный сайт с нуля</h3>
+                    <p>Пошаговое руководство по добавлению современных анимаций и эффектов без использования тяжелых библиотек.</p>
+                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            <article class="post-card animate-on-scroll">
+                <div class="post-image"><i class="fas fa-palette"></i></div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 8 мая 2026</span>
+                        <span><i class="far fa-clock"></i> 12 мин</span>
+                    </div>
+                    <h3>Психология цвета в веб-дизайне</h3>
+                    <p>Как правильно подбирать цветовую палитру для сайта, чтобы вызывать нужные эмоции у пользователей.</p>
+                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            <article class="post-card animate-on-scroll">
+                <div class="post-image"><i class="fas fa-brain"></i></div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> 3 мая 2026</span>
+                        <span><i class="far fa-clock"></i> 15 мин</span>
+                    </div>
+                    <h3>AI в веб-разработке: тренды 2026</h3>
+                    <p>Обзор современных инструментов на основе искусственного интеллекта, которые ускоряют разработку.</p>
+                    <a href="#" class="read-more">Читать далее <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Секция Обо мне -->
+    <section class="section" id="about">
+        <div class="about-section">
+            <div class="about-image"><i class="fas fa-user-astronaut"></i></div>
+            <div class="about-content">
+                <h3>Привет, я Софья! 👋</h3>
+                <p>Frontend-разработчик с 5-летним опытом создания современных веб-приложений. Люблю превращать сложные идеи в интуитивно понятные интерфейсы.</p>
+                <p>В этом блоге я делюсь практическими советами, разборками кода и инсайтами из мира технологий. Моя цель — сделать разработку доступной и увлекательной для каждого!</p>
+                <div class="skills">
+                    <span class="skill-tag">HTML5 & CSS3</span>
+                    <span class="skill-tag">JavaScript / TypeScript</span>
+                    <span class="skill-tag">React & Vue</span>
+                    <span class="skill-tag">UI/UX Дизайн</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">Git & DevOps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контактная форма -->
+    <section class="section" id="contact">
+        <div class="section-title">
+            <h2>Напишите мне</h2>
+            <p>Есть вопрос, идея для статьи или предложение о сотрудничестве? Буду рада услышать вас!</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+            <div class="form-group">
+                <label for="name">Ваше имя</label>
+                <input type="text" id="name" name="name" required placeholder="Как к вам обращаться?">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="message">Сообщение</label>
+                <textarea id="message" name="message" required placeholder="Расскажите, чем могу помочь..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Отправить сообщение
+            </button>
+        </form>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Софья.Код</h4>
+                <p>Блог о веб-разработке, дизайне и технологиях. Создаю контент, который помогает расти.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Навигация</h4>
+                <p><a href="#home" style="color:white;text-decoration:none">🏠 Главная</a></p>
+                <p><a href="#articles" style="color:white;text-decoration:none">📚 Статьи</a></p>
+                <p><a href="#about" style="color:white;text-decoration:none">👤 Обо мне</a></p>
+                <p><a href="#contact" style="color:white;text-decoration:none">✉️ Контакты</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Подписка</h4>
+                <p>Получайте новые статьи прямо на почту. Никакого спама, только полезный контент.</p>
+                <form style="display:flex;gap:0.5rem;margin-top:1rem">
+                    <input type="email" placeholder="Ваш email" style="flex:1;padding:0.7rem 1rem;border-radius:50px;border:none;outline:none">
+                    <button type="submit" style="background:var(--secondary);color:white;border:none;padding:0.7rem 1.2rem;border-radius:50px;cursor:pointer;font-weight:600">OK</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Блог Софьи. Все права защищены. Сделано с 💙 и любовью к коду</p>
+        </div>
+    </footer>
+
+    <!-- Уведомление -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Сообщение отправлено! Спасибо за связь 🎉</span>
+    </div>
+
+    <script>
+        // Генерация частиц фона
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = window.innerWidth > 768 ? 25 : 12;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 60 + 20;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = Math.random() * 15 + 15;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.bottom = `-${size}px`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        // Прогресс-бар скролла
+        function updateScrollProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollProgress').style.width = `${scrollPercent}%`;
+        }
+
+        // Мобильное меню
+        function initMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    menuToggle.querySelector('i').classList.add('fa-bars');
+                    menuToggle.querySelector('i').classList.remove('fa-times');
+                });
+            });
+        }
+
+        // Анимация при скролле
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            document.querySelectorAll('.post-card').forEach(card => observer.observe(card));
+        }
+
+        // Плавный скролл
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        const offset = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                        window.scrollTo({ top: offset, behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+
+        // Обработка формы
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            const toast = document.getElementById('toast');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('.submit-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+                btn.disabled = true;
+                setTimeout(() => {
+                    toast.classList.add('show');
+                    form.reset();
+                    btn.innerHTML = original;
+                    btn.disabled = false;
+                    setTimeout(() => toast.classList.remove('show'), 4000);
+                }, 1500);
+            });
+        }
+
+        // Эффект шапки при скролле
+        function initHeaderEffect() {
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+                updateScrollProgress();
+            });
+        }
+
+        // Активная ссылка в меню
+        function initActiveNavLink() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    if (window.scrollY >= section.offsetTop - 100) current = section.id;
+                });
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+                });
+            });
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            initMobileMenu();
+            initScrollAnimations();
+            initSmoothScroll();
+            initContactForm();
+            initHeaderEffect();
+            initActiveNavLink();
+            setTimeout(() => {
+                document.querySelectorAll('.post-card').forEach((card, i) => {
+                    setTimeout(() => card.classList.add('visible'), i * 150);
+                });
+            }, 300);
+        });
+
+        // Параллакс для героя
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero');
+            const scrolled = window.pageYOffset;
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.backgroundPositionY = `${scrolled * 0.3}px`;
+            }
+        });
+    </script>
+</body>
+</html>
