@@ -1,928 +1,1288 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌹 Блог Софьи | Sofia's Tech Space</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>☠️ Sofia's Pirate Log | Tech & Treasure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Nosifer&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      /* Пиратская палитра */
+      --black: #0a0a0a;
+      --charcoal: #1a1a1a;
+      --slate: #2d2d2d;
+      --stone: #4a4a4a;
+      --silver: #888888;
+      --bone: #d4c5b0;
+      --blood: #8b0000;
+      --gold: #c9a227;
+      --gold-glow: rgba(201, 162, 39, 0.4);
+      --skull-white: #f5f5f0;
+      
+      --bg-main: linear-gradient(135deg, var(--black) 0%, var(--charcoal) 50%, var(--slate) 100%);
+      --card-bg: rgba(26, 26, 26, 0.95);
+      --card-border: rgba(201, 162, 39, 0.3);
+      --text-primary: var(--skull-white);
+      --text-secondary: var(--silver);
+      --text-accent: var(--gold);
+      
+      --shadow-sm: 0 2px 10px rgba(0,0,0,0.5);
+      --shadow-lg: 0 10px 40px rgba(0,0,0,0.7), 0 0 30px rgba(201, 162, 39, 0.15);
+      --shadow-glow: 0 0 20px rgba(201, 162, 39, 0.3);
+      
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* 🏴 Пиратский фон с текстурой */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: 
+        radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%),
+        repeating-linear-gradient(45deg, rgba(26,26,26,0.9) 0px, rgba(26,26,26,0.9) 2px, transparent 2px, transparent 10px),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 58 L75 90 L50 72 L25 90 L35 58 L10 40 L40 40 Z' fill='none' stroke='%23c9a227' stroke-width='0.5' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    /* Анимированный череп в углу */
+    .skull-corner {
+      position: fixed;
+      font-size: 4rem;
+      opacity: 0.08;
+      z-index: -1;
+      animation: skullFloat 20s ease-in-out infinite;
+      pointer-events: none;
+      filter: drop-shadow(0 0 10px rgba(201, 162, 39, 0.3));
+    }
+    .skull-corner.top-right { top: 5%; right: 3%; animation-delay: -5s; }
+    .skull-corner.bottom-left { bottom: 5%; left: 3%; animation-delay: -10s; transform: scaleX(-1); }
     
-    <style>
-        :root {
-            /* Красная палитра */
-            --primary: #dc2626;
-            --primary-dark: #b91c1c;
-            --primary-light: #fecaca;
-            --accent: #f43f5e;
-            --accent-light: #ffe4e6;
-            --bg: #fff9fa;
-            --bg-gradient: linear-gradient(135deg, #fef2f2 0%, #fff1f2 50%, #fef2f2 100%);
-            --card: rgba(255, 255, 255, 0.95);
-            --text: #1f2937;
-            --text-muted: #6b7280;
-            --code-bg: #1a1a2e;
-            --code-text: #e6e6e6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --radius: 20px;
-            --shadow: 0 10px 40px -10px rgba(220, 38, 38, 0.15);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    @keyframes skullFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-10px) rotate(2deg); }
+      75% { transform: translateY(10px) rotate(-2deg); }
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Парящие монеты/частицы */
+    .pirate-particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .coin {
+      position: absolute;
+      width: 12px; height: 12px;
+      background: radial-gradient(circle, var(--gold) 0%, var(--blood) 100%);
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      opacity: 0.7;
+      animation: coinFloat 18s infinite linear;
+      box-shadow: 0 0 10px var(--gold-glow);
+    }
+    @keyframes coinFloat {
+      0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+      10%, 90% { opacity: 0.7; }
+      100% { transform: translateY(-20px) rotate(720deg) scale(1); opacity: 0; }
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text);
-            line-height: 1.7;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
+    /* Эффект мерцающей свечи */
+    .candle-glow {
+      position: fixed;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+      animation: flicker 3s ease-in-out infinite alternate;
+    }
+    .candle-glow:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .candle-glow:nth-child(2) { bottom: 15%; right: 8%; animation-delay: -1.5s; }
+    @keyframes flicker {
+      0% { opacity: 0.3; transform: scale(1); }
+      100% { opacity: 0.6; transform: scale(1.05); }
+    }
 
-        /* 🌸 Анимированный фон с лепестками */
-        .flower-bg {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
+    /* Контейнер */
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
 
-        .petal {
-            position: absolute;
-            width: 20px; height: 20px;
-            background: radial-gradient(ellipse at center, var(--accent) 0%, transparent 70%);
-            border-radius: 50% 50% 50% 0;
-            animation: float 15s infinite linear;
-            opacity: 0.6;
-            transform-origin: center;
-        }
+    /* Шапка с пиратским флагом */
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2.5rem;
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    
+    .jolly-roger {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: skullBob 3s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+      display: inline-block;
+    }
+    @keyframes skullBob {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
 
-        .petal:nth-child(odd) {
-            background: radial-gradient(ellipse at center, var(--primary) 0%, transparent 70%);
-            animation-duration: 18s;
-            animation-delay: -5s;
-        }
+    header h1 {
+      font-family: 'Nosifer', cursive;
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, var(--bone), var(--gold), var(--blood));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      letter-spacing: 2px;
+    }
 
-        .petal:nth-child(3n) {
-            width: 15px; height: 15px;
-            animation-duration: 22s;
-            animation-delay: -10s;
-        }
+    header p {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
-            10%, 90% { opacity: 0.6; }
-            100% { transform: translateY(-100px) rotate(720deg) scale(1); opacity: 0; }
-        }
+    .flag-divider {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--blood), var(--gold), var(--blood), transparent);
+      margin: 1.5rem auto;
+      border-radius: 2px;
+      max-width: 400px;
+      position: relative;
+    }
+    .flag-divider::before,
+    .flag-divider::after {
+      content: '☠️';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+    .flag-divider::before { left: -15px; }
+    .flag-divider::after { right: -15px; }
 
-        /* Декоративные цветы по углам */
-        .corner-flower {
-            position: fixed;
-            width: 80px; height: 80px;
-            z-index: 1;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-        .corner-flower.top-left { top: 20px; left: 20px; }
-        .corner-flower.top-right { top: 20px; right: 20px; transform: scaleX(-1); }
-        .corner-flower.bottom-left { bottom: 20px; left: 20px; transform: scaleY(-1); }
-        .corner-flower.bottom-right { bottom: 20px; right: 20px; transform: scale(-1); }
+    /* Навигация */
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin: 1.5rem 0 2.5rem;
+      flex-wrap: wrap;
+      padding: 0.5rem;
+      background: rgba(26, 26, 26, 0.7);
+      border-radius: 50px;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
 
-        .flower-svg {
-            width: 100%; height: 100%;
-            animation: pulse 4s ease-in-out infinite;
-        }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    .nav a {
+      padding: 0.65rem 1.3rem;
+      background: linear-gradient(135deg, var(--slate), var(--charcoal));
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 0.92rem;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--accent));
-            color: white;
-            padding: 4rem 2rem 5rem;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 4px 20px rgba(185, 28, 28, 0.3);
-            overflow: hidden;
-        }
+    .nav a::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.2), transparent);
+      transition: left 0.5s;
+    }
 
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: shimmer 8s linear infinite;
-        }
-        @keyframes shimmer { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .nav a:hover::before { left: 100%; }
+    .nav a:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-glow);
+      color: var(--gold);
+    }
 
-        header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            position: relative;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            animation: fadeInDown 0.8s ease;
-        }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    .nav a.active {
+      background: linear-gradient(135deg, var(--blood), var(--charcoal));
+      border-color: var(--blood);
+      box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+    }
 
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            margin-bottom: 1rem;
-            position: relative;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .nav a i { font-size: 1rem; }
 
-        .header-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: var(--transition);
-            position: relative;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-        .header-cta:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
+    /* Карточки постов */
+    .post {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--card-border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      animation: slideUp 0.5s ease-out forwards;
+      opacity: 0;
+    }
 
-        /* Container */
-        .container {
-            max-width: 850px;
-            margin: -3rem auto 3rem;
-            padding: 0 1.5rem;
-            position: relative;
-            z-index: 10;
-        }
+    .post::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blood), var(--gold), var(--blood));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
 
-        /* Article Cards */
-        article {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 1px solid rgba(220, 38, 38, 0.1);
-            position: relative;
-            overflow: hidden;
-            animation: slideIn 0.5s ease both;
-        }
-        article::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px; height: 100%;
-            background: linear-gradient(to bottom, var(--primary), var(--accent));
-            transition: var(--transition);
-        }
-        article:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px -10px rgba(220, 38, 38, 0.25);
-            border-color: rgba(220, 38, 38, 0.3);
-        }
-        article:hover::before { width: 6px; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .post:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-lg);
+    }
 
-        /* Date Badge */
-        .date-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: linear-gradient(135deg, var(--primary-light), #ffe4e6);
-            color: var(--primary-dark);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
-            border: 1px solid rgba(220, 38, 38, 0.2);
-            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
-        }
+    .post:hover::before { transform: scaleX(1); }
 
-        h2 {
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            color: var(--text);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        h2::after {
-            content: '';
-            flex: 1;
-            height: 2px;
-            background: linear-gradient(to right, var(--primary-light), transparent);
-            margin-left: 1rem;
-        }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Links */
-        a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-            padding-bottom: 2px;
-            transition: var(--transition);
-        }
-        a::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 0; height: 2px;
-            background: var(--accent);
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-        a:hover { color: var(--accent); }
-        a:hover::after { width: 100%; }
+    .post:nth-child(1) { animation-delay: 0.1s; }
+    .post:nth-child(2) { animation-delay: 0.15s; }
+    .post:nth-child(3) { animation-delay: 0.2s; }
+    .post:nth-child(4) { animation-delay: 0.25s; }
+    .post:nth-child(5) { animation-delay: 0.3s; }
 
-        /* Download Button */
-        .download-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 0.9rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 500;
-            margin: 0.5rem 0;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .download-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
-            color: white;
-        }
-        .download-link::after { display: none; }
+    .post-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1.1rem;
+      background: linear-gradient(135deg, var(--blood), var(--charcoal));
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.1rem;
+      color: var(--bone);
+      border: 1px solid var(--blood);
+      box-shadow: 0 2px 10px rgba(139, 0, 0, 0.3);
+    }
 
-        /* Code Blocks */
-        pre {
-            background: var(--code-bg);
-            color: var(--code-text);
-            padding: 1.3rem;
-            border-radius: 12px;
-            overflow-x: auto;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            margin: 1.2rem 0;
-            border-left: 4px solid var(--accent);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
-        }
+    .post h2 {
+      font-size: 1.45rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
 
-        .crypto-key, .log-entry {
-            background: linear-gradient(135deg, #fef2f2, #fff1f2);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.2rem;
-            border-radius: 0 8px 8px 0;
-            margin: 0.8rem 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: var(--text);
-        }
-        .crypto-key {
-            word-break: break-all;
-            color: var(--primary-dark);
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-        }
+    .post h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--card-border), transparent);
+      margin-left: 1rem;
+    }
 
-        blockquote {
-            background: linear-gradient(135deg, #fef2f2, #fff1f2);
-            border-left: 4px solid var(--accent);
-            padding: 1.2rem 1.5rem;
-            font-style: italic;
-            color: var(--text-muted);
-            margin: 1.2rem 0;
-            border-radius: 0 12px 12px 0;
-            position: relative;
-        }
-        blockquote::before {
-            content: '"';
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            position: absolute;
-            top: -10px; left: 10px;
-            color: var(--primary-light);
-            opacity: 0.5;
-        }
+    .post p, .post blockquote {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
 
-        /* Tables */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .data-table th {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-        }
-        .data-table td {
-            padding: 0.9rem 1rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .data-table tr:hover { background: #fef2f2; }
-        .data-table tr:last-child td { border-bottom: none; }
+    .post blockquote {
+      border-left: 4px solid var(--gold);
+      padding-left: 1.3rem;
+      font-style: italic;
+      background: rgba(201, 162, 39, 0.08);
+      border-radius: 0 12px 12px 0;
+      margin: 1.2rem 0;
+    }
 
-        /* Cipher List */
-        .cipher-list {
-            list-style: none;
-            display: grid;
-            gap: 0.6rem;
-        }
-        .cipher-list li {
-            background: linear-gradient(135deg, #fff1f2, #fee2e2);
-            padding: 0.8rem 1.2rem;
-            border-radius: 10px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            border-left: 3px solid var(--accent);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-        .cipher-list li:hover {
-            transform: translateX(5px);
-            background: linear-gradient(135deg, #fecaca, #fca5a5);
-            border-left-color: var(--primary);
-        }
-        .cipher-list li::before { content: '🔐'; font-size: 1.1rem; }
+    .post blockquote strong {
+      color: var(--gold);
+    }
 
-        /* Metrics Cards */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        .metric-card {
-            background: linear-gradient(135deg, #fef2f2, white);
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(220, 38, 38, 0.15);
-            transition: var(--transition);
-        }
-        .metric-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
-        }
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 0.3rem 0;
-        }
-        .metric-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
+    /* Ссылки */
+    .post a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      padding-bottom: 2px;
+    }
 
-        /* Image */
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 16px;
-            margin: 1rem 0;
-            display: block;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            transition: var(--transition);
-            border: 3px solid white;
-        }
-        img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.25);
-        }
+    .post a::after {
+      content: '⚓';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0;
+      font-size: 0.7rem;
+      transition: width 0.3s ease;
+      opacity: 0;
+    }
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem 2rem 4rem;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            position: relative;
-            z-index: 10;
-        }
-        .footer-decoration {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
-            font-size: 1.5rem;
-        }
+    .post a:hover::after {
+      width: 100%;
+      opacity: 0.6;
+    }
 
-        /* Modal for demo files */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem; right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .modal-close:hover { color: var(--primary); transform: rotate(90deg); }
+    .post a:hover {
+      color: var(--bone);
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.2rem; }
-            header p { font-size: 1rem; }
-            .container { margin-top: -2rem; padding: 0 1rem; }
-            article { padding: 1.5rem; }
-            h2 { font-size: 1.4rem; }
-            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+    /* Кнопки */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.9rem;
+      background: linear-gradient(135deg, var(--blood), var(--charcoal));
+      color: var(--bone);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: var(--transition);
+      border: 2px solid var(--blood);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #fef2f2; }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(var(--primary-light), var(--primary));
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
-    </style>
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.3), transparent);
+      transition: left 0.4s;
+    }
+
+    .btn:hover::before { left: 100%; }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .btn:active { transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .btn-outline:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, var(--gold), #997a1a);
+      color: var(--black);
+      border-color: var(--gold);
+      font-weight: 600;
+    }
+    .btn-download:hover {
+      background: linear-gradient(135deg, #e6c050, var(--gold));
+      box-shadow: 0 0 25px rgba(201, 162, 39, 0.5);
+    }
+
+    /* Код и данные */
+    .code-block, .data-block {
+      background: #0f0f0f;
+      border-radius: 12px;
+      padding: 1.3rem;
+      margin: 1.1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      border: 1px solid var(--card-border);
+      position: relative;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .code-block::before {
+      content: '💀';
+      position: absolute;
+      top: 10px; right: 14px;
+      font-size: 1.3rem;
+      opacity: 0.6;
+    }
+
+    .data-block {
+      border-left: 4px solid var(--gold);
+      background: linear-gradient(135deg, rgba(26,26,26,0.95), rgba(45,45,45,0.9));
+    }
+
+    /* Таблицы */
+    .pirate-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: rgba(26, 26, 26, 0.8);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .pirate-table th {
+      background: linear-gradient(135deg, var(--blood), var(--charcoal));
+      color: var(--bone);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold);
+      position: relative;
+    }
+
+    .pirate-table th::after {
+      content: '⚔️';
+      position: absolute;
+      right: 10px;
+      opacity: 0.5;
+    }
+
+    .pirate-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+      color: var(--text-secondary);
+    }
+
+    .pirate-table tr:hover {
+      background: rgba(201, 162, 39, 0.08);
+    }
+
+    .pirate-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .pirate-table .highlight {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Метрики */
+    .metric {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      background: rgba(201, 162, 39, 0.15);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      margin: 0.35rem;
+      font-weight: 600;
+      color: var(--gold);
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .metric:hover {
+      background: rgba(201, 162, 39, 0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+    .metric i { font-size: 0.85rem; }
+
+    /* Теги */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.2rem 0 0.5rem;
+    }
+
+    .tag {
+      padding: 0.35rem 1rem;
+      background: rgba(139, 0, 0, 0.25);
+      border: 1px solid var(--blood);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--bone);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .tag:hover {
+      background: var(--blood);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
+    }
+
+    .tag.gold {
+      background: rgba(201, 162, 39, 0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .tag.gold:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    /* Изображения */
+    .post img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin: 1.2rem 0;
+      display: block;
+      transition: var(--transition);
+      border: 3px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .post img:hover {
+      transform: scale(1.03);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Шифрованный текст */
+    .cipher-text {
+      background: rgba(139, 0, 0, 0.15);
+      border: 1px dashed var(--blood);
+      border-radius: 10px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      margin: 0.8rem 0;
+      color: var(--bone);
+    }
+
+    .cipher-text span {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Футер */
+    footer {
+      text-align: center;
+      padding: 3rem 1rem 2.5rem;
+      color: var(--text-secondary);
+      border-top: 2px solid var(--card-border);
+      margin-top: 2.5rem;
+      position: relative;
+    }
+
+    footer::before {
+      content: '☠️ ⚓ ☠️';
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      opacity: 0.6;
+      letter-spacing: 0.5rem;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    footer a:hover {
+      color: var(--bone);
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    /* Анимация появления при скролле */
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: all 0.6s ease;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Модальное окно для демо-файлов */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      backdrop-filter: blur(5px);
+    }
+    .modal.active { display: flex; }
+    
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      border: 2px solid var(--gold);
+      box-shadow: var(--shadow-lg), 0 0 40px rgba(201, 162, 39, 0.3);
+      animation: modalIn 0.35s ease;
+      position: relative;
+    }
+    
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-skull {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: skullBob 2s ease-in-out infinite;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      color: var(--gold);
+    }
+
+    .modal-size {
+      color: var(--text-secondary);
+      margin-bottom: 1.3rem;
+      font-size: 0.95rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--silver);
+      cursor: pointer;
+      transition: var(--transition);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: rgba(201, 162, 39, 0.2);
+      color: var(--gold);
+      transform: rotate(90deg);
+    }
+
+    /* Уведомления */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      padding: 1rem 1.6rem;
+      background: var(--card-bg);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+      transform: translateX(150%);
+      transition: transform 0.35s ease;
+      z-index: 1001;
+      max-width: 380px;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      border: 1px solid var(--card-border);
+    }
+    .toast.show { transform: translateX(0); }
+    .toast.success { border-left-color: #22c55e; }
+    .toast.error { border-left-color: #ef4444; }
+    .toast i { font-size: 1.3rem; }
+
+    /* Прогресс-бар чтения */
+    .reading-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blood), var(--gold));
+      z-index: 100;
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.2rem; }
+      .jolly-roger { font-size: 3rem; }
+      
+      .nav {
+        gap: 0.4rem;
+        padding: 0.3rem;
+      }
+      .nav a {
+        padding: 0.5rem 0.9rem;
+        font-size: 0.85rem;
+      }
+      
+      .post { padding: 1.4rem; }
+      .code-block { font-size: 0.85rem; padding: 1rem; }
+      
+      .pirate-table { font-size: 0.9rem; }
+      .pirate-table th, .pirate-table td { padding: 0.7rem 0.8rem; }
+      
+      .metric { padding: 0.3rem 0.8rem; font-size: 0.85rem; }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.9rem; }
+      .post h2 { font-size: 1.3rem; }
+      .btn { padding: 0.75rem 1.5rem; font-size: 0.9rem; }
+      .nav { flex-direction: column; align-items: center; }
+      .nav a { width: 100%; justify-content: center; }
+    }
+
+    /* Плавная прокрутка */
+    html { scroll-behavior: smooth; }
+
+    /* Скрытие скроллбара для чистоты */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--charcoal); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(var(--slate), var(--blood));
+      border-radius: 4px;
+      border: 2px solid var(--charcoal);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(var(--blood), var(--gold));
+    }
+  </style>
 </head>
 <body>
+  <!-- Пиратские элементы фона -->
+  <div class="skull-corner top-right">☠️</div>
+  <div class="skull-corner bottom-left">☠️</div>
+  <div class="candle-glow"></div>
+  <div class="candle-glow"></div>
+  <div class="pirate-particles" id="pirateParticles"></div>
+  
+  <!-- Прогресс чтения -->
+  <div class="reading-progress" id="readingProgress"></div>
 
-    <!-- 🌸 Анимированный фон -->
-    <div class="flower-bg" id="flowerBg"></div>
-    
-    <!-- Декоративные цветы -->
-    <div class="corner-flower top-left">
-        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
-            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
-            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
-            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
-            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
-        </svg>
-    </div>
-    <div class="corner-flower top-right">
-        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
-            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
-            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
-            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
-            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
-        </svg>
-    </div>
-    <div class="corner-flower bottom-left">
-        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
-            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
-            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
-            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
-            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
-        </svg>
-    </div>
-    <div class="corner-flower bottom-right">
-        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
-            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
-            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
-            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
-            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
-        </svg>
-    </div>
-
+  <div class="container">
+    <!-- Шапка -->
     <header>
-        <h1><i class="fas fa-rose"></i> Sofia's Tech Space</h1>
-        <p>Личный блог • Эксперименты с данными • Заметки разработчика</p>
-        <a href="mailto:sofi.vasilek100@mail.ru" class="header-cta">
-            <i class="fas fa-envelope"></i> Написать мне
-        </a>
+      <div class="jolly-roger">☠️</div>
+      <h1>Sofia's Pirate Log</h1>
+      <p>Код, криптография и сокровища данных • Записки капитана корабля данных</p>
+      <div class="flag-divider"></div>
     </header>
 
-    <div class="container">
+    <!-- Навигация -->
+    <nav class="nav">
+      <a href="#latest" class="active"><i class="fas fa-scroll"></i> Журнал</a>
+      <a href="#ml"><i class="fas fa-robot"></i> ML & Код</a>
+      <a href="#crypto"><i class="fas fa-key"></i> Крипто</a>
+      <a href="#treasure"><i class="fas fa-coins"></i> Сокровища</a>
+      <a href="mailto:sofi.vasilek100@mail.ru" class="btn-outline"><i class="fas fa-envelope"></i> Письмо</a>
+    </nav>
 
-        <!-- 5 мая -->
-        <article style="animation-delay: 0.1s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 5 мая, 2026</span>
-            <h2><i class="fas fa-table"></i> Обновление таблиц</h2>
-            <p>Новые данные доступны для скачивания. Файл содержит обновлённую статистику и аналитику.</p>
-            <a href="#" class="download-link" onclick="showDemoModal('Таблица106CS.ods', '~245 КБ'); return false;">
-                <i class="fas fa-download"></i> Скачать Таблица106CS.ods
-            </a>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
-                <i class="fas fa-info-circle"></i> Формат: .ods • Размер: ~245 КБ
-            </p>
-        </article>
+    <!-- Посты -->
+    <main>
+      <!-- 18 февраля 2026 -->
+      <article class="post reveal" id="latest">
+        <span class="post-date"><i class="fas fa-calendar"></i> 18 февраля, 2026</span>
+        <h2><i class="fas fa-eye"></i> Компьютерное зрение: Классификация</h2>
+        <p>Топ-3 предсказания нейросети для входного изображения:</p>
+        <div class="data-block">
+          <div style="margin: 0.5rem 0"><strong>👟 running shoe:</strong> <span class="metric"><i class="fas fa-bolt"></i> 99.45%</span></div>
+          <div style="margin: 0.5rem 0"><strong>🏪 shoe store:</strong> <span class="metric">0.27%</span></div>
+          <div style="margin: 0.5rem 0"><strong>🥿 clogs:</strong> <span class="metric">0.15%</span></div>
+        </div>
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-brain"></i> ComputerVision</span>
+          <span class="tag"><i class="fas fa-robot"></i> AI</span>
+          <span class="tag"><i class="fas fa-chart-line"></i> Predictions</span>
+        </div>
+      </article>
 
-        <!-- 27 апреля -->
-        <article style="animation-delay: 0.15s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 27 апреля, 2026</span>
-            <h2><i class="fas fa-archive"></i> Архив данных</h2>
-            <p>Архивная версия таблицы с историческими данными для сравнительного анализа.</p>
-            <a href="#" class="download-link" onclick="showDemoModal('таблица 2.ods', '~198 КБ'); return false;">
-                <i class="fas fa-download"></i> Скачать таблицу 2.ods
-            </a>
-        </article>
+      <!-- 25 февраля 2026 -->
+      <article class="post reveal">
+        <span class="post-date"><i class="fas fa-calendar"></i> 25 февраля, 2026</span>
+        <h2><i class="fas fa-robot"></i> FAQ Bot: Ответ на вопрос</h2>
+        <p><strong>❓ Вопрос пользователя:</strong> Сколько ждать мой заказ?</p>
+        <p><strong>🔍 Найден FAQ-вопрос:</strong> Как быстро доставляется заказ? <em>(similarity=0.706)</em></p>
+        <blockquote>
+          <strong>🗣️ Ответ бота:</strong> Наш стандартный срок доставки — 3–5 рабочих дней. 📦⚓
+        </blockquote>
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-comments"></i> ChatBot</span>
+          <span class="tag"><i class="fas fa-language"></i> NLP</span>
+          <span class="tag"><i class="fas fa-headset"></i> Support</span>
+        </div>
+      </article>
 
-        <!-- 22 апреля -->
-        <article style="animation-delay: 0.2s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 22 апреля, 2026</span>
-            <h2><i class="fas fa-file-excel"></i> Работа с электронными таблицами</h2>
-            <p>Основная рабочая таблица проекта 106С с формулами и сводными данными.</p>
-            <a href="#" class="download-link" onclick="showDemoModal('106С таблица.ods', '~312 КБ'); return false;">
-                <i class="fas fa-download"></i> Скачать 106С таблица.ods
-            </a>
-        </article>
+      <!-- 16 марта 2026 -->
+      <article class="post reveal" id="ml">
+        <span class="post-date"><i class="fas fa-calendar"></i> 16 марта, 2026</span>
+        <h2><i class="fas fa-chart-line"></i> Прогноз успеваемости студентов</h2>
+        <p>Линейная регрессия для предсказания баллов по часам подготовки:</p>
+        
+        <div class="code-block">
+# Прогноз для одного студента
+new_student = pd.DataFrame({'Часы': [5]})
+prediction = regressor.predict(new_student)
+print(f"🎓 Студент занимался 5 часов")
+print(f"📊 Прогноз баллов: {prediction[0]:.2f}")
 
-        <!-- 1 апреля -->
-        <article style="animation-delay: 0.25s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 1 апреля, 2026</span>
-            <h2><i class="fas fa-chart-line"></i> Результаты обучения модели (MSE)</h2>
-            <p>Метрики качества регрессионной модели после финального обучения:</p>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-label">Train MSE</div>
-                    <div class="metric-value">0.135</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Test MSE</div>
-                    <div class="metric-value">0.151</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Delta</div>
-                    <div class="metric-value" style="color: var(--success)">+0.016</div>
-                </div>
-            </div>
-            <div class="log-entry">
-                <i class="fas fa-check-circle" style="color: var(--success)"></i> 
-                Модель не переобучена • Хорошая обобщающая способность
-            </div>
-        </article>
-
-        <!-- 21 марта -->
-        <article style="animation-delay: 0.3s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 21 марта, 2026</span>
-            <h2><i class="fas fa-shield-alt"></i> КАСКО: ML Модель классификации</h2>
-            <p>Завершено обучение модели для системы страхования. Результаты превзошли ожидания:</p>
-            
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-label">Accuracy</div>
-                    <div class="metric-value">98.5%</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Precision</div>
-                    <div class="metric-value">98.4%</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Recall</div>
-                    <div class="metric-value">99.7%</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">F1-Score</div>
-                    <div class="metric-value">99.1%</div>
-                </div>
-            </div>
-            
-            <pre>
-# Сводка по датасету
-Датасет: kasko_dataset.csv
-Всего записей: 2,000
-Одобрено заявок: 1,587 (79.3%)
-
-# Сохранённые артефакты
-✓ metrics.json — метрики оценки
-✓ kasko_model.pkl — сериализованная модель
-✓ preprocessing.pkl — пайплайн предобработки
-
-[✓] Обучение завершено успешно!
-            </pre>
-        </article>
-
-        <!-- 16 марта -->
-        <article style="animation-delay: 0.35s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 16 марта, 2026</span>
-            <h2><i class="fas fa-graduation-cap"></i> Прогноз успеваемости студентов</h2>
-            <p>Линейная регрессия для предсказания баллов по часам подготовки:</p>
-            
-            <pre>
-import pandas as pd
-from sklearn.linear_model import LinearRegression
-
-# Подготовка данных
+# Группа студентов
 students = pd.DataFrame({'Часы': [1, 3, 5, 7, 10]})
 predictions = regressor.predict(students)
 
-# Формирование отчёта
 results = pd.DataFrame({
     'Часы подготовки': students['Часы'],
     'Прогноз баллов': predictions.round(2)
 })
 print(results.to_string(index=False))
-            </pre>
-            
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Часы</th>
-                        <th>Прогноз баллов</th>
-                        <th>Уровень</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>12.32</td><td style="color: var(--warning)">Начальный</td></tr>
-                    <tr><td>3</td><td>31.28</td><td style="color: var(--warning)">Средний</td></tr>
-                    <tr><td>5</td><td>50.23</td><td style="color: var(--success)">Хороший</td></tr>
-                    <tr><td>7</td><td>69.19</td><td style="color: var(--success)">Отличный</td></tr>
-                    <tr><td>10</td><td>97.62</td><td style="color: var(--primary)">Превосходно</td></tr>
-                </tbody>
-            </table>
-        </article>
+        </div>
+        
+        <table class="pirate-table">
+          <thead>
+            <tr>
+              <th>⏱️ Часы подготовки</th>
+              <th>📈 Прогноз баллов</th>
+              <th>🏆 Уровень</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>12.32</td><td class="highlight">🌱 Новичок</td></tr>
+            <tr><td>3</td><td>31.28</td><td class="highlight">⚔️ Ученик</td></tr>
+            <tr><td>5</td><td class="highlight">50.23</td><td class="highlight">🗡️ Мастер</td></tr>
+            <tr><td>7</td><td class="highlight">69.19</td><td class="highlight">⚡ Эксперт</td></tr>
+            <tr><td>10</td><td class="highlight">97.62</td><td class="highlight">☠️ Легенда</td></tr>
+          </tbody>
+        </table>
+        
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-ruler"></i> LinearRegression</span>
+          <span class="tag"><i class="fab fa-python"></i> Python</span>
+          <span class="tag"><i class="fas fa-database"></i> DataScience</span>
+        </div>
+      </article>
 
-        <!-- 25 февраля -->
-        <article style="animation-delay: 0.4s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 25 февраля, 2026</span>
-            <h2><i class="fas fa-robot"></i> Чат-бот FAQ с NLP</h2>
-            <p>Демонстрация работы семантического поиска по базе знаний:</p>
-            <div class="log-entry">
-                <strong><i class="fas fa-user"></i> Пользователь:</strong> Сколько ждать мой заказ?<br><br>
-                <strong><i class="fas fa-search"></i> Найденный вопрос:</strong> 
-                <span style="color: var(--primary-dark)">«Как быстро доставляется заказ?»</span> 
-                (similarity: 0.706)<br><br>
-                <strong><i class="fas fa-comment-alt"></i> Ответ бота:</strong> 
-                <span style="color: var(--success)">Наш стандартный срок доставки — 3–5 рабочих дней.</span>
+      <!-- 21 марта 2026 -->
+      <article class="post reveal" id="crypto">
+        <span class="post-date"><i class="fas fa-calendar"></i> 21 марта, 2026</span>
+        <h2><i class="fas fa-shield-alt"></i> Система страхования КАСКО</h2>
+        <p>Завершено обучение модели классификации для оценки страховых рисков:</p>
+        
+        <div class="data-block">
+          <p><strong>📁 Датасет:</strong> <code style="color:var(--gold)">kasko_dataset.csv</code></p>
+          <p><strong>📊 Записей:</strong> 2,000 | <strong>✅ Одобрено:</strong> 1,587 (79.3%)</p>
+          <hr style="border:0; border-top:1px solid rgba(201,162,39,0.2); margin:1rem 0;">
+          <p><strong>🎯 ТОЧНОСТЬ МОДЕЛИ:</strong> <span class="metric"><i class="fas fa-bullseye"></i> 98.5%</span></p>
+          <div style="margin: 0.6rem 0">
+            <span class="metric"><i class="fas fa-check"></i> Precision: 98.43%</span>
+            <span class="metric"><i class="fas fa-search"></i> Recall: 99.68%</span>
+            <span class="metric"><i class="fas fa-star"></i> F1: 99.05%</span>
+          </div>
+          <p style="margin-top:0.9rem; font-size:0.9rem; color:var(--text-secondary);">
+            💾 <code>metrics.json</code> • 🤖 <code>kasko_model.pkl</code> • 🔧 <code>preprocessing.pkl</code>
+          </p>
+        </div>
+        
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-brain"></i> MachineLearning</span>
+          <span class="tag"><i class="fas fa-file-contract"></i> Insurance</span>
+          <span class="tag"><i class="fas fa-layer-group"></i> Classification</span>
+        </div>
+      </article>
+
+      <!-- 20 января 2026 - Крипто -->
+      <article class="post reveal">
+        <span class="post-date"><i class="fas fa-calendar"></i> 20 января, 2026</span>
+        <h2><i class="fas fa-key"></i> RSA: Открытый и закрытый ключи</h2>
+        
+        <div class="code-block">
+# 🔐 RSA Keys Example (Educational)
+Открытый ключ:  (n, e) = (33, 3)
+Закрытый ключ:  (n, d) = (33, 7)
+
+⚠️ ВНИМАНИЕ: Это учебный пример!
+Не используйте малые значения n в продакшене.
+
+🔢 Реальное большое n (256 бит):
+152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938
+        </div>
+        
+        <p style="margin-top:1rem;">
+          <a href="#" onclick="showDemoModal('pac.png', 'Схема проекта БД'); return false;" class="btn-download">
+            <i class="fas fa-download"></i> 📥 Скачать схему проекта (pac.png)
+          </a>
+        </p>
+        
+        <blockquote style="margin-top:1.2rem;">
+          <strong>💡 Мудрость капитана:</strong> Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов. Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза. ⚓
+        </blockquote>
+        
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-lock"></i> Cryptography</span>
+          <span class="tag"><i class="fas fa-key"></i> RSA</span>
+          <span class="tag"><i class="fas fa-brain"></i> NeuralNetworks</span>
+        </div>
+      </article>
+
+      <!-- Сокровища / Файлы -->
+      <article class="post reveal" id="treasure">
+        <span class="post-date"><i class="fas fa-coins"></i> 🗝️ Сокровищница</span>
+        <h2>Скачать таблицы и ресурсы</h2>
+        <p style="color:var(--text-secondary); margin-bottom:1.2rem;">
+          Все файлы готовы к загрузке. Нажмите на сундук, чтобы получить сокровище! 🏴‍☠️
+        </p>
+        
+        <div style="display: grid; gap: 0.9rem; margin-top: 0.5rem;">
+          <a href="#" onclick="showDemoModal('106С таблица.ods', '~312 КБ'); return false;" class="btn btn-download">
+            <i class="fas fa-file-excel"></i> 📊 Таблица 106С (.ods)
+          </a>
+          <a href="#" onclick="showDemoModal('таблица 2.ods', '~198 КБ'); return false;" class="btn btn-download">
+            <i class="fas fa-file-excel"></i> 📋 Таблица 2 (.ods)
+          </a>
+          <a href="#" onclick="showDemoModal('Таблица106CS.ods', '~245 КБ'); return false;" class="btn btn-download">
+            <i class="fas fa-file-excel"></i> 📈 Таблица 106CS (.ods)
+          </a>
+          <a href="#" onclick="showDemoModal('Congratulations2026.html', 'Праздничная страница'); return false;" class="btn btn-outline">
+            <i class="fas fa-gift"></i> 🎄 Поздравление с 2026 годом
+          </a>
+          <a href="https://github.com/OLYAKL/dem.github.io" target="_blank" rel="noopener" class="btn btn-outline">
+            <i class="fab fa-github"></i> 🔗 Сайт моего друга (GitHub)
+          </a>
+        </div>
+        
+        <p style="margin-top:1.5rem; font-size:0.9rem; color:var(--text-secondary); text-align:center;">
+          <i class="fas fa-info-circle"></i> В реальном проекте файлы размещаются в корне репозитория GitHub Pages
+        </p>
+      </article>
+
+      <!-- Цитаты и заметки -->
+      <article class="post reveal">
+        <span class="post-date"><i class="fas fa-calendar"></i> 1 декабря, 2025</span>
+        <blockquote>
+          «Путешествие в тысячу миль начинается с одного шага»<br>
+          <em>— Лао Цзы</em> 🍃⚓
+        </blockquote>
+        <div style="text-align:center; margin:1.5rem 0;">
+          <i class="fas fa-tree" style="font-size:3.5rem; color:var(--gold); opacity:0.8;"></i>
+        </div>
+        <p style="text-align:center;">
+          <a href="#" onclick="showDemoModal('Congratulations2026.html', 'Праздничная страница'); return false;" style="font-weight:600;">
+            🎁 Открыть новогоднее поздравление →
+          </a>
+        </p>
+      </article>
+
+      <article class="post reveal">
+        <span class="post-date"><i class="fas fa-calendar"></i> 1 сентября, 2025</span>
+        <h2><i class="fas fa-globe"></i> Переход в Всемирную паутину</h2>
+        <p>Оставляю в прошлом скучную локальную файловую систему ради безграничных возможностей <strong>Интернета</strong>. 🌐✨</p>
+        <p style="margin-top:0.9rem; font-size:0.9rem; color:var(--text-secondary);">
+          🎨 Иконки: <a href="https://icons8.com" target="_blank">Icons8</a> • 
+          🏴‍☠️ Тема: «Пиратский лог»
+        </p>
+      </article>
+
+      <!-- Зашифрованные заметки -->
+      <article class="post reveal">
+        <span class="post-date"><i class="fas fa-lock"></i> 19 января, 2026</span>
+        <h2><i class="fas fa-user-secret"></i> Личные зашифрованные заметки</h2>
+        <p style="color:var(--text-secondary); margin-bottom:0.8rem;">
+          Доступно только для доверенных членов экипажа:
+        </p>
+        <div class="cipher-text">
+          <p>• АПЕЛЬСИН → <span>САЦЬНВЩЮ</span> [shift: 17]</p>
+          <p>• АБРИКОС → <span>ЫЬЛГЕЙМ</span> [shift: 27]</p>
+          <p>• ФХНЗКЧ → <span>ПРИВЕТ</span> <i class="fas fa-check" style="color:#22c55e"></i> [shift: 5]</p>
+          <p>• ЦЩЕБФ → <span>ВЕСНА</span> [shift: 20]</p>
+          <p>• Васильева → <span>МКЫТХЖПМК</span> [shift: 10]</p>
+        </div>
+        <p style="margin-top:1rem; font-size:0.9rem; color:var(--text-secondary);">
+          <i class="fas fa-lightbulb"></i> Подсказка: русский алфавит = 33 буквы • Используйте модульную арифметику
+        </p>
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-lock"></i> Caesar Cipher</span>
+          <span class="tag"><i class="fas fa-code"></i> Cryptography</span>
+        </div>
+      </article>
+
+      <!-- Метрики обучения -->
+      <article class="post reveal">
+        <span class="post-date"><i class="fas fa-calendar"></i> 1 апреля, 2026</span>
+        <h2><i class="fas fa-chart-line"></i> Метрики обучения модели</h2>
+        <p>Результаты финального обучения регрессионной модели:</p>
+        
+        <div class="data-block" style="text-align:center; padding:1.2rem;">
+          <div style="display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+            <div>
+              <div style="font-size:0.9rem; color:var(--text-secondary)">Train MSE</div>
+              <div class="metric" style="font-size:1.3rem; margin-top:0.3rem">0.1347</div>
             </div>
-        </article>
-
-        <!-- 18 февраля -->
-        <article style="animation-delay: 0.45s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 18 февраля, 2026</span>
-            <h2><i class="fas fa-eye"></i> Computer Vision: Классификация изображений</h2>
-            <p>Топ-3 предсказания нейросети для тестового изображения:</p>
-            <ul class="cipher-list" style="margin-top: 0.5rem">
-                <li style="border-left-color: var(--success)">👟 running shoe: <strong>99.45%</strong></li>
-                <li>🏪 shoe store: 0.27%</li>
-                <li>🥿 clogs: 0.15%</li>
-            </ul>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted)">
-                <i class="fas fa-lightbulb"></i> Модель уверенно определила объект даже при частичном перекрытии
-            </p>
-        </article>
-
-        <!-- 20 января -->
-        <article style="animation-delay: 0.5s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 20 января, 2026</span>
-            <h2><i class="fas fa-key"></i> Криптография и нейросети</h2>
-            
-            <p><strong>RSA Keys Example (Educational):</strong></p>
-            <div class="crypto-key">
-                <i class="fas fa-lock-open"></i> Публичный ключ: (n=33, e=3)<br>
-                <i class="fas fa-lock"></i> Приватный ключ: (n=33, d=7)
+            <div>
+              <div style="font-size:0.9rem; color:var(--text-secondary)">Test MSE</div>
+              <div class="metric" style="font-size:1.3rem; margin-top:0.3rem">0.1505</div>
             </div>
-            
-            <p style="margin-top:1rem;"><strong>Пример большого модуля n (256 бит):</strong></p>
-            <div class="crypto-key" style="font-size: 0.75rem">
-                152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938
+            <div>
+              <div style="font-size:0.9rem; color:var(--text-secondary)">Delta</div>
+              <div class="metric" style="font-size:1.3rem; margin-top:0.3rem; color:#22c55e">+0.016 ✓</div>
             </div>
+          </div>
+          <p style="font-size:0.95rem; margin-top:0.5rem;">
+            <i class="fas fa-check-circle" style="color:#22c55e"></i> 
+            Модель не переобучена • Хорошая обобщающая способность
+          </p>
+        </div>
+        
+        <div class="tags">
+          <span class="tag gold"><i class="fas fa-graduation-cap"></i> Model Training</span>
+          <span class="tag"><i class="fas fa-balance-scale"></i> MSE Metric</span>
+        </div>
+      </article>
+    </main>
 
-            <hr style="margin: 1.8rem 0; border: 0; border-top: 2px dashed rgba(220, 38, 38, 0.2);">
-
-            <h3 style="margin-bottom: 0.8rem"><i class="fas fa-brain"></i> Теория нейронных сетей</h3>
-            <blockquote>
-                Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», 
-                то нейронная сеть — это команда виртуальных экспертов, каждый из которых ищет свой паттерн в данных.
-            </blockquote>
-            <p style="margin-top: 0.8rem">
-                Каждый нейрон взвешивает признаки, применяет нелинейную активацию и передаёт сигнал дальше. 
-                В процессе обучения сеть автоматически настраивает веса, минимизируя ошибку прогноза.
-            </p>
-            
-            <p style="margin-top: 1.2rem">
-                <a href="#" onclick="showDemoModal('pac.png', 'Схема проекта'); return false;">
-                    <i class="fas fa-image"></i> Смотреть схему проекта (pac.png)
-                </a>
-            </p>
-        </article>
-
-        <!-- 19 января -->
-        <article style="animation-delay: 0.55s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 19 января, 2026</span>
-            <h2><i class="fas fa-user-secret"></i> Шифрованные сообщения (Цезарь/ROT)</h2>
-            <p>Примеры зашифрованных строк с указанием сдвига:</p>
-            <ul class="cipher-list">
-                <li>АПЕЛЬСИН → САЦЬНВЩЮ <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 17</span></li>
-                <li>АБРИКОС → ЫЬЛГЕЙМ <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 27</span></li>
-                <li>ФХНЗКЧ → ПРИВЕТ <span style="margin-left: auto; background: var(--success); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">✓ shift: 5</span></li>
-                <li>ЦЩЕБФ → ВЕСНА <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 20</span></li>
-                <li>Васильева → МКЫТХЖПМК <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 10</span></li>
-            </ul>
-            <p style="margin-top: 1rem; font-size: 0.9rem">
-                <i class="fas fa-lightbulb"></i> Подсказка: для русского алфавита используйте модуль 33
-            </p>
-        </article>
-
-        <!-- 14 января -->
-        <article style="animation-delay: 0.6s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 14 января, 2026</span>
-            <h2><i class="fas fa-globe"></i> Переход в Web</h2>
-            <p>Оставляю в прошлом локальную файловую систему ради возможностей Всемирной паутины.</p>
-            <p style="margin-top: 0.8rem">
-                <i class="fas fa-check" style="color: var(--success)"></i> Адаптивный дизайн • 
-                <i class="fas fa-check" style="color: var(--success)"></i> SEO-оптимизация • 
-                <i class="fas fa-check" style="color: var(--success)"></i> PWA-ready
-            </p>
-        </article>
-
-        <!-- 1 декабря -->
-        <article style="animation-delay: 0.65s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 1 декабря, 2025</span>
-            <h2><i class="fas fa-flag"></i> Путешествие начинается</h2>
-            <blockquote>
-                "Путешествие в тысячу миль начинается с одного шага" 
-                <br><small>— Лао Цзы</small>
-            </blockquote>
-            
-            <div style="text-align: center; margin: 1.5rem 0">
-                <i class="fas fa-tree" style="font-size: 3rem; color: var(--primary); opacity: 0.8"></i>
-            </div>
-            
-            <p style="text-align: center">
-                🎄 Поздравление с Новым 2026 годом: 
-                <a href="#" onclick="showDemoModal('Congratulations2026.html', 'Праздничная страница'); return false;" style="font-weight: 600">открыть →</a>
-            </p>
-        </article>
-
-        <!-- 15 октября -->
-        <article style="animation-delay: 0.7s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 15 октября, 2025</span>
-            <h2><i class="fas fa-handshake"></i> Коллаборация</h2>
-            <p>Разработала интерактивные новогодние кроссворды для сайта коллеги.</p>
-            <a href="https://github.com/OLYAKL/dem.github.io" target="_blank" rel="noopener" class="download-link" style="background: linear-gradient(135deg, #6366f1, #8b5cf6)">
-                <i class="fab fa-github"></i> Перейти к проекту друга
-            </a>
-        </article>
-
-        <!-- 1 сентября -->
-        <article style="animation-delay: 0.75s">
-            <span class="date-badge"><i class="fas fa-calendar"></i> 1 сентября, 2025</span>
-            <h2><i class="fas fa-seedling"></i> Начало пути</h2>
-            <blockquote>
-                "Путешествие в тысячу миль начинается с одного шага" 
-                <br><small>— Лао Цзы</small>
-            </blockquote>
-            <p style="margin-top: 1rem; font-style: italic; color: var(--text-muted)">
-                Первый пост в блоге • Здесь будут мои заметки, эксперименты и открытия
-            </p>
-        </article>
-
-    </div>
-
+    <!-- Футер -->
     <footer>
-        <div class="footer-decoration">
-            <i class="fas fa-rose"></i>
-            <i class="fas fa-flower-tulip"></i>
-            <i class="fas fa-seedling"></i>
-            <i class="fas fa-flower-tulip"></i>
-            <i class="fas fa-rose"></i>
-        </div>
-        <p>&copy; 2025–2026 <strong>Sofia Vasileva</strong>. Все права защищены.</p>
-        <p>
-            <i class="fas fa-code"></i> Сделано с <i class="fas fa-heart" style="color: var(--accent)"></i> и любовью к коду • 
-            <a href="https://github.com/Sofia-a-cell" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-        </p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem">
-            Hosted on <a href="https://pages.github.com" target="_blank">GitHub Pages</a> • 
-            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Наверх ↑</a>
-        </p>
+      <p>
+        <strong>🏴‍☠️ Sofia's Pirate Log</strong><br>
+        <i class="fas fa-map-marker-alt"></i> Домен: <strong>Sofia-a-cell.github.io</strong><br>
+        <i class="fas fa-envelope"></i> <a href="mailto:sofi.vasilek100@mail.ru">sofi.vasilek100@mail.ru</a>
+      </p>
+      <p style="margin-top:1.3rem; font-size:0.95rem;">
+        © 2025–2026 Sofia Vasileva • Создано с <i class="fas fa-heart" style="color:var(--blood)"></i> и пиратским ромом 🏴‍☠️
+      </p>
+      <p style="margin-top:0.8rem; font-size:0.9rem;">
+        Hosted on <a href="https://pages.github.com" target="_blank">GitHub Pages</a> • 
+        <a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">⬆️ Наверх</a>
+      </p>
     </footer>
+  </div>
 
-    <!-- Модальное окно для демо-файлов -->
-    <div class="modal" id="demoModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <i class="fas fa-file-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
-            <h3 id="modalTitle" style="margin-bottom: 0.5rem; color: var(--text);">Файл</h3>
-            <p id="modalSize" style="color: var(--text-muted); margin-bottom: 1.5rem;">Размер: —</p>
-            <p style="margin-bottom: 1.5rem;">
-                В демо-режиме файл не доступен для скачивания.<br>
-                В реальном проекте разместите файлы в корне репозитория.
-            </p>
-            <button class="download-link" onclick="closeModal()">
-                <i class="fas fa-check"></i> Понятно
-            </button>
-        </div>
+  <!-- Модальное окно для демо-файлов -->
+  <div class="modal" id="demoModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-skull">☠️</div>
+      <h3 class="modal-title" id="modalTitle">Файл</h3>
+      <p class="modal-size" id="modalSize">Размер: —</p>
+      <p style="margin-bottom:1.5rem; color:var(--text-secondary);">
+        В демо-режиме файл не доступен для скачивания.<br>
+        <strong>В реальном проекте:</strong> разместите файлы в корне репозитория GitHub.
+      </p>
+      <button class="btn btn-download" onclick="closeModal()">
+        <i class="fas fa-check"></i> Понял, капитан!
+      </button>
     </div>
+  </div>
 
-    <script>
-        // 🌸 Генерация лепестков
-        document.addEventListener('DOMContentLoaded', () => {
-            const flowerBg = document.getElementById('flowerBg');
-            for (let i = 0; i < 25; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                const size = 15 + Math.random() * 15;
-                const left = Math.random() * 100;
-                const delay = Math.random() * 20;
-                const duration = 15 + Math.random() * 15;
-                petal.style.width = `${size}px`;
-                petal.style.height = `${size}px`;
-                petal.style.left = `${left}%`;
-                petal.style.animationDelay = `-${delay}s`;
-                petal.style.animationDuration = `${duration}s`;
-                flowerBg.appendChild(petal);
-            }
-            
-            // Плавное появление карточек
-            const articles = document.querySelectorAll('article');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, { threshold: 0.1 });
-            articles.forEach(article => {
-                article.style.opacity = '0';
-                article.style.transform = 'translateY(20px)';
-                article.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(article);
-            });
-        });
+  <!-- Уведомление -->
+  <div class="toast" id="toast">
+    <i class="fas fa-info-circle"></i>
+    <span id="toast-message">Сообщение</span>
+  </div>
 
-        // Модальное окно для демо-файлов
-        function showDemoModal(filename, size) {
-            document.getElementById('modalTitle').textContent = filename;
-            document.getElementById('modalSize').textContent = `Размер: ${size}`;
-            document.getElementById('demoModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
+  <script>
+    // 🪙 Создание парящих монет
+    function createPirateParticles() {
+      const container = document.getElementById('pirateParticles');
+      for (let i = 0; i < 25; i++) {
+        const coin = document.createElement('div');
+        coin.className = 'coin';
+        coin.style.left = Math.random() * 100 + '%';
+        coin.style.animationDelay = Math.random() * 18 + 's';
+        coin.style.animationDuration = (18 + Math.random() * 12) + 's';
+        coin.style.opacity = 0.4 + Math.random() * 0.4;
+        container.appendChild(coin);
+      }
+    }
+
+    // Анимация появления при скролле
+    function handleScrollReveal() {
+      const reveals = document.querySelectorAll('.reveal');
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        if (elementTop < windowHeight - 80) {
+          el.classList.add('active');
         }
+      });
+    }
 
-        function closeModal() {
-            document.getElementById('demoModal').classList.remove('active');
-            document.body.style.overflow = '';
+    // Прогресс-бар чтения
+    function updateReadingProgress() {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (scrollTop / scrollHeight) * 100;
+      document.getElementById('readingProgress').style.width = scrolled + '%';
+    }
+
+    // Показ уведомления
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      const icon = toast.querySelector('i');
+      
+      toastMsg.textContent = message;
+      toast.className = 'toast ' + type;
+      
+      if (type === 'success') icon.className = 'fas fa-check-circle';
+      else if (type === 'error') icon.className = 'fas fa-exclamation-circle';
+      else icon.className = 'fas fa-info-circle';
+      
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // Модальное окно для демо-файлов
+    function showDemoModal(filename, size) {
+      document.getElementById('modalTitle').textContent = filename;
+      document.getElementById('modalSize').textContent = `Размер: ${size}`;
+      document.getElementById('demoModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      showToast('🔐 Доступ к сокровищу...', 'success');
+    }
+
+    function closeModal() {
+      document.getElementById('demoModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Закрытие модалки по клику вне контента
+    document.getElementById('demoModal').addEventListener('click', (e) => {
+      if (e.target.id === 'demoModal') closeModal();
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        document.querySelectorAll('.toast').forEach(t => t.classList.remove('show'));
+      }
+    });
+
+    // Обработка кликов по ссылкам
+    document.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        
+        // Внешние ссылки
+        if (href.startsWith('http') && !href.includes('github.io')) {
+          e.preventDefault();
+          showToast('🔗 Открываю внешнюю ссылку...', 'success');
+          setTimeout(() => window.open(href, '_blank', 'noopener,noreferrer'), 600);
+          return;
         }
+        
+        // Email
+        if (href.startsWith('mailto:')) {
+          showToast('📧 Открываю почтовый клиент...', 'success');
+          return;
+        }
+        
+        // Файлы для скачивания (демо-режим)
+        if (href.endsWith('.ods') || href.endsWith('.png') || href.endsWith('.html')) {
+          if (!this.onclick) {
+            e.preventDefault();
+            const filename = href.split('/').pop();
+            showDemoModal(filename, '~200-350 КБ');
+          }
+          return;
+        }
+        
+        // Якорные ссылки
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            showToast('📍 Переход к разделу', 'info');
+          }
+        }
+      });
+    });
 
-        // Закрытие модалки по клику вне контента
-        document.getElementById('demoModal').addEventListener('click', (e) => {
-            if (e.target.id === 'demoModal') closeModal();
-        });
+    // Активная навигация
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
 
-        // Закрытие по Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-    </script>
+    // Обработка ошибок изображений
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('error', function() {
+        this.style.display = 'none';
+        const placeholder = document.createElement('div');
+        placeholder.innerHTML = '<i class="fas fa-image" style="font-size:2rem; opacity:0.5"></i><br><em style="font-size:0.9rem">Изображение не найдено</em>';
+        placeholder.style.cssText = 'text-align:center; color:var(--text-secondary); padding:1.5rem;';
+        this.parentNode.insertBefore(placeholder, this.nextSibling);
+      });
+    });
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+      createPirateParticles();
+      handleScrollReveal();
+      
+      // Приветственное уведомление
+      setTimeout(() => {
+        showToast('☠️ Добро пожаловать на борт, капитан!', 'success');
+      }, 1200);
+    });
+
+    // Слушатели событий
+    window.addEventListener('scroll', () => {
+      handleScrollReveal();
+      updateReadingProgress();
+    });
+    
+    // Инициализация прогресса
+    updateReadingProgress();
+  </script>
 </body>
 </html>
