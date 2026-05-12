@@ -10,48 +10,42 @@
     <style>
         :root {
             /* Красная палитра */
-            --primary-red: #dc2626;
+            --primary: #dc2626;
             --primary-dark: #b91c1c;
             --primary-light: #fecaca;
-            --accent-pink: #f43f5e;
-            --accent-rose: #fb7185;
-            --bg-cream: #fff9fa;
+            --accent: #f43f5e;
+            --accent-light: #ffe4e6;
+            --bg: #fff9fa;
             --bg-gradient: linear-gradient(135deg, #fef2f2 0%, #fff1f2 50%, #fef2f2 100%);
-            --card-bg: rgba(255, 255, 255, 0.92);
-            --card-shadow: 0 10px 40px -10px rgba(220, 38, 38, 0.15);
-            --text-main: #1f2937;
+            --card: rgba(255, 255, 255, 0.95);
+            --text: #1f2937;
             --text-muted: #6b7280;
             --code-bg: #1a1a2e;
             --code-text: #e6e6e6;
             --success: #10b981;
             --warning: #f59e0b;
-            --border-radius: 20px;
+            --radius: 20px;
+            --shadow: 0 10px 40px -10px rgba(220, 38, 38, 0.15);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-gradient);
-            color: var(--text-main);
+            color: var(--text);
             line-height: 1.7;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* 🌸 Цветочный фон - анимированные лепестки */
+        /* 🌸 Анимированный фон с лепестками */
         .flower-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
@@ -59,9 +53,8 @@
 
         .petal {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(ellipse at center, var(--accent-rose) 0%, transparent 70%);
+            width: 20px; height: 20px;
+            background: radial-gradient(ellipse at center, var(--accent) 0%, transparent 70%);
             border-radius: 50% 50% 50% 0;
             animation: float 15s infinite linear;
             opacity: 0.6;
@@ -69,64 +62,45 @@
         }
 
         .petal:nth-child(odd) {
-            background: radial-gradient(ellipse at center, var(--primary-red) 0%, transparent 70%);
+            background: radial-gradient(ellipse at center, var(--primary) 0%, transparent 70%);
             animation-duration: 18s;
             animation-delay: -5s;
         }
 
         .petal:nth-child(3n) {
-            width: 15px;
-            height: 15px;
+            width: 15px; height: 15px;
             animation-duration: 22s;
             animation-delay: -10s;
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) rotate(720deg) scale(1);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+            10%, 90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(720deg) scale(1); opacity: 0; }
         }
 
         /* Декоративные цветы по углам */
         .corner-flower {
             position: fixed;
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             z-index: 1;
             opacity: 0.15;
             pointer-events: none;
         }
-
         .corner-flower.top-left { top: 20px; left: 20px; }
         .corner-flower.top-right { top: 20px; right: 20px; transform: scaleX(-1); }
         .corner-flower.bottom-left { bottom: 20px; left: 20px; transform: scaleY(-1); }
         .corner-flower.bottom-right { bottom: 20px; right: 20px; transform: scale(-1); }
 
         .flower-svg {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             animation: pulse 4s ease-in-out infinite;
         }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-red), var(--accent-pink));
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--accent));
             color: white;
             padding: 4rem 2rem 5rem;
             text-align: center;
@@ -139,18 +113,12 @@
         header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
             animation: shimmer 8s linear infinite;
         }
-
-        @keyframes shimmer {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes shimmer { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         header h1 {
             font-size: 2.8rem;
@@ -160,11 +128,7 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
             animation: fadeInDown 0.8s ease;
         }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         header p {
             font-size: 1.2rem;
@@ -173,11 +137,7 @@
             position: relative;
             animation: fadeInUp 0.8s ease 0.2s both;
         }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .header-cta {
             display: inline-flex;
@@ -195,15 +155,10 @@
             position: relative;
             animation: fadeInUp 0.8s ease 0.4s both;
         }
-
         .header-cta:hover {
             background: rgba(255,255,255,0.3);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .header-cta i {
-            font-size: 1.1rem;
         }
 
         /* Container */
@@ -217,43 +172,32 @@
 
         /* Article Cards */
         article {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
+            background: var(--card);
+            border-radius: var(--radius);
             padding: 2rem;
             margin-bottom: 1.5rem;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--shadow);
             transition: var(--transition);
             border: 1px solid rgba(220, 38, 38, 0.1);
             position: relative;
             overflow: hidden;
             animation: slideIn 0.5s ease both;
         }
-
         article::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--primary-red), var(--accent-pink));
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
             transition: var(--transition);
         }
-
         article:hover {
             transform: translateY(-4px);
             box-shadow: 0 20px 50px -10px rgba(220, 38, 38, 0.25);
             border-color: rgba(220, 38, 38, 0.3);
         }
-
-        article:hover::before {
-            width: 6px;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        article:hover::before { width: 6px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Date Badge */
         .date-badge {
@@ -271,20 +215,15 @@
             box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
         }
 
-        .date-badge i {
-            font-size: 0.9rem;
-        }
-
         h2 {
             font-size: 1.6rem;
             margin-bottom: 1rem;
-            color: var(--text-main);
+            color: var(--text);
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-
         h2::after {
             content: '';
             flex: 1;
@@ -295,40 +234,31 @@
 
         /* Links */
         a {
-            color: var(--primary-red);
+            color: var(--primary);
             text-decoration: none;
             font-weight: 500;
             position: relative;
             padding-bottom: 2px;
             transition: var(--transition);
         }
-
         a::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-pink);
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent);
             transition: var(--transition);
             border-radius: 2px;
         }
-
-        a:hover {
-            color: var(--accent-pink);
-        }
-
-        a:hover::after {
-            width: 100%;
-        }
+        a:hover { color: var(--accent); }
+        a:hover::after { width: 100%; }
 
         /* Download Button */
         .download-link {
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 0.9rem 1.5rem;
             border-radius: 12px;
@@ -338,21 +268,14 @@
             transition: var(--transition);
             border: none;
             cursor: pointer;
+            text-decoration: none;
         }
-
         .download-link:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
             color: white;
         }
-
-        .download-link::after {
-            display: none;
-        }
-
-        .download-link i {
-            font-size: 1.1rem;
-        }
+        .download-link::after { display: none; }
 
         /* Code Blocks */
         pre {
@@ -364,21 +287,20 @@
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
             margin: 1.2rem 0;
-            border-left: 4px solid var(--accent-pink);
+            border-left: 4px solid var(--accent);
             box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
         }
 
         .crypto-key, .log-entry {
             background: linear-gradient(135deg, #fef2f2, #fff1f2);
-            border-left: 4px solid var(--primary-red);
+            border-left: 4px solid var(--primary);
             padding: 1rem 1.2rem;
             border-radius: 0 8px 8px 0;
             margin: 0.8rem 0;
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
-            color: var(--text-main);
+            color: var(--text);
         }
-
         .crypto-key {
             word-break: break-all;
             color: var(--primary-dark);
@@ -387,7 +309,7 @@
 
         blockquote {
             background: linear-gradient(135deg, #fef2f2, #fff1f2);
-            border-left: 4px solid var(--accent-pink);
+            border-left: 4px solid var(--accent);
             padding: 1.2rem 1.5rem;
             font-style: italic;
             color: var(--text-muted);
@@ -395,14 +317,12 @@
             border-radius: 0 12px 12px 0;
             position: relative;
         }
-
         blockquote::before {
             content: '"';
             font-family: 'Dancing Script', cursive;
             font-size: 3rem;
             position: absolute;
-            top: -10px;
-            left: 10px;
+            top: -10px; left: 10px;
             color: var(--primary-light);
             opacity: 0.5;
         }
@@ -417,27 +337,19 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-
         .data-table th {
-            background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 1rem;
             text-align: left;
             font-weight: 600;
         }
-
         .data-table td {
             padding: 0.9rem 1rem;
             border-bottom: 1px solid #f1f5f9;
         }
-
-        .data-table tr:hover {
-            background: #fef2f2;
-        }
-
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
+        .data-table tr:hover { background: #fef2f2; }
+        .data-table tr:last-child td { border-bottom: none; }
 
         /* Cipher List */
         .cipher-list {
@@ -445,30 +357,24 @@
             display: grid;
             gap: 0.6rem;
         }
-
         .cipher-list li {
             background: linear-gradient(135deg, #fff1f2, #fee2e2);
             padding: 0.8rem 1.2rem;
             border-radius: 10px;
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
-            border-left: 3px solid var(--accent-pink);
+            border-left: 3px solid var(--accent);
             transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 0.6rem;
         }
-
         .cipher-list li:hover {
             transform: translateX(5px);
             background: linear-gradient(135deg, #fecaca, #fca5a5);
-            border-left-color: var(--primary-red);
+            border-left-color: var(--primary);
         }
-
-        .cipher-list li::before {
-            content: '🔐';
-            font-size: 1.1rem;
-        }
+        .cipher-list li::before { content: '🔐'; font-size: 1.1rem; }
 
         /* Metrics Cards */
         .metrics-grid {
@@ -477,7 +383,6 @@
             gap: 1rem;
             margin: 1rem 0;
         }
-
         .metric-card {
             background: linear-gradient(135deg, #fef2f2, white);
             padding: 1rem;
@@ -486,20 +391,17 @@
             border: 1px solid rgba(220, 38, 38, 0.15);
             transition: var(--transition);
         }
-
         .metric-card:hover {
             transform: translateY(-3px);
-            border-color: var(--primary-red);
+            border-color: var(--primary);
             box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
         }
-
         .metric-value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary-red);
+            color: var(--primary);
             margin: 0.3rem 0;
         }
-
         .metric-label {
             font-size: 0.85rem;
             color: var(--text-muted);
@@ -516,7 +418,6 @@
             transition: var(--transition);
             border: 3px solid white;
         }
-
         img:hover {
             transform: scale(1.02);
             box-shadow: 0 15px 40px rgba(220, 38, 38, 0.25);
@@ -531,11 +432,6 @@
             position: relative;
             z-index: 10;
         }
-
-        footer a {
-            color: var(--primary-red);
-        }
-
         .footer-decoration {
             display: flex;
             justify-content: center;
@@ -544,77 +440,71 @@
             font-size: 1.5rem;
         }
 
+        /* Modal for demo files */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-close:hover { color: var(--primary); transform: rotate(90deg); }
+
         /* Responsive */
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.2rem;
-            }
-            
-            header p {
-                font-size: 1rem;
-            }
-            
-            .container {
-                margin-top: -2rem;
-                padding: 0 1rem;
-            }
-            
-            article {
-                padding: 1.5rem;
-            }
-            
-            h2 {
-                font-size: 1.4rem;
-            }
+            header h1 { font-size: 2.2rem; }
+            header p { font-size: 1rem; }
+            .container { margin-top: -2rem; padding: 0 1rem; }
+            article { padding: 1.5rem; }
+            h2 { font-size: 1.4rem; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #fef2f2;
-        }
-
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fef2f2; }
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(var(--primary-light), var(--primary-red));
+            background: linear-gradient(var(--primary-light), var(--primary));
             border-radius: 4px;
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Loading animation for links */
-        .link-loading {
-            position: relative;
-        }
-
-        .link-loading::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-pink);
-            animation: loading 1.5s ease-in-out infinite;
-        }
-
-        @keyframes loading {
-            0% { width: 0; left: 0; }
-            50% { width: 100%; left: 0; }
-            100% { width: 0; left: 100%; }
-        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
     </style>
 </head>
 <body>
 
-    <!-- 🌸 Анимированный цветочный фон -->
+    <!-- 🌸 Анимированный фон -->
     <div class="flower-bg" id="flowerBg"></div>
     
-    <!-- Декоративные цветы по углам -->
+    <!-- Декоративные цветы -->
     <div class="corner-flower top-left">
         <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="8" fill="#dc2626"/>
@@ -662,12 +552,12 @@
 
     <div class="container">
 
-        <!-- Запись: 5 мая -->
+        <!-- 5 мая -->
         <article style="animation-delay: 0.1s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 5 мая, 2026</span>
             <h2><i class="fas fa-table"></i> Обновление таблиц</h2>
             <p>Новые данные доступны для скачивания. Файл содержит обновлённую статистику и аналитику.</p>
-            <a href="Таблица106CS.ods" class="download-link" download>
+            <a href="#" class="download-link" onclick="showDemoModal('Таблица106CS.ods', '~245 КБ'); return false;">
                 <i class="fas fa-download"></i> Скачать Таблица106CS.ods
             </a>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
@@ -675,27 +565,27 @@
             </p>
         </article>
 
-        <!-- Запись: 27 апреля -->
+        <!-- 27 апреля -->
         <article style="animation-delay: 0.15s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 27 апреля, 2026</span>
             <h2><i class="fas fa-archive"></i> Архив данных</h2>
             <p>Архивная версия таблицы с историческими данными для сравнительного анализа.</p>
-            <a href="таблица 2.ods" class="download-link" download>
+            <a href="#" class="download-link" onclick="showDemoModal('таблица 2.ods', '~198 КБ'); return false;">
                 <i class="fas fa-download"></i> Скачать таблицу 2.ods
             </a>
         </article>
 
-        <!-- Запись: 22 апреля -->
+        <!-- 22 апреля -->
         <article style="animation-delay: 0.2s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 22 апреля, 2026</span>
             <h2><i class="fas fa-file-excel"></i> Работа с электронными таблицами</h2>
             <p>Основная рабочая таблица проекта 106С с формулами и сводными данными.</p>
-            <a href="106С таблица.ods" class="download-link" download>
+            <a href="#" class="download-link" onclick="showDemoModal('106С таблица.ods', '~312 КБ'); return false;">
                 <i class="fas fa-download"></i> Скачать 106С таблица.ods
             </a>
         </article>
 
-        <!-- Запись: 1 апреля -->
+        <!-- 1 апреля -->
         <article style="animation-delay: 0.25s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 1 апреля, 2026</span>
             <h2><i class="fas fa-chart-line"></i> Результаты обучения модели (MSE)</h2>
@@ -720,7 +610,7 @@
             </div>
         </article>
 
-        <!-- Запись: 21 марта -->
+        <!-- 21 марта -->
         <article style="animation-delay: 0.3s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 21 марта, 2026</span>
             <h2><i class="fas fa-shield-alt"></i> КАСКО: ML Модель классификации</h2>
@@ -760,7 +650,7 @@
             </pre>
         </article>
 
-        <!-- Запись: 16 марта -->
+        <!-- 16 марта -->
         <article style="animation-delay: 0.35s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 16 марта, 2026</span>
             <h2><i class="fas fa-graduation-cap"></i> Прогноз успеваемости студентов</h2>
@@ -795,12 +685,12 @@ print(results.to_string(index=False))
                     <tr><td>3</td><td>31.28</td><td style="color: var(--warning)">Средний</td></tr>
                     <tr><td>5</td><td>50.23</td><td style="color: var(--success)">Хороший</td></tr>
                     <tr><td>7</td><td>69.19</td><td style="color: var(--success)">Отличный</td></tr>
-                    <tr><td>10</td><td>97.62</td><td style="color: var(--primary-red)">Превосходно</td></tr>
+                    <tr><td>10</td><td>97.62</td><td style="color: var(--primary)">Превосходно</td></tr>
                 </tbody>
             </table>
         </article>
 
-        <!-- Запись: 25 февраля -->
+        <!-- 25 февраля -->
         <article style="animation-delay: 0.4s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 25 февраля, 2026</span>
             <h2><i class="fas fa-robot"></i> Чат-бот FAQ с NLP</h2>
@@ -815,7 +705,7 @@ print(results.to_string(index=False))
             </div>
         </article>
 
-        <!-- Запись: 18 февраля -->
+        <!-- 18 февраля -->
         <article style="animation-delay: 0.45s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 18 февраля, 2026</span>
             <h2><i class="fas fa-eye"></i> Computer Vision: Классификация изображений</h2>
@@ -830,7 +720,7 @@ print(results.to_string(index=False))
             </p>
         </article>
 
-        <!-- Запись: 20 января -->
+        <!-- 20 января -->
         <article style="animation-delay: 0.5s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 20 января, 2026</span>
             <h2><i class="fas fa-key"></i> Криптография и нейросети</h2>
@@ -859,30 +749,30 @@ print(results.to_string(index=False))
             </p>
             
             <p style="margin-top: 1.2rem">
-                <a href="pac.png" class="link-loading" target="_blank">
+                <a href="#" onclick="showDemoModal('pac.png', 'Схема проекта'); return false;">
                     <i class="fas fa-image"></i> Смотреть схему проекта (pac.png)
                 </a>
             </p>
         </article>
 
-        <!-- Запись: 19 января -->
+        <!-- 19 января -->
         <article style="animation-delay: 0.55s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 19 января, 2026</span>
             <h2><i class="fas fa-user-secret"></i> Шифрованные сообщения (Цезарь/ROT)</h2>
             <p>Примеры зашифрованных строк с указанием сдвига:</p>
             <ul class="cipher-list">
-                <li>АПЕЛЬСИН → САЦЬНВЩЮ <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 17</span></li>
-                <li>АБРИКОС → ЫЬЛГЕЙМ <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 27</span></li>
+                <li>АПЕЛЬСИН → САЦЬНВЩЮ <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 17</span></li>
+                <li>АБРИКОС → ЫЬЛГЕЙМ <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 27</span></li>
                 <li>ФХНЗКЧ → ПРИВЕТ <span style="margin-left: auto; background: var(--success); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">✓ shift: 5</span></li>
-                <li>ЦЩЕБФ → ВЕСНА <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 20</span></li>
-                <li>Васильева → МКЫТХЖПМК <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 10</span></li>
+                <li>ЦЩЕБФ → ВЕСНА <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 20</span></li>
+                <li>Васильева → МКЫТХЖПМК <span style="margin-left: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 10</span></li>
             </ul>
             <p style="margin-top: 1rem; font-size: 0.9rem">
                 <i class="fas fa-lightbulb"></i> Подсказка: для русского алфавита используйте модуль 33
             </p>
         </article>
 
-        <!-- Запись: 14 января -->
+        <!-- 14 января -->
         <article style="animation-delay: 0.6s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 14 января, 2026</span>
             <h2><i class="fas fa-globe"></i> Переход в Web</h2>
@@ -892,12 +782,9 @@ print(results.to_string(index=False))
                 <i class="fas fa-check" style="color: var(--success)"></i> SEO-оптимизация • 
                 <i class="fas fa-check" style="color: var(--success)"></i> PWA-ready
             </p>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem">
-                <small><i class="fas fa-heart" style="color: var(--accent-pink)"></i> Авторство иконок и ресурсов учтено</small>
-            </p>
         </article>
 
-        <!-- Запись: 1 декабря -->
+        <!-- 1 декабря -->
         <article style="animation-delay: 0.65s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 1 декабря, 2025</span>
             <h2><i class="fas fa-flag"></i> Путешествие начинается</h2>
@@ -907,16 +794,16 @@ print(results.to_string(index=False))
             </blockquote>
             
             <div style="text-align: center; margin: 1.5rem 0">
-                <i class="fas fa-tree" style="font-size: 3rem; color: var(--primary-red); opacity: 0.8"></i>
+                <i class="fas fa-tree" style="font-size: 3rem; color: var(--primary); opacity: 0.8"></i>
             </div>
             
             <p style="text-align: center">
                 🎄 Поздравление с Новым 2026 годом: 
-                <a href="Congratulations2026.html" style="font-weight: 600">открыть →</a>
+                <a href="#" onclick="showDemoModal('Congratulations2026.html', 'Праздничная страница'); return false;" style="font-weight: 600">открыть →</a>
             </p>
         </article>
 
-        <!-- Запись: 15 октября -->
+        <!-- 15 октября -->
         <article style="animation-delay: 0.7s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 15 октября, 2025</span>
             <h2><i class="fas fa-handshake"></i> Коллаборация</h2>
@@ -926,7 +813,7 @@ print(results.to_string(index=False))
             </a>
         </article>
 
-        <!-- Запись: 1 сентября -->
+        <!-- 1 сентября -->
         <article style="animation-delay: 0.75s">
             <span class="date-badge"><i class="fas fa-calendar"></i> 1 сентября, 2025</span>
             <h2><i class="fas fa-seedling"></i> Начало пути</h2>
@@ -951,41 +838,52 @@ print(results.to_string(index=False))
         </div>
         <p>&copy; 2025–2026 <strong>Sofia Vasileva</strong>. Все права защищены.</p>
         <p>
-            <i class="fas fa-code"></i> Сделано с <i class="fas fa-heart" style="color: var(--accent-pink)"></i> и любовью к коду • 
+            <i class="fas fa-code"></i> Сделано с <i class="fas fa-heart" style="color: var(--accent)"></i> и любовью к коду • 
             <a href="https://github.com/Sofia-a-cell" target="_blank"><i class="fab fa-github"></i> GitHub</a>
         </p>
         <p style="margin-top: 0.5rem; font-size: 0.85rem">
             Hosted on <a href="https://pages.github.com" target="_blank">GitHub Pages</a> • 
-            <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Наверх ↑</a>
+            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Наверх ↑</a>
         </p>
     </footer>
 
+    <!-- Модальное окно для демо-файлов -->
+    <div class="modal" id="demoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <i class="fas fa-file-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h3 id="modalTitle" style="margin-bottom: 0.5rem; color: var(--text);">Файл</h3>
+            <p id="modalSize" style="color: var(--text-muted); margin-bottom: 1.5rem;">Размер: —</p>
+            <p style="margin-bottom: 1.5rem;">
+                В демо-режиме файл не доступен для скачивания.<br>
+                В реальном проекте разместите файлы в корне репозитория.
+            </p>
+            <button class="download-link" onclick="closeModal()">
+                <i class="fas fa-check"></i> Понятно
+            </button>
+        </div>
+    </div>
+
     <script>
-        // 🌸 Генерация анимированных лепестков
+        // 🌸 Генерация лепестков
         document.addEventListener('DOMContentLoaded', () => {
             const flowerBg = document.getElementById('flowerBg');
-            const petalCount = 25;
-            
-            for (let i = 0; i < petalCount; i++) {
+            for (let i = 0; i < 25; i++) {
                 const petal = document.createElement('div');
                 petal.className = 'petal';
-                
-                // Случайная позиция, размер и задержка
                 const size = 15 + Math.random() * 15;
                 const left = Math.random() * 100;
                 const delay = Math.random() * 20;
                 const duration = 15 + Math.random() * 15;
-                
                 petal.style.width = `${size}px`;
                 petal.style.height = `${size}px`;
                 petal.style.left = `${left}%`;
                 petal.style.animationDelay = `-${delay}s`;
                 petal.style.animationDuration = `${duration}s`;
-                
                 flowerBg.appendChild(petal);
             }
             
-            // Плавное появление карточек при скролле
+            // Плавное появление карточек
             const articles = document.querySelectorAll('article');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -995,25 +893,35 @@ print(results.to_string(index=False))
                     }
                 });
             }, { threshold: 0.1 });
-            
             articles.forEach(article => {
                 article.style.opacity = '0';
                 article.style.transform = 'translateY(20px)';
                 article.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                 observer.observe(article);
             });
-            
-            // Предотвращение 404 для демонстрационных ссылок
-            document.querySelectorAll('a[href$=".ods"], a[href$=".png"], a[href="Congratulations2026.html"]').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    // В реальном проекте файлы должны существовать
-                    // Для демо показываем уведомление
-                    if (!link.getAttribute('download')) {
-                        e.preventDefault();
-                        alert(`🔗 Ссылка: ${link.href}\n\nВ реальном проекте здесь будет скачан файл.\nДля демо добавьте файлы в корень сайта.`);
-                    }
-                });
-            });
+        });
+
+        // Модальное окно для демо-файлов
+        function showDemoModal(filename, size) {
+            document.getElementById('modalTitle').textContent = filename;
+            document.getElementById('modalSize').textContent = `Размер: ${size}`;
+            document.getElementById('demoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('demoModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Закрытие модалки по клику вне контента
+        document.getElementById('demoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'demoModal') closeModal();
+        });
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
         });
     </script>
 </body>
