@@ -5,107 +5,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔪 Sofia's Scream Log | Data & Secrets</title>
-    <!-- Шрифты: Inter для текста, Creepster для заголовков, JetBrains Mono для кода -->
+    
+    <!-- Шрифты: Inter (текст), Creepster (ужасы), JetBrains Mono (код) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Creepster&display=swap" rel="stylesheet">
+    
     <!-- Иконки FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            /* Палитра фильма «Крик» */
-            --black: #050505;
-            --charcoal: #0f0f0f;
-            --dark-gray: #1a1a1a;
-            --mid-gray: #2d2d2d;
-            --light-gray: #b0b0b0;
-            --white: #ffffff;
-            --off-white: #e0e0e0;
-            
-            /* Цвета крови */
-            --blood: #8a0303;
+            /* 🎨 Палитра Scream */
+            --bg-black: #050505;
+            --card-bg: rgba(15, 15, 15, 0.95);
+            --blood-main: #8a0303;
             --blood-bright: #cf142b;
             --blood-dark: #4a0000;
-            --blood-glow: rgba(138, 3, 3, 0.5);
+            --text-main: #e0e0e0;
+            --text-muted: #888;
+            --border-color: rgba(138, 3, 3, 0.3);
             
-            --bg-gradient: radial-gradient(circle at center, #1a0505 0%, #000000 100%);
-            --card-bg: rgba(15, 15, 15, 0.95);
-            --card-border: rgba(138, 3, 3, 0.3);
-            
-            --shadow-sm: 0 4px 6px rgba(0,0,0,0.5);
-            --shadow-lg: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px var(--blood-glow);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --border-radius: 8px;
+            --shadow-glow: 0 0 20px rgba(138, 3, 3, 0.4);
+            --transition: all 0.3s ease;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--black);
-            background-image: 
-                linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)),
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            color: var(--off-white);
+            background-color: var(--bg-black);
+            color: var(--text-main);
             line-height: 1.6;
-            min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
         /* --- ФОНОВЫЕ ЭФФЕКТЫ --- */
         
-        /* Виньетка и шум пленки */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            background: radial-gradient(circle, transparent 40%, black 100%);
-        }
-
-        /* Маска Ghostface на фоне */
+        /* 1. Маска Ghostface на фоне */
         .ghostface-bg {
             position: fixed;
-            top: 50%; left: 50%;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 30rem;
-            color: var(--white);
+            width: 600px;
+            height: 600px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath fill='%23ffffff' d='M565.1 37.9C584.6 55.8 592 83.4 583.4 108.6L529.6 266.3C522.2 288 502.6 303.1 480.3 303.1H448V416C448 451.3 419.3 480 384 480H192C156.7 480 128 451.3 128 416V303.1H95.7C73.4 303.1 53.8 288 46.4 266.3L-7.36 108.6C-15.96 83.4-8.586 55.8 10.91 37.9C30.41 20.03 58.76 14.53 83.63 24.35L185.3 64.5C215.6 76.47 236.4 104.6 238.3 137.1L240 165.1L240 32C240 14.33 254.3 0 272 0C289.7 0 304 14.33 304 32V165.1L305.7 137.1C307.6 104.6 328.4 76.47 358.7 64.5L460.4 24.35C485.2 14.53 513.6 20.03 533.1 37.9V37.9zM160 335.1V416C160 433.7 174.3 448 192 448H224V335.1H160zM352 448H384C401.7 448 416 433.7 416 416V335.1H352V448z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
             opacity: 0.03;
             z-index: -2;
-            text-shadow: 0 0 50px var(--blood);
-            animation: breathe 6s ease-in-out infinite;
-            user-select: none;
+            pointer-events: none;
+            animation: breathe 8s infinite ease-in-out;
         }
 
         @keyframes breathe {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.03; }
-            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.06; }
+            0%, 100% { opacity: 0.03; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.06; transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        /* Капли крови */
+        /* 2. Капли крови */
         .blood-drip {
             position: fixed;
             top: -100px;
             width: 2px;
-            background: linear-gradient(to bottom, var(--blood-dark), var(--blood-bright));
+            background: linear-gradient(to bottom, transparent, var(--blood-bright));
             z-index: -1;
-            opacity: 0.7;
-            animation: drip linear infinite;
+            animation: drip 10s infinite linear;
         }
-        .drip-1 { left: 10%; height: 150px; animation-duration: 8s; animation-delay: 0s; }
-        .drip-2 { left: 30%; height: 100px; animation-duration: 12s; animation-delay: 2s; }
-        .drip-3 { left: 70%; height: 180px; animation-duration: 10s; animation-delay: 1s; }
-        .drip-4 { left: 90%; height: 120px; animation-duration: 15s; animation-delay: 4s; }
+        .drip-1 { left: 10%; animation-duration: 8s; height: 150px; }
+        .drip-2 { left: 80%; animation-duration: 12s; animation-delay: 2s; height: 100px; }
+        .drip-3 { left: 40%; animation-duration: 15s; animation-delay: 5s; height: 200px; }
 
         @keyframes drip {
-            0% { transform: translateY(-200px); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(110vh); opacity: 0; }
+            0% { transform: translateY(-200px); }
+            100% { transform: translateY(120vh); }
         }
 
-        /* --- КОНТЕЙНЕР --- */
+        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -118,68 +96,52 @@
         header {
             text-align: center;
             margin-bottom: 3rem;
-            padding-top: 2rem;
             position: relative;
-        }
-
-        .logo-icon {
-            font-size: 4rem;
-            color: var(--white);
-            margin-bottom: 1rem;
-            display: inline-block;
-            filter: drop-shadow(0 0 15px var(--blood));
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
 
         h1 {
             font-family: 'Creepster', cursive;
-            font-size: 3.5rem;
-            color: var(--white);
+            font-size: 4rem;
+            color: var(--text-main);
             letter-spacing: 2px;
-            text-shadow: 2px 2px 0px var(--blood-dark), 0 0 20px var(--blood);
+            text-shadow: 0 0 15px var(--blood-main);
             margin-bottom: 0.5rem;
             position: relative;
             display: inline-block;
         }
-        
-        /* Нож рядом с заголовком */
+
+        /* Нож в заголовке */
         h1::after {
-            content: '\f6ec'; /* FontAwesome Knife */
+            content: '\f6ec'; /* Knife Icon */
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
             right: -40px;
             top: 10px;
             font-size: 2rem;
-            color: var(--light-gray);
+            color: var(--text-muted);
             transform: rotate(45deg);
-            animation: shake 3s infinite;
+            animation: shake 4s infinite;
         }
 
         @keyframes shake {
-            0%, 100% { transform: rotate(45deg); }
-            10%, 30%, 50%, 70%, 90% { transform: rotate(35deg) translate(-2px, 2px); }
-            20%, 40%, 60%, 80% { transform: rotate(55deg) translate(2px, -2px); }
+            0%, 90%, 100% { transform: rotate(45deg); }
+            92%, 96% { transform: rotate(35deg) translate(-2px, 2px); }
+            94%, 98% { transform: rotate(55deg) translate(2px, -2px); }
         }
 
         .subtitle {
-            color: var(--light-gray);
+            color: var(--text-muted);
             font-size: 1.1rem;
-            font-weight: 300;
             letter-spacing: 1px;
         }
 
         .divider {
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--blood), transparent);
+            background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
             margin: 2rem auto;
-            width: 60%;
-            box-shadow: 0 0 10px var(--blood);
+            width: 50%;
+            box-shadow: 0 0 10px var(--blood-main);
         }
 
         /* --- НАВИГАЦИЯ --- */
@@ -192,36 +154,33 @@
         }
 
         .nav-link {
-            color: var(--light-gray);
+            color: var(--text-main);
             text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border: 1px solid var(--mid-gray);
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             transition: var(--transition);
-            font-size: 0.9rem;
+            background: rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(0,0,0,0.5);
         }
 
         .nav-link:hover, .nav-link.active {
+            background: var(--blood-dark);
             border-color: var(--blood-bright);
-            color: var(--white);
-            background: rgba(138, 3, 3, 0.1);
-            box-shadow: 0 0 10px rgba(138, 3, 3, 0.2);
+            box-shadow: 0 0 10px rgba(207, 20, 43, 0.3);
         }
 
         /* --- КАРТОЧКИ (POSTS) --- */
         .post {
             background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-left: 4px solid var(--blood);
-            border-radius: var(--border-radius);
-            padding: 1.8rem;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--blood-main);
+            border-radius: 8px;
+            padding: 2rem;
             margin-bottom: 2rem;
-            position: relative;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             transition: var(--transition);
             opacity: 0;
             transform: translateY(20px);
@@ -230,18 +189,8 @@
 
         .post:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(138, 3, 3, 0.2);
             border-color: var(--blood-bright);
-        }
-
-        /* Эффект мерцания для важных постов */
-        .flicker-effect {
-            animation: flicker 4s infinite;
-        }
-
-        @keyframes flicker {
-            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
-            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.8; }
         }
 
         @keyframes fadeInUp {
@@ -252,29 +201,56 @@
             display: inline-block;
             font-size: 0.8rem;
             color: var(--blood-bright);
-            font-weight: 600;
+            font-weight: bold;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .post h2 {
             font-size: 1.6rem;
-            color: var(--white);
             margin-bottom: 1rem;
+            color: white;
             display: flex;
             align-items: center;
             gap: 0.8rem;
         }
         
-        .post h2 i { color: var(--blood); }
+        .post h2 i { color: var(--blood-main); }
 
-        .post p { margin-bottom: 1rem; color: var(--light-gray); }
+        /* --- ТАБЛИЦЫ --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+        }
 
-        /* --- ТАБЛИЦЫ И ДАННЫЕ --- */
+        th {
+            background: var(--blood-dark);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--blood-bright);
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(138, 3, 3, 0.1); color: white; }
+
+        .highlight { color: var(--blood-bright); font-weight: bold; }
+
+        /* --- БЛОКИ КОДА И ДАННЫХ --- */
         .data-block {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid var(--mid-gray);
+            background: #0a0a0a;
+            border: 1px solid #333;
             padding: 1rem;
             border-radius: 6px;
             font-family: 'JetBrains Mono', monospace;
@@ -283,68 +259,38 @@
             color: #ddd;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-            font-size: 0.95rem;
+        .metric-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: rgba(138, 3, 3, 0.2);
+            border: 1px solid var(--blood-main);
+            border-radius: 4px;
+            color: var(--blood-bright);
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
         }
 
-        th {
-            text-align: left;
-            padding: 0.8rem;
-            background: var(--blood-dark);
-            color: var(--white);
-            border-bottom: 2px solid var(--blood);
-        }
-
-        td {
-            padding: 0.8rem;
-            border-bottom: 1px solid var(--mid-gray);
-            color: var(--light-gray);
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(138, 3, 3, 0.1); color: var(--white); }
-
-        /* --- ТЕСТЫ / QUIZ STYLE --- */
+        /* --- ТЕСТ / QUIZ STYLE --- */
         .quiz-item {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.05);
             padding: 1rem;
             border-radius: 6px;
             margin-bottom: 1rem;
-            border-left: 2px solid var(--mid-gray);
+            border-left: 3px solid var(--text-muted);
         }
-        .quiz-question {
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        .quiz-answer {
-            color: var(--blood-bright);
-            font-style: italic;
-        }
-        .quiz-answer::before {
-            content: "✓ ";
-            color: var(--white);
-        }
+        .quiz-question { font-weight: bold; color: white; display: block; margin-bottom: 0.5rem; }
+        .quiz-answer { color: var(--blood-bright); font-style: italic; }
+        .quiz-answer::before { content: "✓ "; color: white; }
 
         /* --- ТЕГИ --- */
-        .tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
+        .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
         .tag {
             font-size: 0.75rem;
             padding: 0.2rem 0.6rem;
-            background: var(--dark-gray);
-            color: var(--light-gray);
+            background: #1a1a1a;
+            color: #888;
             border-radius: 3px;
-            border: 1px solid var(--mid-gray);
+            border: 1px solid #333;
         }
 
         /* --- КНОПКИ --- */
@@ -352,9 +298,9 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.7rem 1.5rem;
-            background: var(--blood);
-            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            background: var(--blood-main);
+            color: white;
             text-decoration: none;
             border-radius: 4px;
             font-weight: 600;
@@ -365,36 +311,34 @@
 
         .btn:hover {
             background: var(--blood-bright);
-            box-shadow: 0 0 15px var(--blood);
+            box-shadow: 0 0 15px var(--blood-main);
             transform: scale(1.02);
         }
 
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--blood);
+            border: 1px solid var(--blood-main);
             color: var(--blood-bright);
         }
         .btn-outline:hover {
-            background: var(--blood);
-            color: var(--white);
+            background: var(--blood-main);
+            color: white;
         }
 
         /* --- FOOTER --- */
         footer {
             text-align: center;
             padding: 3rem 0;
-            color: var(--mid-gray);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--dark-gray);
+            color: #555;
+            border-top: 1px solid #222;
             margin-top: 2rem;
         }
-        
-        footer a { color: var(--blood); text-decoration: none; }
-        footer a:hover { color: var(--white); }
+        footer a { color: var(--blood-main); text-decoration: none; }
+        footer a:hover { color: white; }
 
-        /* --- MEDIA QUERIES --- */
+        /* Адаптив */
         @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 2.8rem; }
             h1::after { display: none; }
             .container { padding: 1rem; }
             .post { padding: 1.2rem; }
@@ -404,17 +348,14 @@
 <body>
 
     <!-- Фоновые элементы -->
-    <div class="overlay"></div>
-    <div class="ghostface-bg">☠</div>
+    <div class="ghostface-bg"></div>
     <div class="blood-drip drip-1"></div>
     <div class="blood-drip drip-2"></div>
     <div class="blood-drip drip-3"></div>
-    <div class="blood-drip drip-4"></div>
 
     <div class="container">
         <!-- Шапка -->
         <header>
-            <i class="fas fa-ghost logo-icon"></i>
             <h1>Sofia's Scream Log</h1>
             <p class="subtitle">Данные • Тайны • Информатика</p>
             <div class="divider"></div>
@@ -428,43 +369,51 @@
         </nav>
 
         <main>
-            <!-- ПОСТ 1: ТЕСТ (Самый свежий) -->
-            <article class="post flicker-effect">
+            <!-- 1. НОВАЯ ЗАПИСЬ: ТЕСТ (12.05.2026) -->
+            <article class="post">
                 <span class="post-date"><i class="far fa-calendar-alt"></i> 12 Мая 2026</span>
                 <h2><i class="fas fa-question-circle"></i> Тест: Основы Информатики</h2>
-                <p>Результаты проверки знаний. Разбор ключевых вопросов.</p>
+                <p>Результаты проверки знаний. Разбор вопросов.</p>
                 
-                <div class="data-block">
-                    <div class="quiz-item">
-                        <span class="quiz-question">4. Какое утверждение неверно?</span>
-                        <span class="quiz-answer">Информация не может быть в графическом виде</span>
-                        <small style="display:block; margin-top:5px; color:#666;">(Комментарий: Это ложь. Информация бывает текстовой, графической, звуковой и др.)</small>
-                    </div>
-
-                    <div class="quiz-item">
-                        <span class="quiz-question">5. Какое утверждение верно?</span>
-                        <span class="quiz-answer">Информацию можно преобразовывать и передавать</span>
-                    </div>
-
-                    <div class="quiz-item">
-                        <span class="quiz-question">6. Какую форму информации человек уже научился долговременно хранить?</span>
-                        <span class="quiz-answer">Зрительные образы</span>
-                        <small style="display:block; margin-top:5px; color:#666;">(Наскальная живопись, картины, фотографии)</small>
-                    </div>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">№</th>
+                            <th>Вопрос</th>
+                            <th>Ответ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>4</td>
+                            <td>Какое утверждение <strong>неверно</strong>?</td>
+                            <td class="highlight">Информация не может быть в графическом виде</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Какое утверждение <strong>верно</strong>?</td>
+                            <td class="highlight">Информацию можно преобразовывать и передавать</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Какую форму информации человек научился хранить долговременно?</td>
+                            <td class="highlight">Зрительные образы</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <div class="tags">
                     <span class="tag">#Test</span>
                     <span class="tag">#Informatics</span>
-                    <span class="tag">#School2026</span>
+                    <span class="tag">#School</span>
                 </div>
             </article>
 
-            <!-- ПОСТ 2: ML -->
+            <!-- 2. ML ПРОГНОЗ -->
             <article class="post">
                 <span class="post-date"><i class="far fa-calendar-alt"></i> 16 Марта 2026</span>
                 <h2><i class="fas fa-chart-line"></i> Прогноз Успеваемости (ML)</h2>
-                <p>Использование линейной регрессии для предсказания баллов студентов на основе затраченных часов.</p>
+                <p>Линейная регрессия для предсказания баллов студентов.</p>
                 
                 <table>
                     <thead>
@@ -477,62 +426,75 @@
                     <tbody>
                         <tr><td>1 ч</td><td>12.32</td><td>Начальный</td></tr>
                         <tr><td>3 ч</td><td>31.28</td><td>Средний</td></tr>
-                        <tr><td>5 ч</td><td style="color:white; font-weight:bold;">50.23</td><td>Хороший</td></tr>
-                        <tr><td>7 ч</td><td style="color:white; font-weight:bold;">69.19</td><td>Отличный</td></tr>
-                        <tr><td>10 ч</td><td style="color:var(--blood-bright); font-weight:bold;">97.62</td><td>Превосходно</td></tr>
+                        <tr><td>5 ч</td><td class="highlight">50.23</td><td>Хороший</td></tr>
+                        <tr><td>7 ч</td><td class="highlight">69.19</td><td>Отличный</td></tr>
+                        <tr><td>10 ч</td><td class="highlight">97.62</td><td>Превосходно</td></tr>
                     </tbody>
                 </table>
-                
                 <div class="tags">
                     <span class="tag">#Python</span>
-                    <span class="tag">#MachineLearning</span>
-                    <span class="tag">#DataScience</span>
+                    <span class="tag">#LinearRegression</span>
                 </div>
             </article>
 
-            <!-- ПОСТ 3: Компьютерное зрение -->
+            <!-- 3. КАСКО МОДЕЛЬ -->
             <article class="post">
-                <span class="post-date"><i class="far fa-calendar-alt"></i> 18 Февраля 2026</span>
-                <h2><i class="fas fa-eye"></i> Computer Vision</h2>
-                <p>Нейросеть анализирует изображение. Топ-3 предсказания:</p>
+                <span class="post-date"><i class="far fa-calendar-alt"></i> 21 Марта 2026</span>
+                <h2><i class="fas fa-shield-alt"></i> КАСКО: ML Модель</h2>
+                <p>Классификация страховых случаев. Датасет: 2,000 записей.</p>
                 
                 <div class="data-block">
                     <div style="margin-bottom: 0.5rem;">
-                        <strong>running shoe:</strong> <span style="float:right; color:var(--blood-bright)">99.45%</span>
-                    </div>
-                    <div style="height:4px; background:#333; border-radius:2px; margin-bottom:1rem;">
-                        <div style="width:99%; height:100%; background:var(--blood); border-radius:2px;"></div>
-                    </div>
-
-                    <div style="margin-bottom: 0.5rem;">
-                        <strong>shoe store:</strong> <span style="float:right;">0.27%</span>
+                        <strong>Accuracy:</strong> <span class="metric-badge">98.5%</span>
                     </div>
                     <div style="margin-bottom: 0.5rem;">
-                        <strong>clogs:</strong> <span style="float:right;">0.15%</span>
+                        <strong>Precision:</strong> <span class="metric-badge">98.43%</span>
+                        <strong>Recall:</strong> <span class="metric-badge">99.68%</span>
                     </div>
+                    <div>
+                        <strong>F1-Score:</strong> <span class="metric-badge">99.05%</span>
+                    </div>
+                </div>
+                <div class="tags">
+                    <span class="tag">#Classification</span>
+                    <span class="tag">#Insurance</span>
                 </div>
             </article>
 
-            <!-- ПОСТ 4: Криптография -->
+            <!-- 4. МЕТРИКИ ОБУЧЕНИЯ (MSE) -->
             <article class="post">
-                <span class="post-date"><i class="far fa-calendar-alt"></i> 19 Января 2026</span>
-                <h2><i class="fas fa-user-secret"></i> Личные Шифровки</h2>
-                <p>Метод Цезаря для русского алфавита (33 буквы).</p>
+                <span class="post-date"><i class="far fa-calendar-alt"></i> 1 Апреля 2026</span>
+                <h2><i class="fas fa-vial"></i> Метрики Обучения (MSE)</h2>
+                <p>Оценка ошибки регрессионной модели.</p>
                 
-                <div class="data-block" style="font-family: 'Courier New', monospace;">
-                    <p>• АПЕЛЬСИН → <span style="color:var(--blood-bright)">САЦЬНВЩЮ</span> [shift: 17]</p>
-                    <p>• АБРИКОС → <span style="color:var(--blood-bright)">ЫЬЛГЕЙМ</span> [shift: 27]</p>
-                    <p>• ФХНЗКЧ → <span style="color:white">ПРИВЕТ</span> ✓ [shift: 5]</p>
-                    <p>• ЦЩЕБФ → <span style="color:var(--blood-bright)">ВЕСНА</span> [shift: 20]</p>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Набор данных</th>
+                            <th>MSE (Ошибка)</th>
+                            <th>Delta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Train (Обучение)</td>
+                            <td>0.1347</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Test (Тест)</td>
+                            <td class="highlight">0.1505</td>
+                            <td class="highlight">+0.016</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 0.9rem; color: #888;"><i class="fas fa-check-circle"></i> Переобучение отсутствует</p>
             </article>
 
-            <!-- ПОСТ 5: Файлы -->
+            <!-- 5. ФАЙЛЫ -->
             <article class="post" id="files">
                 <span class="post-date"><i class="fas fa-folder"></i> Архив</span>
                 <h2><i class="fas fa-download"></i> Скачать Материалы</h2>
-                <p>Доступ к таблицам и проектам.</p>
-                
                 <div style="display: grid; gap: 10px; margin-top: 1rem;">
                     <a href="106С таблица.ods" download class="btn">
                         <i class="fas fa-file-excel"></i> Таблица 106С (.ods)
@@ -544,9 +506,6 @@
                         <i class="fas fa-image"></i> Схема проекта (PNG)
                     </a>
                 </div>
-                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.6;">
-                    *Если файлы не скачиваются, убедитесь, что они находятся в той же папке, что и index.html
-                </p>
             </article>
 
         </main>
@@ -555,31 +514,27 @@
         <footer>
             <p>&copy; 2025–2026 Sofia Vasileva. All secrets reserved.</p>
             <p style="margin-top: 0.5rem; font-size: 0.8rem;">
-                <i class="fas fa-code"></i> with <i class="fas fa-heart" style="color:var(--blood)"></i> & Horror
+                Hosted on GitHub Pages • <a href="#">⬆️ Наверх</a>
             </p>
         </footer>
     </div>
 
     <script>
-        // Скрипт для плавного появления элементов при скролле
-        document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animationPlayState = 'running';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            // Находим все посты и запускаем анимацию, если нужно
-            // В данном CSS анимация настроена через keyframes при загрузке,
-            // но этот скрипт поможет, если мы захотим добавлять класс .visible
-            console.log("Scream Log Loaded... 👻");
+        // Анимация появления при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        document.querySelectorAll('.post').forEach(post => {
+            post.style.opacity = 0; 
+            post.style.transform = 'translateY(20px)';
+            post.style.transition = 'all 0.6s ease-out';
+            observer.observe(post);
         });
     </script>
 </body>
