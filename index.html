@@ -1,1287 +1,1045 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>☠️ Sofia's Pirate Log | Tech & Treasure</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Nosifer&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      /* Пиратская палитра */
-      --black: #0a0a0a;
-      --charcoal: #1a1a1a;
-      --slate: #2d2d2d;
-      --stone: #4a4a4a;
-      --silver: #888888;
-      --bone: #d4c5b0;
-      --blood: #8b0000;
-      --gold: #c9a227;
-      --gold-glow: rgba(201, 162, 39, 0.4);
-      --skull-white: #f5f5f0;
-      
-      --bg-main: linear-gradient(135deg, var(--black) 0%, var(--charcoal) 50%, var(--slate) 100%);
-      --card-bg: rgba(26, 26, 26, 0.95);
-      --card-border: rgba(201, 162, 39, 0.3);
-      --text-primary: var(--skull-white);
-      --text-secondary: var(--silver);
-      --text-accent: var(--gold);
-      
-      --shadow-sm: 0 2px 10px rgba(0,0,0,0.5);
-      --shadow-lg: 0 10px 40px rgba(0,0,0,0.7), 0 0 30px rgba(201, 162, 39, 0.15);
-      --shadow-glow: 0 0 20px rgba(201, 162, 39, 0.3);
-      
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --border-radius: 16px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-main);
-      color: var(--text-primary);
-      line-height: 1.65;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* 🏴 Пиратский фон с текстурой */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: 
-        radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%),
-        repeating-linear-gradient(45deg, rgba(26,26,26,0.9) 0px, rgba(26,26,26,0.9) 2px, transparent 2px, transparent 10px),
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 58 L75 90 L50 72 L25 90 L35 58 L10 40 L40 40 Z' fill='none' stroke='%23c9a227' stroke-width='0.5' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    /* Анимированный череп в углу */
-    .skull-corner {
-      position: fixed;
-      font-size: 4rem;
-      opacity: 0.08;
-      z-index: -1;
-      animation: skullFloat 20s ease-in-out infinite;
-      pointer-events: none;
-      filter: drop-shadow(0 0 10px rgba(201, 162, 39, 0.3));
-    }
-    .skull-corner.top-right { top: 5%; right: 3%; animation-delay: -5s; }
-    .skull-corner.bottom-left { bottom: 5%; left: 3%; animation-delay: -10s; transform: scaleX(-1); }
-    
-    @keyframes skullFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      25% { transform: translateY(-10px) rotate(2deg); }
-      75% { transform: translateY(10px) rotate(-2deg); }
-    }
-
-    /* Парящие монеты/частицы */
-    .pirate-particles {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: -1;
-      overflow: hidden;
-    }
-    .coin {
-      position: absolute;
-      width: 12px; height: 12px;
-      background: radial-gradient(circle, var(--gold) 0%, var(--blood) 100%);
-      border-radius: 50%;
-      border: 2px solid var(--gold);
-      opacity: 0.7;
-      animation: coinFloat 18s infinite linear;
-      box-shadow: 0 0 10px var(--gold-glow);
-    }
-    @keyframes coinFloat {
-      0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
-      10%, 90% { opacity: 0.7; }
-      100% { transform: translateY(-20px) rotate(720deg) scale(1); opacity: 0; }
-    }
-
-    /* Эффект мерцающей свечи */
-    .candle-glow {
-      position: fixed;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201, 162, 39, 0.15) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-      animation: flicker 3s ease-in-out infinite alternate;
-    }
-    .candle-glow:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
-    .candle-glow:nth-child(2) { bottom: 15%; right: 8%; animation-delay: -1.5s; }
-    @keyframes flicker {
-      0% { opacity: 0.3; transform: scale(1); }
-      100% { opacity: 0.6; transform: scale(1.05); }
-    }
-
-    /* Контейнер */
-    .container {
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-      position: relative;
-      z-index: 10;
-    }
-
-    /* Шапка с пиратским флагом */
-    header {
-      text-align: center;
-      padding: 3rem 1rem 2.5rem;
-      position: relative;
-      margin-bottom: 2rem;
-    }
-    
-    .jolly-roger {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      animation: skullBob 3s ease-in-out infinite;
-      text-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
-      display: inline-block;
-    }
-    @keyframes skullBob {
-      0%, 100% { transform: translateY(0) rotate(-2deg); }
-      50% { transform: translateY(-8px) rotate(2deg); }
-    }
-
-    header h1 {
-      font-family: 'Nosifer', cursive;
-      font-size: 2.8rem;
-      background: linear-gradient(135deg, var(--bone), var(--gold), var(--blood));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-      letter-spacing: 2px;
-    }
-
-    header p {
-      color: var(--text-secondary);
-      font-size: 1.15rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .flag-divider {
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--blood), var(--gold), var(--blood), transparent);
-      margin: 1.5rem auto;
-      border-radius: 2px;
-      max-width: 400px;
-      position: relative;
-    }
-    .flag-divider::before,
-    .flag-divider::after {
-      content: '☠️';
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2rem;
-      opacity: 0.8;
-    }
-    .flag-divider::before { left: -15px; }
-    .flag-divider::after { right: -15px; }
-
-    /* Навигация */
-    .nav {
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      margin: 1.5rem 0 2.5rem;
-      flex-wrap: wrap;
-      padding: 0.5rem;
-      background: rgba(26, 26, 26, 0.7);
-      border-radius: 50px;
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
-    }
-
-    .nav a {
-      padding: 0.65rem 1.3rem;
-      background: linear-gradient(135deg, var(--slate), var(--charcoal));
-      color: var(--text-primary);
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 500;
-      font-size: 0.92rem;
-      transition: var(--transition);
-      border: 1px solid transparent;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .nav a::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    .nav a:hover::before { left: 100%; }
-    .nav a:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold);
-      box-shadow: var(--shadow-glow);
-      color: var(--gold);
-    }
-
-    .nav a.active {
-      background: linear-gradient(135deg, var(--blood), var(--charcoal));
-      border-color: var(--blood);
-      box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
-    }
-
-    .nav a i { font-size: 1rem; }
-
-    /* Карточки постов */
-    .post {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      padding: 1.8rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--card-border);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-      animation: slideUp 0.5s ease-out forwards;
-      opacity: 0;
-    }
-
-    .post::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--blood), var(--gold), var(--blood));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s ease;
-    }
-
-    .post:hover {
-      transform: translateY(-5px);
-      border-color: var(--gold);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .post:hover::before { transform: scaleX(1); }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .post:nth-child(1) { animation-delay: 0.1s; }
-    .post:nth-child(2) { animation-delay: 0.15s; }
-    .post:nth-child(3) { animation-delay: 0.2s; }
-    .post:nth-child(4) { animation-delay: 0.25s; }
-    .post:nth-child(5) { animation-delay: 0.3s; }
-
-    .post-date {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.45rem 1.1rem;
-      background: linear-gradient(135deg, var(--blood), var(--charcoal));
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 1.1rem;
-      color: var(--bone);
-      border: 1px solid var(--blood);
-      box-shadow: 0 2px 10px rgba(139, 0, 0, 0.3);
-    }
-
-    .post h2 {
-      font-size: 1.45rem;
-      margin-bottom: 1rem;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .post h2::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, var(--card-border), transparent);
-      margin-left: 1rem;
-    }
-
-    .post p, .post blockquote {
-      color: var(--text-secondary);
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    .post blockquote {
-      border-left: 4px solid var(--gold);
-      padding-left: 1.3rem;
-      font-style: italic;
-      background: rgba(201, 162, 39, 0.08);
-      border-radius: 0 12px 12px 0;
-      margin: 1.2rem 0;
-    }
-
-    .post blockquote strong {
-      color: var(--gold);
-    }
-
-    /* Ссылки */
-    .post a {
-      color: var(--gold);
-      text-decoration: none;
-      font-weight: 500;
-      transition: var(--transition);
-      position: relative;
-      padding-bottom: 2px;
-    }
-
-    .post a::after {
-      content: '⚓';
-      position: absolute;
-      bottom: -2px; left: 0;
-      width: 0;
-      font-size: 0.7rem;
-      transition: width 0.3s ease;
-      opacity: 0;
-    }
-
-    .post a:hover::after {
-      width: 100%;
-      opacity: 0.6;
-    }
-
-    .post a:hover {
-      color: var(--bone);
-      text-shadow: 0 0 10px var(--gold-glow);
-    }
-
-    /* Кнопки */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.85rem 1.9rem;
-      background: linear-gradient(135deg, var(--blood), var(--charcoal));
-      color: var(--bone);
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: var(--transition);
-      border: 2px solid var(--blood);
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.3), transparent);
-      transition: left 0.4s;
-    }
-
-    .btn:hover::before { left: 100%; }
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .btn:active { transform: translateY(-1px); }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-    }
-
-    .btn-outline:hover {
-      background: var(--gold);
-      color: var(--black);
-    }
-
-    .btn-download {
-      background: linear-gradient(135deg, var(--gold), #997a1a);
-      color: var(--black);
-      border-color: var(--gold);
-      font-weight: 600;
-    }
-    .btn-download:hover {
-      background: linear-gradient(135deg, #e6c050, var(--gold));
-      box-shadow: 0 0 25px rgba(201, 162, 39, 0.5);
-    }
-
-    /* Код и данные */
-    .code-block, .data-block {
-      background: #0f0f0f;
-      border-radius: 12px;
-      padding: 1.3rem;
-      margin: 1.1rem 0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      overflow-x: auto;
-      border: 1px solid var(--card-border);
-      position: relative;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
-    }
-
-    .code-block::before {
-      content: '💀';
-      position: absolute;
-      top: 10px; right: 14px;
-      font-size: 1.3rem;
-      opacity: 0.6;
-    }
-
-    .data-block {
-      border-left: 4px solid var(--gold);
-      background: linear-gradient(135deg, rgba(26,26,26,0.95), rgba(45,45,45,0.9));
-    }
-
-    /* Таблицы */
-    .pirate-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-      background: rgba(26, 26, 26, 0.8);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--card-border);
-    }
-
-    .pirate-table th {
-      background: linear-gradient(135deg, var(--blood), var(--charcoal));
-      color: var(--bone);
-      padding: 1rem;
-      text-align: left;
-      font-weight: 600;
-      border-bottom: 2px solid var(--gold);
-      position: relative;
-    }
-
-    .pirate-table th::after {
-      content: '⚔️';
-      position: absolute;
-      right: 10px;
-      opacity: 0.5;
-    }
-
-    .pirate-table td {
-      padding: 0.9rem 1rem;
-      border-bottom: 1px solid rgba(201, 162, 39, 0.2);
-      color: var(--text-secondary);
-    }
-
-    .pirate-table tr:hover {
-      background: rgba(201, 162, 39, 0.08);
-    }
-
-    .pirate-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .pirate-table .highlight {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* Метрики */
-    .metric {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.4rem 1rem;
-      background: rgba(201, 162, 39, 0.15);
-      border: 1px solid var(--gold);
-      border-radius: 8px;
-      margin: 0.35rem;
-      font-weight: 600;
-      color: var(--gold);
-      font-size: 0.9rem;
-      transition: var(--transition);
-    }
-    .metric:hover {
-      background: rgba(201, 162, 39, 0.3);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-glow);
-    }
-    .metric i { font-size: 0.85rem; }
-
-    /* Теги */
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin: 1.2rem 0 0.5rem;
-    }
-
-    .tag {
-      padding: 0.35rem 1rem;
-      background: rgba(139, 0, 0, 0.25);
-      border: 1px solid var(--blood);
-      border-radius: 50px;
-      font-size: 0.8rem;
-      color: var(--bone);
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .tag:hover {
-      background: var(--blood);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
-    }
-
-    .tag.gold {
-      background: rgba(201, 162, 39, 0.2);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-    .tag.gold:hover {
-      background: var(--gold);
-      color: var(--black);
-    }
-
-    /* Изображения */
-    .post img {
-      max-width: 100%;
-      border-radius: 12px;
-      margin: 1.2rem 0;
-      display: block;
-      transition: var(--transition);
-      border: 3px solid var(--card-border);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .post img:hover {
-      transform: scale(1.03);
-      border-color: var(--gold);
-      box-shadow: var(--shadow-lg);
-    }
-
-    /* Шифрованный текст */
-    .cipher-text {
-      background: rgba(139, 0, 0, 0.15);
-      border: 1px dashed var(--blood);
-      border-radius: 10px;
-      padding: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      margin: 0.8rem 0;
-      color: var(--bone);
-    }
-
-    .cipher-text span {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* Футер */
-    footer {
-      text-align: center;
-      padding: 3rem 1rem 2.5rem;
-      color: var(--text-secondary);
-      border-top: 2px solid var(--card-border);
-      margin-top: 2.5rem;
-      position: relative;
-    }
-
-    footer::before {
-      content: '☠️ ⚓ ☠️';
-      display: block;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-      opacity: 0.6;
-      letter-spacing: 0.5rem;
-    }
-
-    footer a {
-      color: var(--gold);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-    footer a:hover {
-      color: var(--bone);
-      text-shadow: 0 0 10px var(--gold-glow);
-    }
-
-    /* Анимация появления при скролле */
-    .reveal {
-      opacity: 0;
-      transform: translateY(25px);
-      transition: all 0.6s ease;
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Модальное окно для демо-файлов */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      backdrop-filter: blur(5px);
-    }
-    .modal.active { display: flex; }
-    
-    .modal-content {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 2.2rem;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-      border: 2px solid var(--gold);
-      box-shadow: var(--shadow-lg), 0 0 40px rgba(201, 162, 39, 0.3);
-      animation: modalIn 0.35s ease;
-      position: relative;
-    }
-    
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-skull {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      animation: skullBob 2s ease-in-out infinite;
-    }
-
-    .modal-title {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
-      color: var(--gold);
-    }
-
-    .modal-size {
-      color: var(--text-secondary);
-      margin-bottom: 1.3rem;
-      font-size: 0.95rem;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 1rem; right: 1.2rem;
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      color: var(--silver);
-      cursor: pointer;
-      transition: var(--transition);
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-close:hover {
-      background: rgba(201, 162, 39, 0.2);
-      color: var(--gold);
-      transform: rotate(90deg);
-    }
-
-    /* Уведомления */
-    .toast {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      padding: 1rem 1.6rem;
-      background: var(--card-bg);
-      border-left: 4px solid var(--gold);
-      border-radius: 12px;
-      box-shadow: var(--shadow-lg);
-      color: var(--text-primary);
-      transform: translateX(150%);
-      transition: transform 0.35s ease;
-      z-index: 1001;
-      max-width: 380px;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      border: 1px solid var(--card-border);
-    }
-    .toast.show { transform: translateX(0); }
-    .toast.success { border-left-color: #22c55e; }
-    .toast.error { border-left-color: #ef4444; }
-    .toast i { font-size: 1.3rem; }
-
-    /* Прогресс-бар чтения */
-    .reading-progress {
-      position: fixed;
-      top: 0; left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--blood), var(--gold));
-      z-index: 100;
-      transition: width 0.1s ease;
-      box-shadow: 0 0 10px var(--gold-glow);
-    }
-
-    /* Адаптивность */
-    @media (max-width: 768px) {
-      header h1 { font-size: 2.2rem; }
-      .jolly-roger { font-size: 3rem; }
-      
-      .nav {
-        gap: 0.4rem;
-        padding: 0.3rem;
-      }
-      .nav a {
-        padding: 0.5rem 0.9rem;
-        font-size: 0.85rem;
-      }
-      
-      .post { padding: 1.4rem; }
-      .code-block { font-size: 0.85rem; padding: 1rem; }
-      
-      .pirate-table { font-size: 0.9rem; }
-      .pirate-table th, .pirate-table td { padding: 0.7rem 0.8rem; }
-      
-      .metric { padding: 0.3rem 0.8rem; font-size: 0.85rem; }
-    }
-
-    @media (max-width: 480px) {
-      header h1 { font-size: 1.9rem; }
-      .post h2 { font-size: 1.3rem; }
-      .btn { padding: 0.75rem 1.5rem; font-size: 0.9rem; }
-      .nav { flex-direction: column; align-items: center; }
-      .nav a { width: 100%; justify-content: center; }
-    }
-
-    /* Плавная прокрутка */
-    html { scroll-behavior: smooth; }
-
-    /* Скрытие скроллбара для чистоты */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--charcoal); }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(var(--slate), var(--blood));
-      border-radius: 4px;
-      border: 2px solid var(--charcoal);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(var(--blood), var(--gold));
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔪 Sofia's Scream Log | Data & Secrets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Creepster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Палитра фильма «Крик» */
+            --black: #000000;
+            --charcoal: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --mid-gray: #2d2d2d;
+            --light-gray: #4a4a4a;
+            --white: #ffffff;
+            --off-white: #f0f0f0;
+            --blood: #8b0000;
+            --blood-bright: #c41e3a;
+            --blood-glow: rgba(139, 0, 0, 0.4);
+            
+            --bg-main: linear-gradient(135deg, var(--black) 0%, var(--charcoal) 40%, var(--dark-gray) 100%);
+            --card-bg: rgba(10, 10, 10, 0.96);
+            --card-border: rgba(139, 0, 0, 0.35);
+            --text-primary: var(--off-white);
+            --text-secondary: var(--light-gray);
+            --text-muted: #6b6b6b;
+            
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.7);
+            --shadow-lg: 0 10px 50px rgba(0,0,0,0.9), 0 0 30px var(--blood-glow);
+            --shadow-blood: 0 0 20px rgba(139, 0, 0, 0.5);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.65;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 🎭 Фон в стиле «Крик» */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 15% 85%, rgba(139,0,0,0.12) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(139,0,0,0.08) 0%, transparent 55%),
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.95) 0px, rgba(0,0,0,0.95) 1px, transparent 1px, transparent 25px),
+                repeating-linear-gradient(90deg, rgba(10,10,10,0.97) 0px, rgba(10,10,10,0.97) 1px, transparent 1px, transparent 25px);
+            pointer-events: none;
+            z-index: -2;
+            animation: filmGrain 8s steps(10) infinite;
+        }
+
+        @keyframes filmGrain {
+            0%, 100% { opacity: 0.95; }
+            50% { opacity: 1; }
+        }
+
+        /* Мерцание как в хорроре */
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.85; }
+        }
+
+        .flicker {
+            animation: flicker 4s infinite;
+        }
+
+        /* Маска Ghostface как водяной знак */
+        .ghostface-watermark {
+            position: fixed;
+            font-size: 18rem;
+            opacity: 0.025;
+            z-index: -1;
+            pointer-events: none;
+            color: var(--white);
+            font-weight: 900;
+            user-select: none;
+            text-shadow: 0 0 40px var(--blood-glow);
+            animation: floatMask 25s ease-in-out infinite;
+        }
+        .ghostface-watermark.top-left { top: -5%; left: -3%; animation-delay: 0s; }
+        .ghostface-watermark.bottom-right { bottom: -8%; right: -5%; animation-delay: -12s; font-size: 15rem; }
+
+        @keyframes floatMask {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(1deg); }
+            75% { transform: translateY(12px) rotate(-1deg); }
+        }
+
+        /* Капли крови (декоративные) */
+        .blood-drip {
+            position: fixed;
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--blood), transparent);
+            border-radius: 0 0 2px 2px;
+            opacity: 0.6;
+            z-index: -1;
+            animation: drip 6s ease-in infinite;
+            filter: blur(0.5px);
+        }
+        .blood-drip:nth-child(1) { left: 8%; top: -40px; animation-delay: 0s; height: 55px; }
+        .blood-drip:nth-child(2) { left: 23%; top: -40px; animation-delay: -2s; height: 35px; }
+        .blood-drip:nth-child(3) { right: 12%; top: -40px; animation-delay: -4s; height: 48px; }
+        .blood-drip:nth-child(4) { right: 28%; top: -40px; animation-delay: -1.5s; height: 30px; }
+
+        @keyframes drip {
+            0% { transform: translateY(-100%); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Шапка с маской */
+        header {
+            text-align: center;
+            padding: 2.8rem 1rem 2.2rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .ghostface-icon {
+            font-size: 4.5rem;
+            margin-bottom: 0.6rem;
+            color: var(--white);
+            display: inline-block;
+            text-shadow: 0 0 25px var(--blood-glow), 0 0 50px var(--blood-glow);
+            animation: maskPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes maskPulse {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 25px var(--blood-glow); }
+            50% { transform: scale(1.03); text-shadow: 0 0 40px var(--blood-glow), 0 0 70px rgba(139,0,0,0.7); }
+        }
+
+        header h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3.2rem;
+            color: var(--white);
+            margin-bottom: 0.3rem;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.8), 0 0 30px var(--blood-glow);
+            position: relative;
+        }
+        
+        header h1::after {
+            content: '🔪';
+            position: absolute;
+            right: -25px;
+            top: 5px;
+            font-size: 1.8rem;
+            animation: knifeShake 2s ease-in-out infinite;
+        }
+        
+        @keyframes knifeShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto 0.8rem;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blood), var(--blood-bright), var(--blood), transparent);
+            margin: 1.2rem auto;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 0 10px var(--blood-glow);
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '☠️';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+        .divider::before { left: -18px; }
+        .divider::after { right: -18px; }
+
+        /* Навигация */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.2rem 0 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 0.55rem 1.1rem;
+            background: var(--dark-gray);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.92rem;
+            transition: var(--transition);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav a::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139,0,0,0.25), transparent);
+            transition: left 0.4s;
+        }
+
+        .nav a:hover::before { left: 100%; }
+        .nav a:hover {
+            background: var(--mid-gray);
+            border-color: var(--blood-bright);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-blood);
+            color: var(--white);
+        }
+
+        .nav a.active {
+            background: var(--blood);
+            border-color: var(--blood-bright);
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.6);
+        }
+
+        .nav a i { font-size: 0.9rem; }
+
+        /* Карточки постов */
+        .post {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.6rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            position: relative;
+            animation: slideUp 0.4s ease-out forwards;
+            opacity: 0;
+        }
+
+        .post::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--black), var(--blood), var(--black));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s ease;
+            box-shadow: 0 0 8px var(--blood-glow);
+        }
+
+        .post:hover {
+            transform: translateY(-3px);
+            border-color: var(--blood-bright);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .post:hover::before { transform: scaleX(1); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .post:nth-child(1) { animation-delay: 0.05s; }
+        .post:nth-child(2) { animation-delay: 0.1s; }
+        .post:nth-child(3) { animation-delay: 0.15s; }
+        .post:nth-child(4) { animation-delay: 0.2s; }
+        .post:nth-child(5) { animation-delay: 0.25s; }
+
+        .post-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.9rem;
+            background: var(--blood);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 0.95rem;
+            color: var(--white);
+            border: 1px solid var(--blood-bright);
+            box-shadow: 0 2px 8px rgba(139, 0, 0, 0.4);
+        }
+
+        .post h2 {
+            font-size: 1.35rem;
+            margin-bottom: 0.85rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 0.4rem;
+        }
+        
+        .post h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--blood);
+            border-radius: 2px;
+        }
+
+        .post p, .post blockquote {
+            color: var(--text-secondary);
+            margin-bottom: 0.85rem;
+            font-size: 1rem;
+        }
+
+        .post blockquote {
+            border-left: 3px solid var(--blood);
+            padding-left: 1.1rem;
+            font-style: italic;
+            background: rgba(26, 0, 0, 0.4);
+            border-radius: 0 8px 8px 0;
+            margin: 0.9rem 0;
+            color: var(--light-gray);
+            position: relative;
+        }
+        
+        .post blockquote::before {
+            content: '"';
+            position: absolute;
+            top: -8px;
+            left: 4px;
+            font-family: 'Creepster', cursive;
+            font-size: 2.5rem;
+            color: var(--blood);
+            opacity: 0.6;
+        }
+
+        /* Ссылки — прямые и рабочие */
+        .post a {
+            color: var(--blood-bright);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 1px dashed var(--blood);
+            padding-bottom: 1px;
+            position: relative;
+        }
+        
+        .post a::after {
+            content: '🔪';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            font-size: 0.65rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .post a:hover {
+            color: var(--white);
+            border-bottom-style: solid;
+        }
+        
+        .post a:hover::after {
+            opacity: 0.7;
+        }
+
+        /* Кнопки — прямые ссылки без JS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: var(--blood);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid var(--blood-bright);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(139, 0, 0, 0.4);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.4s;
+        }
+        
+        .btn:hover::before { left: 100%; }
+
+        .btn:hover {
+            background: var(--blood-bright);
+            border-color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.7), 0 0 15px var(--blood-glow);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--blood);
+            color: var(--blood-bright);
+        }
+
+        .btn-outline:hover {
+            background: var(--blood);
+            color: var(--white);
+            border-color: var(--blood-bright);
+        }
+
+        /* Код и данные */
+        .code-block, .data-block {
+            background: #050505;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.85rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.87rem;
+            overflow-x: auto;
+            border: 1px solid var(--card-border);
+            color: var(--off-white);
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: '🔪';
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            font-size: 1.1rem;
+            opacity: 0.5;
+        }
+
+        .data-block {
+            border-left: 3px solid var(--blood);
+            background: rgba(18, 0, 0, 0.6);
+        }
+
+        /* Таблицы — чёткие и читаемые */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.75rem 0;
+            background: rgba(20, 20, 20, 0.85);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            font-size: 0.91rem;
+        }
+
+        .data-table th {
+            background: var(--blood);
+            color: var(--white);
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--blood-bright);
+            position: relative;
+        }
+        
+        .data-table th::after {
+            content: '🩸';
+            position: absolute;
+            right: 10px;
+            opacity: 0.6;
+        }
+
+        .data-table td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid rgba(139, 114, 128, 0.15);
+            color: var(--text-secondary);
+        }
+
+        .data-table tr:hover {
+            background: rgba(42, 10, 10, 0.7);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        /* Метрики */
+        .metric {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.28rem 0.8rem;
+            background: rgba(42, 10, 10, 0.9);
+            border: 1px solid var(--blood);
+            border-radius: 5px;
+            margin: 0.28rem;
+            font-weight: 500;
+            color: var(--blood-bright);
+            font-size: 0.89rem;
+            transition: var(--transition);
+        }
+        
+        .metric:hover {
+            background: var(--blood);
+            color: var(--white);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(139, 0, 0, 0.5);
+        }
+
+        /* Теги */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.9rem 0 0.25rem;
+        }
+
+        .tag {
+            padding: 0.28rem 0.8rem;
+            background: rgba(26, 0, 0, 0.85);
+            border: 1px solid var(--blood);
+            border-radius: 5px;
+            font-size: 0.77rem;
+            color: var(--blood-bright);
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            background: var(--blood);
+            color: var(--white);
+            border-color: var(--blood-bright);
+            transform: translateY(-1px);
+        }
+
+        /* Изображения */
+        .post img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 0.9rem 0;
+            display: block;
+            transition: var(--transition);
+            border: 2px solid var(--card-border);
+            filter: grayscale(30%) contrast(1.1);
+        }
+
+        .post img:hover {
+            border-color: var(--blood-bright);
+            filter: grayscale(0%) contrast(1.2);
+            box-shadow: var(--shadow-blood);
+        }
+
+        /* Шифрованный текст */
+        .cipher-text {
+            background: rgba(26, 0, 0, 0.75);
+            border: 1px dashed var(--blood);
+            border-radius: 7px;
+            padding: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.87rem;
+            margin: 0.65rem 0;
+            color: var(--light-gray);
+        }
+
+        .cipher-text span {
+            color: var(--blood-bright);
+            font-weight: 500;
+        }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 2.4rem 1rem 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--card-border);
+            margin-top: 1.8rem;
+            font-size: 0.92rem;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '🔪 ☠️ 🔪';
+            display: block;
+            margin-bottom: 0.9rem;
+            font-size: 1.3rem;
+            opacity: 0.5;
+            letter-spacing: 0.4rem;
+        }
+
+        footer a {
+            color: var(--blood-bright);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        footer a:hover {
+            color: var(--white);
+            border-bottom: 1px solid var(--blood-bright);
+        }
+
+        /* Анимация появления при скролле */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.45s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Эффект «вспышки» при наведении на важные элементы */
+        .flash-hover:hover {
+            animation: flash 0.3s ease;
+        }
+        
+        @keyframes flash {
+            0%, 100% { box-shadow: var(--shadow-lg); }
+            50% { box-shadow: 0 0 30px var(--blood-glow), 0 0 60px rgba(139,0,0,0.8); }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.4rem; }
+            .ghostface-icon { font-size: 3.4rem; }
+            
+            .nav { gap: 0.35rem; }
+            .nav a { padding: 0.48rem 0.9rem; font-size: 0.87rem; }
+            
+            .post { padding: 1.35rem; }
+            .code-block { font-size: 0.82rem; padding: 0.9rem; }
+            
+            .data-table { font-size: 0.87rem; }
+            .data-table th, .data-table td { padding: 0.6rem 0.75rem; }
+            
+            .metric { padding: 0.25rem 0.7rem; font-size: 0.85rem; }
+        }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 2rem; }
+            .post h2 { font-size: 1.22rem; }
+            .btn { padding: 0.62rem 1.25rem; font-size: 0.88rem; }
+            .nav { flex-direction: column; align-items: center; }
+            .nav a { width: 100%; justify-content: center; }
+            .ghostface-icon { font-size: 2.8rem; }
+        }
+
+        /* Плавная прокрутка */
+        html { scroll-behavior: smooth; }
+
+        /* Скроллбар в стиле хоррора */
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: var(--charcoal); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--dark-gray), var(--blood));
+            border-radius: 4px;
+            border: 2px solid var(--charcoal);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--blood), var(--blood-bright));
+            box-shadow: 0 0 10px var(--blood-glow);
+        }
+    </style>
 </head>
 <body>
-  <!-- Пиратские элементы фона -->
-  <div class="skull-corner top-right">☠️</div>
-  <div class="skull-corner bottom-left">☠️</div>
-  <div class="candle-glow"></div>
-  <div class="candle-glow"></div>
-  <div class="pirate-particles" id="pirateParticles"></div>
-  
-  <!-- Прогресс чтения -->
-  <div class="reading-progress" id="readingProgress"></div>
+    <!-- 🎭 Элементы в стиле «Крик» -->
+    <div class="ghostface-watermark top-left">☠</div>
+    <div class="ghostface-watermark bottom-right">☠</div>
+    
+    <div class="blood-drip"></div>
+    <div class="blood-drip"></div>
+    <div class="blood-drip"></div>
+    <div class="blood-drip"></div>
 
-  <div class="container">
-    <!-- Шапка -->
-    <header>
-      <div class="jolly-roger">☠️</div>
-      <h1>Sofia's Pirate Log</h1>
-      <p>Код, криптография и сокровища данных • Записки капитана корабля данных</p>
-      <div class="flag-divider"></div>
-    </header>
+    <div class="container">
+        <!-- Шапка -->
+        <header class="flicker">
+            <div class="ghostface-icon">☠</div>
+            <h1>Sofia's Scream Log</h1>
+            <p>Код, данные и тайны • В стиле фильма «Крик»</p>
+            <div class="divider"></div>
+        </header>
 
-    <!-- Навигация -->
-    <nav class="nav">
-      <a href="#latest" class="active"><i class="fas fa-scroll"></i> Журнал</a>
-      <a href="#ml"><i class="fas fa-robot"></i> ML & Код</a>
-      <a href="#crypto"><i class="fas fa-key"></i> Крипто</a>
-      <a href="#treasure"><i class="fas fa-coins"></i> Сокровища</a>
-      <a href="mailto:sofi.vasilek100@mail.ru" class="btn-outline"><i class="fas fa-envelope"></i> Письмо</a>
-    </nav>
+        <!-- Навигация -->
+        <nav class="nav">
+            <a href="#latest" class="active"><i class="fas fa-scroll"></i> Записи</a>
+            <a href="#ml"><i class="fas fa-code"></i> ML</a>
+            <a href="#crypto"><i class="fas fa-key"></i> Крипто</a>
+            <a href="#files"><i class="fas fa-folder"></i> Файлы</a>
+            <a href="mailto:sofi.vasilek100@mail.ru" class="btn-outline"><i class="fas fa-envelope"></i> Email</a>
+        </nav>
 
-    <!-- Посты -->
-    <main>
-      <!-- 18 февраля 2026 -->
-      <article class="post reveal" id="latest">
-        <span class="post-date"><i class="fas fa-calendar"></i> 18 февраля, 2026</span>
-        <h2><i class="fas fa-eye"></i> Компьютерное зрение: Классификация</h2>
-        <p>Топ-3 предсказания нейросети для входного изображения:</p>
-        <div class="data-block">
-          <div style="margin: 0.5rem 0"><strong>👟 running shoe:</strong> <span class="metric"><i class="fas fa-bolt"></i> 99.45%</span></div>
-          <div style="margin: 0.5rem 0"><strong>🏪 shoe store:</strong> <span class="metric">0.27%</span></div>
-          <div style="margin: 0.5rem 0"><strong>🥿 clogs:</strong> <span class="metric">0.15%</span></div>
-        </div>
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-brain"></i> ComputerVision</span>
-          <span class="tag"><i class="fas fa-robot"></i> AI</span>
-          <span class="tag"><i class="fas fa-chart-line"></i> Predictions</span>
-        </div>
-      </article>
+        <!-- Посты -->
+        <main>
+            <!-- 18 февраля 2026 -->
+            <article class="post reveal flash-hover" id="latest">
+                <span class="post-date"><i class="fas fa-calendar"></i> 18 февраля, 2026</span>
+                <h2><i class="fas fa-eye"></i> Компьютерное зрение</h2>
+                <p>Топ-3 предсказания нейросети для входного изображения:</p>
+                <div class="data-block">
+                    <div style="margin: 0.35rem 0"><strong>running shoe:</strong> <span class="metric">99.45%</span></div>
+                    <div style="margin: 0.35rem 0"><strong>shoe store:</strong> <span class="metric">0.27%</span></div>
+                    <div style="margin: 0.35rem 0"><strong>clogs:</strong> <span class="metric">0.15%</span></div>
+                </div>
+                <div class="tags">
+                    <span class="tag">ComputerVision</span>
+                    <span class="tag">AI</span>
+                    <span class="tag">Predictions</span>
+                </div>
+            </article>
 
-      <!-- 25 февраля 2026 -->
-      <article class="post reveal">
-        <span class="post-date"><i class="fas fa-calendar"></i> 25 февраля, 2026</span>
-        <h2><i class="fas fa-robot"></i> FAQ Bot: Ответ на вопрос</h2>
-        <p><strong>❓ Вопрос пользователя:</strong> Сколько ждать мой заказ?</p>
-        <p><strong>🔍 Найден FAQ-вопрос:</strong> Как быстро доставляется заказ? <em>(similarity=0.706)</em></p>
-        <blockquote>
-          <strong>🗣️ Ответ бота:</strong> Наш стандартный срок доставки — 3–5 рабочих дней. 📦⚓
-        </blockquote>
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-comments"></i> ChatBot</span>
-          <span class="tag"><i class="fas fa-language"></i> NLP</span>
-          <span class="tag"><i class="fas fa-headset"></i> Support</span>
-        </div>
-      </article>
+            <!-- 25 февраля 2026 -->
+            <article class="post reveal flash-hover">
+                <span class="post-date"><i class="fas fa-calendar"></i> 25 февраля, 2026</span>
+                <h2><i class="fas fa-robot"></i> FAQ Bot</h2>
+                <p><strong>Вопрос:</strong> Сколько ждать мой заказ?</p>
+                <p><strong>Найдено:</strong> Как быстро доставляется заказ? <em>(sim=0.706)</em></p>
+                <blockquote>
+                    <strong>Ответ:</strong> Наш стандартный срок доставки — 3–5 рабочих дней.
+                </blockquote>
+                <div class="tags">
+                    <span class="tag">ChatBot</span>
+                    <span class="tag">NLP</span>
+                    <span class="tag">Support</span>
+                </div>
+            </article>
 
-      <!-- 16 марта 2026 -->
-      <article class="post reveal" id="ml">
-        <span class="post-date"><i class="fas fa-calendar"></i> 16 марта, 2026</span>
-        <h2><i class="fas fa-chart-line"></i> Прогноз успеваемости студентов</h2>
-        <p>Линейная регрессия для предсказания баллов по часам подготовки:</p>
-        
-        <div class="code-block">
-# Прогноз для одного студента
+            <!-- 16 марта 2026 -->
+            <article class="post reveal flash-hover" id="ml">
+                <span class="post-date"><i class="fas fa-calendar"></i> 16 марта, 2026</span>
+                <h2><i class="fas fa-chart-line"></i> Прогноз успеваемости</h2>
+                <p>Линейная регрессия для предсказания баллов:</p>
+                
+                <div class="code-block">
+# Прогноз для студента
 new_student = pd.DataFrame({'Часы': [5]})
 prediction = regressor.predict(new_student)
-print(f"🎓 Студент занимался 5 часов")
-print(f"📊 Прогноз баллов: {prediction[0]:.2f}")
+print(f"Прогноз баллов: {prediction[0]:.2f}")
 
 # Группа студентов
 students = pd.DataFrame({'Часы': [1, 3, 5, 7, 10]})
 predictions = regressor.predict(students)
 
 results = pd.DataFrame({
-    'Часы подготовки': students['Часы'],
-    'Прогноз баллов': predictions.round(2)
+    'Часы': students['Часы'],
+    'Баллы': predictions.round(2)
 })
 print(results.to_string(index=False))
-        </div>
-        
-        <table class="pirate-table">
-          <thead>
-            <tr>
-              <th>⏱️ Часы подготовки</th>
-              <th>📈 Прогноз баллов</th>
-              <th>🏆 Уровень</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>12.32</td><td class="highlight">🌱 Новичок</td></tr>
-            <tr><td>3</td><td>31.28</td><td class="highlight">⚔️ Ученик</td></tr>
-            <tr><td>5</td><td class="highlight">50.23</td><td class="highlight">🗡️ Мастер</td></tr>
-            <tr><td>7</td><td class="highlight">69.19</td><td class="highlight">⚡ Эксперт</td></tr>
-            <tr><td>10</td><td class="highlight">97.62</td><td class="highlight">☠️ Легенда</td></tr>
-          </tbody>
-        </table>
-        
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-ruler"></i> LinearRegression</span>
-          <span class="tag"><i class="fab fa-python"></i> Python</span>
-          <span class="tag"><i class="fas fa-database"></i> DataScience</span>
-        </div>
-      </article>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Часы</th>
+                            <th>Прогноз</th>
+                            <th>Уровень</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>12.32</td><td>Начальный</td></tr>
+                        <tr><td>3</td><td>31.28</td><td>Средний</td></tr>
+                        <tr><td>5</td><td class="highlight">50.23</td><td>Хороший</td></tr>
+                        <tr><td>7</td><td class="highlight">69.19</td><td>Отличный</td></tr>
+                        <tr><td>10</td><td class="highlight">97.62</td><td>Превосходно</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="tags">
+                    <span class="tag">LinearRegression</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">DataScience</span>
+                </div>
+            </article>
 
-      <!-- 21 марта 2026 -->
-      <article class="post reveal" id="crypto">
-        <span class="post-date"><i class="fas fa-calendar"></i> 21 марта, 2026</span>
-        <h2><i class="fas fa-shield-alt"></i> Система страхования КАСКО</h2>
-        <p>Завершено обучение модели классификации для оценки страховых рисков:</p>
-        
-        <div class="data-block">
-          <p><strong>📁 Датасет:</strong> <code style="color:var(--gold)">kasko_dataset.csv</code></p>
-          <p><strong>📊 Записей:</strong> 2,000 | <strong>✅ Одобрено:</strong> 1,587 (79.3%)</p>
-          <hr style="border:0; border-top:1px solid rgba(201,162,39,0.2); margin:1rem 0;">
-          <p><strong>🎯 ТОЧНОСТЬ МОДЕЛИ:</strong> <span class="metric"><i class="fas fa-bullseye"></i> 98.5%</span></p>
-          <div style="margin: 0.6rem 0">
-            <span class="metric"><i class="fas fa-check"></i> Precision: 98.43%</span>
-            <span class="metric"><i class="fas fa-search"></i> Recall: 99.68%</span>
-            <span class="metric"><i class="fas fa-star"></i> F1: 99.05%</span>
-          </div>
-          <p style="margin-top:0.9rem; font-size:0.9rem; color:var(--text-secondary);">
-            💾 <code>metrics.json</code> • 🤖 <code>kasko_model.pkl</code> • 🔧 <code>preprocessing.pkl</code>
-          </p>
-        </div>
-        
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-brain"></i> MachineLearning</span>
-          <span class="tag"><i class="fas fa-file-contract"></i> Insurance</span>
-          <span class="tag"><i class="fas fa-layer-group"></i> Classification</span>
-        </div>
-      </article>
+            <!-- 21 марта 2026 -->
+            <article class="post reveal flash-hover" id="crypto">
+                <span class="post-date"><i class="fas fa-calendar"></i> 21 марта, 2026</span>
+                <h2><i class="fas fa-shield-alt"></i> КАСКО: ML модель</h2>
+                <p>Обучение модели классификации для страхования:</p>
+                
+                <div class="data-block">
+                    <p><strong>Датасет:</strong> <code>kasko_dataset.csv</code></p>
+                    <p><strong>Записей:</strong> 2,000 | <strong>Одобрено:</strong> 1,587 (79.3%)</p>
+                    <hr style="border:0; border-top:1px solid rgba(139,0,0,0.3); margin:0.7rem 0;">
+                    <p><strong>Точность:</strong> <span class="metric">98.5%</span></p>
+                    <div style="margin: 0.45rem 0">
+                        <span class="metric">Precision: 98.43%</span>
+                        <span class="metric">Recall: 99.68%</span>
+                        <span class="metric">F1: 99.05%</span>
+                    </div>
+                    <p style="margin-top:0.65rem; font-size:0.87rem; color:var(--text-muted);">
+                        <code>metrics.json</code> • <code>kasko_model.pkl</code>
+                    </p>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">MachineLearning</span>
+                    <span class="tag">Insurance</span>
+                    <span class="tag">Classification</span>
+                </div>
+            </article>
 
-      <!-- 20 января 2026 - Крипто -->
-      <article class="post reveal">
-        <span class="post-date"><i class="fas fa-calendar"></i> 20 января, 2026</span>
-        <h2><i class="fas fa-key"></i> RSA: Открытый и закрытый ключи</h2>
-        
-        <div class="code-block">
-# 🔐 RSA Keys Example (Educational)
+            <!-- 20 января 2026 - Крипто -->
+            <article class="post reveal flash-hover">
+                <span class="post-date"><i class="fas fa-calendar"></i> 20 января, 2026</span>
+                <h2><i class="fas fa-key"></i> RSA ключи</h2>
+                
+                <div class="code-block">
+# RSA Keys (Educational)
 Открытый ключ:  (n, e) = (33, 3)
 Закрытый ключ:  (n, d) = (33, 7)
 
-⚠️ ВНИМАНИЕ: Это учебный пример!
-Не используйте малые значения n в продакшене.
+# Реальное большое n (256 бит):
+n = 1523489761029384756102938475610293847561029384756...
+                </div>
+                
+                <p style="margin-top:0.85rem;">
+                    <a href="pac.png" download class="flash-hover"><i class="fas fa-download"></i> Скачать схему проекта (pac.png)</a>
+                </p>
+                
+                <blockquote style="margin-top:0.95rem;">
+                    <strong>Заметка:</strong> Нейронная сеть — это команда экспертов. Каждый нейрон взвешивает признаки, применяет нелинейный фильтр и передаёт мнение дальше. Обучаясь, сеть настраивает веса, минимизируя ошибку.
+                </blockquote>
+                
+                <div class="tags">
+                    <span class="tag">Cryptography</span>
+                    <span class="tag">RSA</span>
+                    <span class="tag">NeuralNetworks</span>
+                </div>
+            </article>
 
-🔢 Реальное большое n (256 бит):
-152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938
-        </div>
-        
-        <p style="margin-top:1rem;">
-          <a href="#" onclick="showDemoModal('pac.png', 'Схема проекта БД'); return false;" class="btn-download">
-            <i class="fas fa-download"></i> 📥 Скачать схему проекта (pac.png)
-          </a>
-        </p>
-        
-        <blockquote style="margin-top:1.2rem;">
-          <strong>💡 Мудрость капитана:</strong> Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов. Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза. ⚓
-        </blockquote>
-        
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-lock"></i> Cryptography</span>
-          <span class="tag"><i class="fas fa-key"></i> RSA</span>
-          <span class="tag"><i class="fas fa-brain"></i> NeuralNetworks</span>
-        </div>
-      </article>
+            <!-- Файлы -->
+            <article class="post reveal flash-hover" id="files">
+                <span class="post-date"><i class="fas fa-folder"></i> Файлы</span>
+                <h2>Скачать ресурсы</h2>
+                <div style="display: grid; gap: 0.65rem; margin-top: 0.75rem;">
+                    <a href="106С таблица.ods" class="btn flash-hover" download>
+                        <i class="fas fa-file-excel"></i> Таблица 106С (.ods)
+                    </a>
+                    <a href="таблица 2.ods" class="btn flash-hover" download>
+                        <i class="fas fa-file-excel"></i> Таблица 2 (.ods)
+                    </a>
+                    <a href="Таблица106CS.ods" class="btn flash-hover" download>
+                        <i class="fas fa-file-excel"></i> Таблица 106CS (.ods)
+                    </a>
+                    <a href="Congratulations2026.html" class="btn btn-outline flash-hover">
+                        <i class="fas fa-gift"></i> Поздравление с 2026
+                    </a>
+                    <a href="https://github.com/OLYAKL/dem.github.io" target="_blank" rel="noopener" class="btn btn-outline flash-hover">
+                        <i class="fab fa-github"></i> Сайт друга (GitHub)
+                    </a>
+                </div>
+                <p style="margin-top:1.1rem; font-size:0.87rem; color:var(--text-muted);">
+                    <i class="fas fa-info-circle"></i> Файлы должны быть в корне репозитория для скачивания
+                </p>
+            </article>
 
-      <!-- Сокровища / Файлы -->
-      <article class="post reveal" id="treasure">
-        <span class="post-date"><i class="fas fa-coins"></i> 🗝️ Сокровищница</span>
-        <h2>Скачать таблицы и ресурсы</h2>
-        <p style="color:var(--text-secondary); margin-bottom:1.2rem;">
-          Все файлы готовы к загрузке. Нажмите на сундук, чтобы получить сокровище! 🏴‍☠️
-        </p>
-        
-        <div style="display: grid; gap: 0.9rem; margin-top: 0.5rem;">
-          <a href="#" onclick="showDemoModal('106С таблица.ods', '~312 КБ'); return false;" class="btn btn-download">
-            <i class="fas fa-file-excel"></i> 📊 Таблица 106С (.ods)
-          </a>
-          <a href="#" onclick="showDemoModal('таблица 2.ods', '~198 КБ'); return false;" class="btn btn-download">
-            <i class="fas fa-file-excel"></i> 📋 Таблица 2 (.ods)
-          </a>
-          <a href="#" onclick="showDemoModal('Таблица106CS.ods', '~245 КБ'); return false;" class="btn btn-download">
-            <i class="fas fa-file-excel"></i> 📈 Таблица 106CS (.ods)
-          </a>
-          <a href="#" onclick="showDemoModal('Congratulations2026.html', 'Праздничная страница'); return false;" class="btn btn-outline">
-            <i class="fas fa-gift"></i> 🎄 Поздравление с 2026 годом
-          </a>
-          <a href="https://github.com/OLYAKL/dem.github.io" target="_blank" rel="noopener" class="btn btn-outline">
-            <i class="fab fa-github"></i> 🔗 Сайт моего друга (GitHub)
-          </a>
-        </div>
-        
-        <p style="margin-top:1.5rem; font-size:0.9rem; color:var(--text-secondary); text-align:center;">
-          <i class="fas fa-info-circle"></i> В реальном проекте файлы размещаются в корне репозитория GitHub Pages
-        </p>
-      </article>
+            <!-- Цитаты -->
+            <article class="post reveal flash-hover">
+                <span class="post-date"><i class="fas fa-calendar"></i> 1 декабря, 2025</span>
+                <blockquote>
+                    «Путешествие в тысячу миль начинается с одного шага»<br>
+                    <em>— Лао Цзы</em>
+                </blockquote>
+                <div style="text-align:center; margin:1.1rem 0;">
+                    <i class="fas fa-tree" style="font-size:2.6rem; opacity:0.65; color:var(--light-gray);"></i>
+                </div>
+                <p style="text-align:center;">
+                    <a href="Congratulations2026.html" class="flash-hover">🎁 Открыть поздравление</a>
+                </p>
+            </article>
 
-      <!-- Цитаты и заметки -->
-      <article class="post reveal">
-        <span class="post-date"><i class="fas fa-calendar"></i> 1 декабря, 2025</span>
-        <blockquote>
-          «Путешествие в тысячу миль начинается с одного шага»<br>
-          <em>— Лао Цзы</em> 🍃⚓
-        </blockquote>
-        <div style="text-align:center; margin:1.5rem 0;">
-          <i class="fas fa-tree" style="font-size:3.5rem; color:var(--gold); opacity:0.8;"></i>
-        </div>
-        <p style="text-align:center;">
-          <a href="#" onclick="showDemoModal('Congratulations2026.html', 'Праздничная страница'); return false;" style="font-weight:600;">
-            🎁 Открыть новогоднее поздравление →
-          </a>
-        </p>
-      </article>
+            <article class="post reveal flash-hover">
+                <span class="post-date"><i class="fas fa-calendar"></i> 1 сентября, 2025</span>
+                <h2><i class="fas fa-globe"></i> Переход в Web</h2>
+                <p>Оставляю локальную файловую систему ради возможностей <strong>Интернета</strong>.</p>
+                <p style="margin-top:0.65rem; font-size:0.87rem; color:var(--text-muted);">
+                    Иконки: <a href="https://icons8.com" target="_blank" class="flash-hover">Icons8</a>
+                </p>
+            </article>
 
-      <article class="post reveal">
-        <span class="post-date"><i class="fas fa-calendar"></i> 1 сентября, 2025</span>
-        <h2><i class="fas fa-globe"></i> Переход в Всемирную паутину</h2>
-        <p>Оставляю в прошлом скучную локальную файловую систему ради безграничных возможностей <strong>Интернета</strong>. 🌐✨</p>
-        <p style="margin-top:0.9rem; font-size:0.9rem; color:var(--text-secondary);">
-          🎨 Иконки: <a href="https://icons8.com" target="_blank">Icons8</a> • 
-          🏴‍☠️ Тема: «Пиратский лог»
-        </p>
-      </article>
+            <!-- Зашифрованные заметки -->
+            <article class="post reveal flash-hover">
+                <span class="post-date"><i class="fas fa-lock"></i> 19 января, 2026</span>
+                <h2><i class="fas fa-user-secret"></i> Личные заметки</h2>
+                <div class="cipher-text">
+                    <p>• АПЕЛЬСИН → <span>САЦЬНВЩЮ</span> [shift: 17]</p>
+                    <p>• АБРИКОС → <span>ЫЬЛГЕЙМ</span> [shift: 27]</p>
+                    <p>• ФХНЗКЧ → <span>ПРИВЕТ</span> ✓ [shift: 5]</p>
+                    <p>• ЦЩЕБФ → <span>ВЕСНА</span> [shift: 20]</p>
+                    <p>• Васильева → <span>МКЫТХЖПМК</span> [shift: 10]</p>
+                </div>
+                <p style="margin-top:0.75rem; font-size:0.87rem; color:var(--text-muted);">
+                    <i class="fas fa-lightbulb"></i> Русский алфавит = 33 буквы
+                </p>
+                <div class="tags">
+                    <span class="tag">Caesar Cipher</span>
+                    <span class="tag">Cryptography</span>
+                </div>
+            </article>
 
-      <!-- Зашифрованные заметки -->
-      <article class="post reveal">
-        <span class="post-date"><i class="fas fa-lock"></i> 19 января, 2026</span>
-        <h2><i class="fas fa-user-secret"></i> Личные зашифрованные заметки</h2>
-        <p style="color:var(--text-secondary); margin-bottom:0.8rem;">
-          Доступно только для доверенных членов экипажа:
-        </p>
-        <div class="cipher-text">
-          <p>• АПЕЛЬСИН → <span>САЦЬНВЩЮ</span> [shift: 17]</p>
-          <p>• АБРИКОС → <span>ЫЬЛГЕЙМ</span> [shift: 27]</p>
-          <p>• ФХНЗКЧ → <span>ПРИВЕТ</span> <i class="fas fa-check" style="color:#22c55e"></i> [shift: 5]</p>
-          <p>• ЦЩЕБФ → <span>ВЕСНА</span> [shift: 20]</p>
-          <p>• Васильева → <span>МКЫТХЖПМК</span> [shift: 10]</p>
-        </div>
-        <p style="margin-top:1rem; font-size:0.9rem; color:var(--text-secondary);">
-          <i class="fas fa-lightbulb"></i> Подсказка: русский алфавит = 33 буквы • Используйте модульную арифметику
-        </p>
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-lock"></i> Caesar Cipher</span>
-          <span class="tag"><i class="fas fa-code"></i> Cryptography</span>
-        </div>
-      </article>
+            <!-- Метрики обучения -->
+            <article class="post reveal flash-hover">
+                <span class="post-date"><i class="fas fa-calendar"></i> 1 апреля, 2026</span>
+                <h2><i class="fas fa-chart-line"></i> Метрики модели</h2>
+                <p>Результаты обучения регрессионной модели:</p>
+                
+                <div class="data-block" style="text-align:center; padding:0.95rem;">
+                    <div style="display:flex; justify-content:center; gap:1.1rem; flex-wrap:wrap; margin-bottom:0.7rem;">
+                        <div>
+                            <div style="font-size:0.87rem; color:var(--text-muted)">Train MSE</div>
+                            <div class="metric" style="font-size:1.15rem; margin-top:0.18rem">0.1347</div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.87rem; color:var(--text-muted)">Test MSE</div>
+                            <div class="metric" style="font-size:1.15rem; margin-top:0.18rem">0.1505</div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.87rem; color:var(--text-muted)">Delta</div>
+                            <div class="metric" style="font-size:1.15rem; margin-top:0.18rem">+0.016</div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.89rem;">
+                        Модель не переобучена • Хорошая обобщающая способность
+                    </p>
+                </div>
+                
+                <div class="tags">
+                    <span class="tag">Model Training</span>
+                    <span class="tag">MSE Metric</span>
+                </div>
+            </article>
+        </main>
 
-      <!-- Метрики обучения -->
-      <article class="post reveal">
-        <span class="post-date"><i class="fas fa-calendar"></i> 1 апреля, 2026</span>
-        <h2><i class="fas fa-chart-line"></i> Метрики обучения модели</h2>
-        <p>Результаты финального обучения регрессионной модели:</p>
-        
-        <div class="data-block" style="text-align:center; padding:1.2rem;">
-          <div style="display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin-bottom:1rem;">
-            <div>
-              <div style="font-size:0.9rem; color:var(--text-secondary)">Train MSE</div>
-              <div class="metric" style="font-size:1.3rem; margin-top:0.3rem">0.1347</div>
-            </div>
-            <div>
-              <div style="font-size:0.9rem; color:var(--text-secondary)">Test MSE</div>
-              <div class="metric" style="font-size:1.3rem; margin-top:0.3rem">0.1505</div>
-            </div>
-            <div>
-              <div style="font-size:0.9rem; color:var(--text-secondary)">Delta</div>
-              <div class="metric" style="font-size:1.3rem; margin-top:0.3rem; color:#22c55e">+0.016 ✓</div>
-            </div>
-          </div>
-          <p style="font-size:0.95rem; margin-top:0.5rem;">
-            <i class="fas fa-check-circle" style="color:#22c55e"></i> 
-            Модель не переобучена • Хорошая обобщающая способность
-          </p>
-        </div>
-        
-        <div class="tags">
-          <span class="tag gold"><i class="fas fa-graduation-cap"></i> Model Training</span>
-          <span class="tag"><i class="fas fa-balance-scale"></i> MSE Metric</span>
-        </div>
-      </article>
-    </main>
-
-    <!-- Футер -->
-    <footer>
-      <p>
-        <strong>🏴‍☠️ Sofia's Pirate Log</strong><br>
-        <i class="fas fa-map-marker-alt"></i> Домен: <strong>Sofia-a-cell.github.io</strong><br>
-        <i class="fas fa-envelope"></i> <a href="mailto:sofi.vasilek100@mail.ru">sofi.vasilek100@mail.ru</a>
-      </p>
-      <p style="margin-top:1.3rem; font-size:0.95rem;">
-        © 2025–2026 Sofia Vasileva • Создано с <i class="fas fa-heart" style="color:var(--blood)"></i> и пиратским ромом 🏴‍☠️
-      </p>
-      <p style="margin-top:0.8rem; font-size:0.9rem;">
-        Hosted on <a href="https://pages.github.com" target="_blank">GitHub Pages</a> • 
-        <a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">⬆️ Наверх</a>
-      </p>
-    </footer>
-  </div>
-
-  <!-- Модальное окно для демо-файлов -->
-  <div class="modal" id="demoModal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()">&times;</button>
-      <div class="modal-skull">☠️</div>
-      <h3 class="modal-title" id="modalTitle">Файл</h3>
-      <p class="modal-size" id="modalSize">Размер: —</p>
-      <p style="margin-bottom:1.5rem; color:var(--text-secondary);">
-        В демо-режиме файл не доступен для скачивания.<br>
-        <strong>В реальном проекте:</strong> разместите файлы в корне репозитория GitHub.
-      </p>
-      <button class="btn btn-download" onclick="closeModal()">
-        <i class="fas fa-check"></i> Понял, капитан!
-      </button>
+        <!-- Футер -->
+        <footer>
+            <p>
+                <strong>Sofia's Scream Log</strong><br>
+                Домен: <strong>Sofia-a-cell.github.io</strong><br>
+                <i class="fas fa-envelope"></i> <a href="mailto:sofi.vasilek100@mail.ru" class="flash-hover">sofi.vasilek100@mail.ru</a>
+            </p>
+            <p style="margin-top:0.95rem; font-size:0.89rem;">
+                © 2025–2026 Sofia Vasileva • Стиль фильма «Крик» 🔪
+            </p>
+            <p style="margin-top:0.55rem; font-size:0.87rem;">
+                Hosted on <a href="https://pages.github.com" target="_blank" class="flash-hover">GitHub Pages</a> • 
+                <a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;" class="flash-hover">⬆️ Наверх</a>
+            </p>
+        </footer>
     </div>
-  </div>
 
-  <!-- Уведомление -->
-  <div class="toast" id="toast">
-    <i class="fas fa-info-circle"></i>
-    <span id="toast-message">Сообщение</span>
-  </div>
-
-  <script>
-    // 🪙 Создание парящих монет
-    function createPirateParticles() {
-      const container = document.getElementById('pirateParticles');
-      for (let i = 0; i < 25; i++) {
-        const coin = document.createElement('div');
-        coin.className = 'coin';
-        coin.style.left = Math.random() * 100 + '%';
-        coin.style.animationDelay = Math.random() * 18 + 's';
-        coin.style.animationDuration = (18 + Math.random() * 12) + 's';
-        coin.style.opacity = 0.4 + Math.random() * 0.4;
-        container.appendChild(coin);
-      }
-    }
-
-    // Анимация появления при скролле
-    function handleScrollReveal() {
-      const reveals = document.querySelectorAll('.reveal');
-      reveals.forEach(el => {
-        const windowHeight = window.innerHeight;
-        const elementTop = el.getBoundingClientRect().top;
-        if (elementTop < windowHeight - 80) {
-          el.classList.add('active');
+    <script>
+        // Анимация появления при скролле
+        function handleScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 70) {
+                    el.classList.add('active');
+                }
+            });
         }
-      });
-    }
 
-    // Прогресс-бар чтения
-    function updateReadingProgress() {
-      const scrollTop = document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (scrollTop / scrollHeight) * 100;
-      document.getElementById('readingProgress').style.width = scrolled + '%';
-    }
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            handleScrollReveal();
+        });
 
-    // Показ уведомления
-    function showToast(message, type = 'info') {
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toast-message');
-      const icon = toast.querySelector('i');
-      
-      toastMsg.textContent = message;
-      toast.className = 'toast ' + type;
-      
-      if (type === 'success') icon.className = 'fas fa-check-circle';
-      else if (type === 'error') icon.className = 'fas fa-exclamation-circle';
-      else icon.className = 'fas fa-info-circle';
-      
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3500);
-    }
-
-    // Модальное окно для демо-файлов
-    function showDemoModal(filename, size) {
-      document.getElementById('modalTitle').textContent = filename;
-      document.getElementById('modalSize').textContent = `Размер: ${size}`;
-      document.getElementById('demoModal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-      showToast('🔐 Доступ к сокровищу...', 'success');
-    }
-
-    function closeModal() {
-      document.getElementById('demoModal').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // Закрытие модалки по клику вне контента
-    document.getElementById('demoModal').addEventListener('click', (e) => {
-      if (e.target.id === 'demoModal') closeModal();
-    });
-
-    // Закрытие по Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeModal();
-        document.querySelectorAll('.toast').forEach(t => t.classList.remove('show'));
-      }
-    });
-
-    // Обработка кликов по ссылкам
-    document.querySelectorAll('a[href]').forEach(link => {
-      link.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
+        // Слушатель скролла
+        window.addEventListener('scroll', handleScrollReveal);
         
-        // Внешние ссылки
-        if (href.startsWith('http') && !href.includes('github.io')) {
-          e.preventDefault();
-          showToast('🔗 Открываю внешнюю ссылку...', 'success');
-          setTimeout(() => window.open(href, '_blank', 'noopener,noreferrer'), 600);
-          return;
-        }
+        // Обработка ошибок изображений
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+                const placeholder = document.createElement('div');
+                placeholder.innerHTML = '<i class="fas fa-image" style="opacity:0.35; font-size:1.8rem"></i><br><small style="color:var(--text-muted)">Изображение не найдено</small>';
+                placeholder.style.cssText = 'text-align:center; color:var(--text-muted); padding:0.9rem; font-size:0.88rem;';
+                this.parentNode.insertBefore(placeholder, this.nextSibling);
+            });
+        });
         
-        // Email
-        if (href.startsWith('mailto:')) {
-          showToast('📧 Открываю почтовый клиент...', 'success');
-          return;
-        }
-        
-        // Файлы для скачивания 
-<a href="файл.ods" class="btn" download>Скачать</a>
-            e.preventDefault();
-            const filename = href.split('/').pop();
-            showDemoModal(filename, '~200-350 КБ');
-          }
-          return;
-        }
-        
-        // Якорные ссылки
-        if (href.startsWith('#')) {
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            showToast('📍 Переход к разделу', 'info');
-          }
-        }
-      });
-    });
-
-    // Активная навигация
-    document.querySelectorAll('.nav a').forEach(link => {
-      link.addEventListener('click', function() {
-        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-        this.classList.add('active');
-      });
-    });
-
-    // Обработка ошибок изображений
-    document.querySelectorAll('img').forEach(img => {
-      img.addEventListener('error', function() {
-        this.style.display = 'none';
-        const placeholder = document.createElement('div');
-        placeholder.innerHTML = '<i class="fas fa-image" style="font-size:2rem; opacity:0.5"></i><br><em style="font-size:0.9rem">Изображение не найдено</em>';
-        placeholder.style.cssText = 'text-align:center; color:var(--text-secondary); padding:1.5rem;';
-        this.parentNode.insertBefore(placeholder, this.nextSibling);
-      });
-    });
-
-    // Инициализация
-    document.addEventListener('DOMContentLoaded', () => {
-      createPirateParticles();
-      handleScrollReveal();
-      
-      // Приветственное уведомление
-      setTimeout(() => {
-        showToast('☠️ Добро пожаловать на борт, капитан!', 'success');
-      }, 1200);
-    });
-
-    // Слушатели событий
-    window.addEventListener('scroll', () => {
-      handleScrollReveal();
-      updateReadingProgress();
-    });
-    
-    // Инициализация прогресса
-    updateReadingProgress();
-  </script>
-</body>
-</html>
+        // Эффект «шёпота» при наведении на заголовки (визуальный)
+        document.querySelectorAll('.post h2').forEach(title => {
+            title.addEventListener('mouseenter', function() {
+                this.style.textShadow = '0 0 12px rgba(139,0,0,0.6)';
+            });
+            title.addEventListener('mouseleave', function() {
+                this.style.textShadow = 'none';
+            });
+        });
+    </script>
+  <h2>12.0502026</h2>
+  <p>
+4. Какое утверждение неверно?
+3.  информация не может быть в графическом виде
+       5. Какое утверждение верно?
+       2. информацию можно преобразовывать и передавать
+6. Какую форму информации человек уже научился долговременно хранить?
+1. зрительные образы </p>
+  </body>
+  </html>
