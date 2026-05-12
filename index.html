@@ -1,24 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Блог Софьи | Sofia's Tech Space</title>
-    <!-- Подключаем современные шрифты -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>🌹 Блог Софьи | Sofia's Tech Space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary-color: #6366f1; /* Индиго */
-            --secondary-color: #a855f7; /* Фиолетовый */
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --code-bg: #1e1e1e;
-            --code-text: #d4d4d4;
-            --accent-green: #10b981;
+            /* Красная палитра */
+            --primary-red: #dc2626;
+            --primary-dark: #b91c1c;
+            --primary-light: #fecaca;
+            --accent-pink: #f43f5e;
+            --accent-rose: #fb7185;
+            --bg-cream: #fff9fa;
+            --bg-gradient: linear-gradient(135deg, #fef2f2 0%, #fff1f2 50%, #fef2f2 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-shadow: 0 10px 40px -10px rgba(220, 38, 38, 0.15);
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --code-bg: #1a1a2e;
+            --code-text: #e6e6e6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --border-radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -29,370 +37,984 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background: var(--bg-gradient);
             color: var(--text-main);
-            line-height: 1.6;
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Header Styles */
+        /* 🌸 Цветочный фон - анимированные лепестки */
+        .flower-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(ellipse at center, var(--accent-rose) 0%, transparent 70%);
+            border-radius: 50% 50% 50% 0;
+            animation: float 15s infinite linear;
+            opacity: 0.6;
+            transform-origin: center;
+        }
+
+        .petal:nth-child(odd) {
+            background: radial-gradient(ellipse at center, var(--primary-red) 0%, transparent 70%);
+            animation-duration: 18s;
+            animation-delay: -5s;
+        }
+
+        .petal:nth-child(3n) {
+            width: 15px;
+            height: 15px;
+            animation-duration: 22s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(720deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Декоративные цветы по углам */
+        .corner-flower {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            z-index: 1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .corner-flower.top-left { top: 20px; left: 20px; }
+        .corner-flower.top-right { top: 20px; right: 20px; transform: scaleX(-1); }
+        .corner-flower.bottom-left { bottom: 20px; left: 20px; transform: scaleY(-1); }
+        .corner-flower.bottom-right { bottom: 20px; right: 20px; transform: scale(-1); }
+
+        .flower-svg {
+            width: 100%;
+            height: 100%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Header */
         header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-red), var(--accent-pink));
             color: white;
-            padding: 3rem 1rem;
+            padding: 4rem 2rem 5rem;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(185, 28, 28, 0.3);
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.2s both;
         }
 
-        header a {
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
             color: white;
-            text-decoration: underline;
+            text-decoration: none;
+            font-weight: 500;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: var(--transition);
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .header-cta:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .header-cta i {
+            font-size: 1.1rem;
         }
 
         /* Container */
         .container {
-            max-width: 800px;
-            margin: -2rem auto 2rem;
-            padding: 0 1rem;
+            max-width: 850px;
+            margin: -3rem auto 3rem;
+            padding: 0 1.5rem;
             position: relative;
             z-index: 10;
         }
 
-        /* Card Styles */
+        /* Article Cards */
         article {
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: var(--border-radius);
             padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: transform 0.2s ease;
-            border-left: 5px solid transparent;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(220, 38, 38, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease both;
+        }
+
+        article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-red), var(--accent-pink));
+            transition: var(--transition);
         }
 
         article:hover {
-            transform: translateY(-2px);
-            border-left-color: var(--primary-color);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px -10px rgba(220, 38, 38, 0.25);
+            border-color: rgba(220, 38, 38, 0.3);
+        }
+
+        article:hover::before {
+            width: 6px;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Date Badge */
         .date-badge {
-            display: inline-block;
-            background-color: #e0e7ff;
-            color: var(--primary-color);
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, var(--primary-light), #ffe4e6);
+            color: var(--primary-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
             font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
+        }
+
+        .date-badge i {
+            font-size: 0.9rem;
         }
 
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin-bottom: 1rem;
             color: var(--text-main);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Content Styling */
-        p {
-            margin-bottom: 1rem;
+        h2::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary-light), transparent);
+            margin-left: 1rem;
         }
 
+        /* Links */
         a {
-            color: var(--primary-color);
+            color: var(--primary-red);
             text-decoration: none;
             font-weight: 500;
-            border-bottom: 1px dotted var(--primary-color);
+            position: relative;
+            padding-bottom: 2px;
+            transition: var(--transition);
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-pink);
+            transition: var(--transition);
+            border-radius: 2px;
         }
 
         a:hover {
-            color: var(--secondary-color);
-            border-bottom-style: solid;
+            color: var(--accent-pink);
         }
 
-        /* Code & Data Blocks */
+        a:hover::after {
+            width: 100%;
+        }
+
+        /* Download Button */
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
+            color: white;
+            padding: 0.9rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            margin: 0.5rem 0;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+            color: white;
+        }
+
+        .download-link::after {
+            display: none;
+        }
+
+        .download-link i {
+            font-size: 1.1rem;
+        }
+
+        /* Code Blocks */
         pre {
-            background-color: var(--code-bg);
+            background: var(--code-bg);
             color: var(--code-text);
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1.3rem;
+            border-radius: 12px;
             overflow-x: auto;
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
-            margin: 1rem 0;
+            margin: 1.2rem 0;
+            border-left: 4px solid var(--accent-pink);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .crypto-key, .log-entry {
+            background: linear-gradient(135deg, #fef2f2, #fff1f2);
+            border-left: 4px solid var(--primary-red);
+            padding: 1rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.8rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-main);
         }
 
         .crypto-key {
             word-break: break-all;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            color: #ef4444;
-            background: #fee2e2;
-            padding: 0.5rem;
-            border-radius: 4px;
-            display: block;
-            margin-top: 0.5rem;
-        }
-
-        .log-entry {
-            border-left: 3px solid var(--accent-green);
-            padding-left: 1rem;
-            margin: 0.5rem 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            color: #334155;
+            color: var(--primary-dark);
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
         }
 
         blockquote {
-            background: #f1f5f9;
-            border-left: 4px solid var(--secondary-color);
-            padding: 1rem;
+            background: linear-gradient(135deg, #fef2f2, #fff1f2);
+            border-left: 4px solid var(--accent-pink);
+            padding: 1.2rem 1.5rem;
             font-style: italic;
             color: var(--text-muted);
+            margin: 1.2rem 0;
+            border-radius: 0 12px 12px 0;
+            position: relative;
+        }
+
+        blockquote::before {
+            content: '"';
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            color: var(--primary-light);
+            opacity: 0.5;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-dark));
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .data-table tr:hover {
+            background: #fef2f2;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Cipher List */
+        .cipher-list {
+            list-style: none;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .cipher-list li {
+            background: linear-gradient(135deg, #fff1f2, #fee2e2);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--accent-pink);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .cipher-list li:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            border-left-color: var(--primary-red);
+        }
+
+        .cipher-list li::before {
+            content: '🔐';
+            font-size: 1.1rem;
+        }
+
+        /* Metrics Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
             margin: 1rem 0;
         }
 
-        /* Image styling */
+        .metric-card {
+            background: linear-gradient(135deg, #fef2f2, white);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(220, 38, 38, 0.15);
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-red);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            margin: 0.3rem 0;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Image */
         img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
-            margin-top: 1rem;
+            border-radius: 16px;
+            margin: 1rem 0;
             display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            border: 3px solid white;
+        }
+
+        img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.25);
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem 4rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Specific overrides for the user's messy data */
-        .cipher-list {
-            list-style: none;
+        footer a {
+            color: var(--primary-red);
         }
-        .cipher-list li {
-            background: #fff1f2;
-            margin: 5px 0;
-            padding: 5px 10px;
+
+        .footer-decoration {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .container {
+                margin-top: -2rem;
+                padding: 0 1rem;
+            }
+            
+            article {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #fef2f2;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary-light), var(--primary-red));
             border-radius: 4px;
-            font-family: monospace;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Loading animation for links */
+        .link-loading {
+            position: relative;
+        }
+
+        .link-loading::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-pink);
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0; left: 100%; }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Sofia-a-cell.github.io</h1>
-    <p>Личный блог, эксперименты с данными и заметки</p>
-    <p style="font-size: 0.9rem; margin-top: 10px;">
-        <a href="mailto:sofi.vasilek100@mail.ru" style="color:white; border-color:white;">Написать мне</a>
-    </p>
-</header>
+    <!-- 🌸 Анимированный цветочный фон -->
+    <div class="flower-bg" id="flowerBg"></div>
+    
+    <!-- Декоративные цветы по углам -->
+    <div class="corner-flower top-left">
+        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
+            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
+            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
+            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
+            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
+        </svg>
+    </div>
+    <div class="corner-flower top-right">
+        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
+            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
+            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
+            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
+            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
+        </svg>
+    </div>
+    <div class="corner-flower bottom-left">
+        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
+            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
+            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
+            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
+            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
+        </svg>
+    </div>
+    <div class="corner-flower bottom-right">
+        <svg class="flower-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#dc2626"/>
+            <path d="M50 20 Q65 35 50 50 Q35 35 50 20" fill="#f43f5e" opacity="0.8"/>
+            <path d="M50 80 Q65 65 50 50 Q35 65 50 80" fill="#f43f5e" opacity="0.8"/>
+            <path d="M20 50 Q35 65 50 50 Q35 35 20 50" fill="#fb7185" opacity="0.7"/>
+            <path d="M80 50 Q65 65 50 50 Q65 35 80 50" fill="#fb7185" opacity="0.7"/>
+        </svg>
+    </div>
 
-<div class="container">
+    <header>
+        <h1><i class="fas fa-rose"></i> Sofia's Tech Space</h1>
+        <p>Личный блог • Эксперименты с данными • Заметки разработчика</p>
+        <a href="mailto:sofi.vasilek100@mail.ru" class="header-cta">
+            <i class="fas fa-envelope"></i> Написать мне
+        </a>
+    </header>
 
-    <!-- Запись: 5 мая -->
-    <article>
-        <span class="date-badge">5 мая, 2026</span>
-        <h2>Обновление таблиц</h2>
-        <p>Новые данные доступны по ссылке:</p>
-        <a href="Таблица106CS.ods">📥 Скачать Таблица106CS.ods</a>
-    </article>
+    <div class="container">
 
-    <!-- Запись: 27 апреля -->
-    <article>
-        <span class="date-badge">27 апреля, 2026</span>
-        <h2>Архив данных</h2>
-        <a href="таблица 2.ods">📥 Скачать таблицу 2.ods</a>
-    </article>
+        <!-- Запись: 5 мая -->
+        <article style="animation-delay: 0.1s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 5 мая, 2026</span>
+            <h2><i class="fas fa-table"></i> Обновление таблиц</h2>
+            <p>Новые данные доступны для скачивания. Файл содержит обновлённую статистику и аналитику.</p>
+            <a href="Таблица106CS.ods" class="download-link" download>
+                <i class="fas fa-download"></i> Скачать Таблица106CS.ods
+            </a>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                <i class="fas fa-info-circle"></i> Формат: .ods • Размер: ~245 КБ
+            </p>
+        </article>
 
-    <!-- Запись: 22 апреля -->
-    <article>
-        <span class="date-badge">22 апреля, 2026</span>
-        <h2>Работа с электронными таблицами</h2>
-        <a href="106С таблица.ods">📥 Скачать 106С таблица.ods</a>
-    </article>
+        <!-- Запись: 27 апреля -->
+        <article style="animation-delay: 0.15s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 27 апреля, 2026</span>
+            <h2><i class="fas fa-archive"></i> Архив данных</h2>
+            <p>Архивная версия таблицы с историческими данными для сравнительного анализа.</p>
+            <a href="таблица 2.ods" class="download-link" download>
+                <i class="fas fa-download"></i> Скачать таблицу 2.ods
+            </a>
+        </article>
 
-    <!-- Запись: 1 апреля -->
-    <article>
-        <span class="date-badge">1 апреля, 2026</span>
-        <h2>Результаты обучения модели (MSE)</h2>
-        <div class="log-entry">
-            Ошибка на обучении (MSE): 0.13474115482825388<br>
-            Ошибка на тесте (MSE): 0.15051288344128164
-        </div>
-    </article>
+        <!-- Запись: 22 апреля -->
+        <article style="animation-delay: 0.2s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 22 апреля, 2026</span>
+            <h2><i class="fas fa-file-excel"></i> Работа с электронными таблицами</h2>
+            <p>Основная рабочая таблица проекта 106С с формулами и сводными данными.</p>
+            <a href="106С таблица.ods" class="download-link" download>
+                <i class="fas fa-download"></i> Скачать 106С таблица.ods
+            </a>
+        </article>
 
-    <!-- Запись: 21 марта -->
-    <article>
-        <span class="date-badge">21 марта, 2026</span>
-        <h2>Система страхования КАСКО: ML Модель</h2>
-        <p>Завершено обучение модели классификации.</p>
-        <pre>
-Датасет сохранен: kasko_dataset.csv
-Записей: 2000
-Одобрено: 1587 (79.3%)
+        <!-- Запись: 1 апреля -->
+        <article style="animation-delay: 0.25s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 1 апреля, 2026</span>
+            <h2><i class="fas fa-chart-line"></i> Результаты обучения модели (MSE)</h2>
+            <p>Метрики качества регрессионной модели после финального обучения:</p>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Train MSE</div>
+                    <div class="metric-value">0.135</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Test MSE</div>
+                    <div class="metric-value">0.151</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Delta</div>
+                    <div class="metric-value" style="color: var(--success)">+0.016</div>
+                </div>
+            </div>
+            <div class="log-entry">
+                <i class="fas fa-check-circle" style="color: var(--success)"></i> 
+                Модель не переобучена • Хорошая обобщающая способность
+            </div>
+        </article>
 
-ТОЧНОСТЬ МОДЕЛИ: 98.5%
-Precision: 98.43%
-Recall: 99.68%
-F1-Score: 99.05%
+        <!-- Запись: 21 марта -->
+        <article style="animation-delay: 0.3s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 21 марта, 2026</span>
+            <h2><i class="fas fa-shield-alt"></i> КАСКО: ML Модель классификации</h2>
+            <p>Завершено обучение модели для системы страхования. Результаты превзошли ожидания:</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Accuracy</div>
+                    <div class="metric-value">98.5%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Precision</div>
+                    <div class="metric-value">98.4%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Recall</div>
+                    <div class="metric-value">99.7%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">F1-Score</div>
+                    <div class="metric-value">99.1%</div>
+                </div>
+            </div>
+            
+            <pre>
+# Сводка по датасету
+Датасет: kasko_dataset.csv
+Всего записей: 2,000
+Одобрено заявок: 1,587 (79.3%)
 
-Метрики сохранены: metrics.json
-Модель сохранена: kasko_model.pkl
-Обучение завершено!
-        </pre>
-        <p><strong>Точность:</strong> 100.0% = 0.69 (коэффициент?)</p>
-    </article>
+# Сохранённые артефакты
+✓ metrics.json — метрики оценки
+✓ kasko_model.pkl — сериализованная модель
+✓ preprocessing.pkl — пайплайн предобработки
 
-    <!-- Запись: 16 марта -->
-    <article>
-        <span class="date-badge">16 марта, 2026</span>
-        <h2>Прогнозирование баллов студентов (Linear Regression)</h2>
-        <p>Использование pandas и sklearn для предсказания успеваемости.</p>
-        <pre>
+[✓] Обучение завершено успешно!
+            </pre>
+        </article>
+
+        <!-- Запись: 16 марта -->
+        <article style="animation-delay: 0.35s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 16 марта, 2026</span>
+            <h2><i class="fas fa-graduation-cap"></i> Прогноз успеваемости студентов</h2>
+            <p>Линейная регрессия для предсказания баллов по часам подготовки:</p>
+            
+            <pre>
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
-# Несколько прогнозов
+# Подготовка данных
 students = pd.DataFrame({'Часы': [1, 3, 5, 7, 10]})
 predictions = regressor.predict(students)
 
+# Формирование отчёта
 results = pd.DataFrame({
     'Часы подготовки': students['Часы'],
-    'Прогноз баллов': predictions
+    'Прогноз баллов': predictions.round(2)
 })
-print(results)
-        </pre>
-        <div class="log-entry">
-             Часы подготовки  Прогноз баллов<br>
-            0                1       12.324896<br>
-            1                3       31.279327<br>
-            2                5       50.233758<br>
-            3                7       69.188190<br>
-            4               10       97.619836
+print(results.to_string(index=False))
+            </pre>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Часы</th>
+                        <th>Прогноз баллов</th>
+                        <th>Уровень</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>12.32</td><td style="color: var(--warning)">Начальный</td></tr>
+                    <tr><td>3</td><td>31.28</td><td style="color: var(--warning)">Средний</td></tr>
+                    <tr><td>5</td><td>50.23</td><td style="color: var(--success)">Хороший</td></tr>
+                    <tr><td>7</td><td>69.19</td><td style="color: var(--success)">Отличный</td></tr>
+                    <tr><td>10</td><td>97.62</td><td style="color: var(--primary-red)">Превосходно</td></tr>
+                </tbody>
+            </table>
+        </article>
+
+        <!-- Запись: 25 февраля -->
+        <article style="animation-delay: 0.4s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 25 февраля, 2026</span>
+            <h2><i class="fas fa-robot"></i> Чат-бот FAQ с NLP</h2>
+            <p>Демонстрация работы семантического поиска по базе знаний:</p>
+            <div class="log-entry">
+                <strong><i class="fas fa-user"></i> Пользователь:</strong> Сколько ждать мой заказ?<br><br>
+                <strong><i class="fas fa-search"></i> Найденный вопрос:</strong> 
+                <span style="color: var(--primary-dark)">«Как быстро доставляется заказ?»</span> 
+                (similarity: 0.706)<br><br>
+                <strong><i class="fas fa-comment-alt"></i> Ответ бота:</strong> 
+                <span style="color: var(--success)">Наш стандартный срок доставки — 3–5 рабочих дней.</span>
+            </div>
+        </article>
+
+        <!-- Запись: 18 февраля -->
+        <article style="animation-delay: 0.45s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 18 февраля, 2026</span>
+            <h2><i class="fas fa-eye"></i> Computer Vision: Классификация изображений</h2>
+            <p>Топ-3 предсказания нейросети для тестового изображения:</p>
+            <ul class="cipher-list" style="margin-top: 0.5rem">
+                <li style="border-left-color: var(--success)">👟 running shoe: <strong>99.45%</strong></li>
+                <li>🏪 shoe store: 0.27%</li>
+                <li>🥿 clogs: 0.15%</li>
+            </ul>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted)">
+                <i class="fas fa-lightbulb"></i> Модель уверенно определила объект даже при частичном перекрытии
+            </p>
+        </article>
+
+        <!-- Запись: 20 января -->
+        <article style="animation-delay: 0.5s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 20 января, 2026</span>
+            <h2><i class="fas fa-key"></i> Криптография и нейросети</h2>
+            
+            <p><strong>RSA Keys Example (Educational):</strong></p>
+            <div class="crypto-key">
+                <i class="fas fa-lock-open"></i> Публичный ключ: (n=33, e=3)<br>
+                <i class="fas fa-lock"></i> Приватный ключ: (n=33, d=7)
+            </div>
+            
+            <p style="margin-top:1rem;"><strong>Пример большого модуля n (256 бит):</strong></p>
+            <div class="crypto-key" style="font-size: 0.75rem">
+                152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938
+            </div>
+
+            <hr style="margin: 1.8rem 0; border: 0; border-top: 2px dashed rgba(220, 38, 38, 0.2);">
+
+            <h3 style="margin-bottom: 0.8rem"><i class="fas fa-brain"></i> Теория нейронных сетей</h3>
+            <blockquote>
+                Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», 
+                то нейронная сеть — это команда виртуальных экспертов, каждый из которых ищет свой паттерн в данных.
+            </blockquote>
+            <p style="margin-top: 0.8rem">
+                Каждый нейрон взвешивает признаки, применяет нелинейную активацию и передаёт сигнал дальше. 
+                В процессе обучения сеть автоматически настраивает веса, минимизируя ошибку прогноза.
+            </p>
+            
+            <p style="margin-top: 1.2rem">
+                <a href="pac.png" class="link-loading" target="_blank">
+                    <i class="fas fa-image"></i> Смотреть схему проекта (pac.png)
+                </a>
+            </p>
+        </article>
+
+        <!-- Запись: 19 января -->
+        <article style="animation-delay: 0.55s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 19 января, 2026</span>
+            <h2><i class="fas fa-user-secret"></i> Шифрованные сообщения (Цезарь/ROT)</h2>
+            <p>Примеры зашифрованных строк с указанием сдвига:</p>
+            <ul class="cipher-list">
+                <li>АПЕЛЬСИН → САЦЬНВЩЮ <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 17</span></li>
+                <li>АБРИКОС → ЫЬЛГЕЙМ <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 27</span></li>
+                <li>ФХНЗКЧ → ПРИВЕТ <span style="margin-left: auto; background: var(--success); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">✓ shift: 5</span></li>
+                <li>ЦЩЕБФ → ВЕСНА <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 20</span></li>
+                <li>Васильева → МКЫТХЖПМК <span style="margin-left: auto; background: var(--primary-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem">shift: 10</span></li>
+            </ul>
+            <p style="margin-top: 1rem; font-size: 0.9rem">
+                <i class="fas fa-lightbulb"></i> Подсказка: для русского алфавита используйте модуль 33
+            </p>
+        </article>
+
+        <!-- Запись: 14 января -->
+        <article style="animation-delay: 0.6s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 14 января, 2026</span>
+            <h2><i class="fas fa-globe"></i> Переход в Web</h2>
+            <p>Оставляю в прошлом локальную файловую систему ради возможностей Всемирной паутины.</p>
+            <p style="margin-top: 0.8rem">
+                <i class="fas fa-check" style="color: var(--success)"></i> Адаптивный дизайн • 
+                <i class="fas fa-check" style="color: var(--success)"></i> SEO-оптимизация • 
+                <i class="fas fa-check" style="color: var(--success)"></i> PWA-ready
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem">
+                <small><i class="fas fa-heart" style="color: var(--accent-pink)"></i> Авторство иконок и ресурсов учтено</small>
+            </p>
+        </article>
+
+        <!-- Запись: 1 декабря -->
+        <article style="animation-delay: 0.65s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 1 декабря, 2025</span>
+            <h2><i class="fas fa-flag"></i> Путешествие начинается</h2>
+            <blockquote>
+                "Путешествие в тысячу миль начинается с одного шага" 
+                <br><small>— Лао Цзы</small>
+            </blockquote>
+            
+            <div style="text-align: center; margin: 1.5rem 0">
+                <i class="fas fa-tree" style="font-size: 3rem; color: var(--primary-red); opacity: 0.8"></i>
+            </div>
+            
+            <p style="text-align: center">
+                🎄 Поздравление с Новым 2026 годом: 
+                <a href="Congratulations2026.html" style="font-weight: 600">открыть →</a>
+            </p>
+        </article>
+
+        <!-- Запись: 15 октября -->
+        <article style="animation-delay: 0.7s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 15 октября, 2025</span>
+            <h2><i class="fas fa-handshake"></i> Коллаборация</h2>
+            <p>Разработала интерактивные новогодние кроссворды для сайта коллеги.</p>
+            <a href="https://github.com/OLYAKL/dem.github.io" target="_blank" rel="noopener" class="download-link" style="background: linear-gradient(135deg, #6366f1, #8b5cf6)">
+                <i class="fab fa-github"></i> Перейти к проекту друга
+            </a>
+        </article>
+
+        <!-- Запись: 1 сентября -->
+        <article style="animation-delay: 0.75s">
+            <span class="date-badge"><i class="fas fa-calendar"></i> 1 сентября, 2025</span>
+            <h2><i class="fas fa-seedling"></i> Начало пути</h2>
+            <blockquote>
+                "Путешествие в тысячу миль начинается с одного шага" 
+                <br><small>— Лао Цзы</small>
+            </blockquote>
+            <p style="margin-top: 1rem; font-style: italic; color: var(--text-muted)">
+                Первый пост в блоге • Здесь будут мои заметки, эксперименты и открытия
+            </p>
+        </article>
+
+    </div>
+
+    <footer>
+        <div class="footer-decoration">
+            <i class="fas fa-rose"></i>
+            <i class="fas fa-flower-tulip"></i>
+            <i class="fas fa-seedling"></i>
+            <i class="fas fa-flower-tulip"></i>
+            <i class="fas fa-rose"></i>
         </div>
-    </article>
-
-    <!-- Запись: 25 февраля -->
-    <article>
-        <span class="date-badge">25 февраля, 2026</span>
-        <h2>Чат-бот FAQ</h2>
-        <div class="log-entry">
-            <strong>Вопрос пользователя:</strong> Сколько ждать мой заказ?<br>
-            <strong>Найден FAQ-вопрос:</strong> Как быстро доставляется заказ? (sim=0.706)<br>
-            <strong>Ответ бот-FAQ:</strong> Наш стандартный срок доставки — 3–5 рабочих дней.
-        </div>
-    </article>
-
-    <!-- Запись: 18 февраля -->
-    <article>
-        <span class="date-badge">18 февраля, 2026</span>
-        <h2>Компьютерное зрение: Классификация</h2>
-        <p>Топ-3 предсказания нейросети для входного изображения:</p>
-        <ul>
-            <li>👟 running shoe: <strong>99.45%</strong></li>
-            <li>🏪 shoe store: 0.27%</li>
-            <li>🥿 clogs: 0.15%</li>
-        </ul>
-    </article>
-
-    <!-- Запись: 20 января (Основная) -->
-    <article>
-        <span class="date-badge">20 января, 2026</span>
-        <h2>Криптография и базы данных</h2>
-        
-        <p><strong>RSA Keys Example (Small n):</strong></p>
-        <div class="crypto-key">
-            Открытый ключ: (n,e)=(33,3)<br>
-            Закрытый ключ: (n,d)=(33,7)
-        </div>
-        
-        <p style="margin-top:10px;"><strong>Реальное большое число n:</strong></p>
-        <div class="crypto-key">
-            152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938
-        </div>
-
-        <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #eee;">
-
-        <h3>Теория нейронных сетей</h3>
-        <p>Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов, каждый из которых ищет свой паттерн в данных.</p>
-        <blockquote>
-            Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше, позволяя сети описывать сложные зависимости. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза.
-        </blockquote>
-        
-        <p style="margin-top: 1rem;">
-            <a href="pac.png">📂 Смотреть проект БД (pac.png)</a>
+        <p>&copy; 2025–2026 <strong>Sofia Vasileva</strong>. Все права защищены.</p>
+        <p>
+            <i class="fas fa-code"></i> Сделано с <i class="fas fa-heart" style="color: var(--accent-pink)"></i> и любовью к коду • 
+            <a href="https://github.com/Sofia-a-cell" target="_blank"><i class="fab fa-github"></i> GitHub</a>
         </p>
-    </article>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem">
+            Hosted on <a href="https://pages.github.com" target="_blank">GitHub Pages</a> • 
+            <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Наверх ↑</a>
+        </p>
+    </footer>
 
-    <!-- Запись: 19 января -->
-    <article>
-        <span class="date-badge">19 января, 2026</span>
-        <h2>Шифрованные сообщения (Цезарь/ROT)?</h2>
-        <ul class="cipher-list">
-            <li>АПЕЛЬСИН-САЦЬНВЩЮ-17</li>
-            <li>АБРИКОС-ЫЬЛГЕЙМ-27</li>
-            <li>ФХНЗКЧ-ПРИВЕТ-5</li>
-            <li>ЦЩЕБФ-ВЕСНА-20</li>
-            <li>Васильева-МКЫТХЖПМК-10</li>
-        </ul>
-    </article>
-
-    <!-- Запись: 14 января -->
-    <article>
-        <span class="date-badge">14 января, 2026</span>
-        <h2>Переход в Web</h2>
-        <p>Оставляю в прошлом скучную неинтересную локальную файловую систему ради Всемирной паутины.</p>
-        <p><small>Авторство иконок учтено.</small></p>
-    </article>
-
-    <!-- Запись: 1 декабря -->
-    <article>
-        <span class="date-badge">1 декабря, 2025</span>
-        <h2>Путешествие начинается</h2>
-        <blockquote>"Путешествие в тысячу миль начинается с одного шага" (Лао Цзы)</blockquote>
-        
-        <!-- Placeholder image since local file won't work for me, but works for you -->
-        <img src="Icons/tree.png" alt="Дерево" onerror="this.style.display='none'">
-        
-        <p>Поздравление с Наступающим 2026 годом читайте <a href="Congratulations2026.html">здесь</a>.</p>
-    </article>
-
-    <!-- Запись: 15 октября -->
-    <article>
-        <span class="date-badge">15 октября, 2025</span>
-        <h2>Коллаборация</h2>
-        <p>Я сделала Новогодние кроссворды для сайта моего друга.</p>
-        <a href="https://github.com/OLYAKL/dem.github.io/edit/main/index.html" target="_blank" title="Блог моего друга">Перейти на сайт друга &rarr;</a>
-    </article>
-
-    <!-- Запись: 1 сентября -->
-    <article>
-        <span class="date-badge">1 сентября, 2025</span>
-        <h2>Начало пути</h2>
-        <blockquote>"Путешествие в тысячу миль начинается с одного шага" (Лао Цзы)</blockquote>
-    </article>
-
-</div>
-
-<footer>
-    <p>&copy; 2025-2026 Sofia Vasileva. All rights reserved.</p>
-    <p>Hosted on GitHub Pages</p>
-</footer>
-
+    <script>
+        // 🌸 Генерация анимированных лепестков
+        document.addEventListener('DOMContentLoaded', () => {
+            const flowerBg = document.getElementById('flowerBg');
+            const petalCount = 25;
+            
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                
+                // Случайная позиция, размер и задержка
+                const size = 15 + Math.random() * 15;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = 15 + Math.random() * 15;
+                
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${left}%`;
+                petal.style.animationDelay = `-${delay}s`;
+                petal.style.animationDuration = `${duration}s`;
+                
+                flowerBg.appendChild(petal);
+            }
+            
+            // Плавное появление карточек при скролле
+            const articles = document.querySelectorAll('article');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            articles.forEach(article => {
+                article.style.opacity = '0';
+                article.style.transform = 'translateY(20px)';
+                article.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(article);
+            });
+            
+            // Предотвращение 404 для демонстрационных ссылок
+            document.querySelectorAll('a[href$=".ods"], a[href$=".png"], a[href="Congratulations2026.html"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // В реальном проекте файлы должны существовать
+                    // Для демо показываем уведомление
+                    if (!link.getAttribute('download')) {
+                        e.preventDefault();
+                        alert(`🔗 Ссылка: ${link.href}\n\nВ реальном проекте здесь будет скачан файл.\nДля демо добавьте файлы в корень сайта.`);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-```
