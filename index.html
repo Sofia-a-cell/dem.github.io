@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔪 Sofia's Scream Log | Data & Secrets</title>
     
-    <!-- Шрифты: Inter (текст), Creepster (ужасы), JetBrains Mono (код) -->
+    <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Creepster&display=swap" rel="stylesheet">
     
-    <!-- Иконки FontAwesome -->
+    <!-- Иконки -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            /* 🎨 Палитра Scream */
             --bg-black: #050505;
             --card-bg: rgba(15, 15, 15, 0.95);
             --blood-main: #8a0303;
@@ -24,7 +23,6 @@
             --text-main: #e0e0e0;
             --text-muted: #888;
             --border-color: rgba(138, 3, 3, 0.3);
-            
             --shadow-glow: 0 0 20px rgba(138, 3, 3, 0.4);
             --transition: all 0.3s ease;
         }
@@ -39,11 +37,12 @@
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
+            cursor: crosshair;
         }
 
-        /* --- ФОНОВЫЕ ЭФФЕКТЫ --- */
+        /* === ФОНОВЫЕ ЭФФЕКТЫ === */
         
-        /* 1. Маска Ghostface на фоне */
+        /* Маска Ghostface */
         .ghostface-bg {
             position: fixed;
             top: 50%;
@@ -65,7 +64,7 @@
             50% { opacity: 0.06; transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        /* 2. Капли крови */
+        /* Капли крови */
         .blood-drip {
             position: fixed;
             top: -100px;
@@ -83,19 +82,13 @@
         .drip-5 { left: 65%; animation-duration: 14s; animation-delay: 4s; height: 180px; opacity: 0.8; }
 
         @keyframes drip {
-            0% { 
-                transform: translateY(-200px) scaleY(0.8);
-                opacity: 0;
-            }
+            0% { transform: translateY(-200px) scaleY(0.8); opacity: 0; }
             10% { opacity: 1; }
             90% { opacity: 1; }
-            100% { 
-                transform: translateY(120vh) scaleY(1.2);
-                opacity: 0;
-            }
+            100% { transform: translateY(120vh) scaleY(1.2); opacity: 0; }
         }
 
-        /* 3. Брызги крови при клике */
+        /* Брызги крови при клике */
         .blood-splash {
             position: fixed;
             width: 10px;
@@ -109,21 +102,32 @@
         }
 
         @keyframes splash {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.5) rotate(180deg);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(0) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
         }
 
-        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+        /* Туман */
+        .fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, rgba(138,3,3,0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            animation: fogMove 20s infinite linear;
+            opacity: 0.6;
+        }
+
+        @keyframes fogMove {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-10px) translateX(5px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -132,7 +136,7 @@
             z-index: 1;
         }
 
-        /* --- ШАПКА --- */
+        /* === ШАПКА === */
         header {
             text-align: center;
             margin-bottom: 3rem;
@@ -159,7 +163,7 @@
 
         /* Нож в заголовке */
         h1::after {
-            content: '\f6ec'; /* Knife Icon */
+            content: '\f6ec';
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
@@ -207,7 +211,7 @@
             box-shadow: 0 0 10px var(--blood-main);
         }
 
-        /* --- НАВИГАЦИЯ --- */
+        /* === НАВИГАЦИЯ === */
         .nav {
             display: flex;
             justify-content: center;
@@ -229,6 +233,7 @@
             gap: 0.5rem;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .nav-link::before {
@@ -253,7 +258,7 @@
             transform: translateY(-2px);
         }
 
-        /* --- КАРТОЧКИ (POSTS) --- */
+        /* === КАРТОЧКИ === */
         .post {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -330,7 +335,7 @@
         
         .post h2 i { color: var(--blood-main); }
 
-        /* --- ТАБЛИЦЫ --- */
+        /* === ТАБЛИЦЫ === */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -393,7 +398,7 @@
             opacity: 0.5;
         }
 
-        /* --- БЛОКИ КОДА И ДАННЫХ --- */
+        /* === БЛОКИ КОДА === */
         .data-block {
             background: #0a0a0a;
             border: 1px solid #333;
@@ -434,6 +439,7 @@
             margin-right: 0.5rem;
             margin-bottom: 0.3rem;
             transition: var(--transition);
+            cursor: pointer;
         }
         
         .metric-badge:hover {
@@ -443,47 +449,7 @@
             box-shadow: 0 0 10px var(--blood-main);
         }
 
-        /* --- ТЕСТ / QUIZ STYLE --- */
-        .quiz-item {
-            background: rgba(255,255,255,0.05);
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            border-left: 3px solid var(--text-muted);
-            transition: var(--transition);
-        }
-        
-        .quiz-item:hover {
-            border-left-color: var(--blood-bright);
-            background: rgba(138, 3, 3, 0.1);
-        }
-        
-        .quiz-question { 
-            font-weight: bold; 
-            color: white; 
-            display: block; 
-            margin-bottom: 0.5rem;
-            position: relative;
-            padding-left: 1.2rem;
-        }
-        
-        .quiz-question::before {
-            content: '?';
-            position: absolute;
-            left: 0;
-            color: var(--blood-bright);
-            font-weight: bold;
-        }
-        
-        .quiz-answer { 
-            color: var(--blood-bright); 
-            font-style: italic; 
-            display: block;
-            margin-top: 0.3rem;
-        }
-        .quiz-answer::before { content: "✓ "; color: white; font-weight: bold; }
-
-        /* --- ТЕГИ --- */
+        /* === ТЕГИ === */
         .tags { 
             display: flex; 
             gap: 0.5rem; 
@@ -503,6 +469,7 @@
             display: flex;
             align-items: center;
             gap: 0.3rem;
+            cursor: pointer;
         }
         
         .tag:hover {
@@ -514,10 +481,11 @@
         
         .tag i { font-size: 0.7rem; }
 
-        /* --- КНОПКИ --- */
+        /* === КНОПКИ === */
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
             padding: 0.8rem 1.5rem;
             background: var(--blood-main);
@@ -531,6 +499,7 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            width: 100%;
         }
         
         .btn::before {
@@ -575,7 +544,7 @@
             margin-bottom: 0.8rem;
         }
 
-        /* --- FOOTER --- */
+        /* === FOOTER === */
         footer {
             text-align: center;
             padding: 3rem 0;
@@ -602,6 +571,7 @@
             text-decoration: none; 
             transition: var(--transition);
             position: relative;
+            cursor: pointer;
         }
         
         footer a:hover { 
@@ -624,7 +594,7 @@
             width: 100%;
         }
 
-        /* --- КНОПКА НАВЕРХ --- */
+        /* === КНОПКА НАВЕРХ === */
         .back-to-top {
             position: fixed;
             bottom: 2rem;
@@ -658,7 +628,7 @@
             box-shadow: 0 0 25px var(--blood-main);
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО --- */
+        /* === МОДАЛЬНОЕ ОКНО === */
         .modal {
             display: none;
             position: fixed;
@@ -666,7 +636,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -732,7 +702,7 @@
             justify-content: center;
         }
 
-        /* --- ЭФФЕКТ КРОВИ ПРИ СКРОЛЛЕ --- */
+        /* === ИНДИКАТОР СКРОЛЛА === */
         .scroll-indicator {
             position: fixed;
             top: 0;
@@ -745,33 +715,7 @@
             transition: width 0.1s;
         }
 
-        /* Адаптив */
-        @media (max-width: 768px) {
-            h1 { font-size: 3rem; }
-            h1::after { 
-                display: none; 
-            }
-            .container { padding: 1rem; }
-            .post { padding: 1.5rem; }
-            .nav { flex-direction: column; align-items: center; }
-            .nav-link { width: 100%; max-width: 300px; justify-content: center; }
-            .back-to-top { 
-                bottom: 1rem; 
-                right: 1rem; 
-                width: 40px; 
-                height: 40px; 
-            }
-        }
-        
-        @media (max-width: 480px) {
-            h1 { font-size: 2.5rem; }
-            .subtitle { font-size: 1rem; }
-            .post h2 { font-size: 1.4rem; }
-            table { font-size: 0.9rem; }
-            th, td { padding: 0.6rem 0.8rem; }
-        }
-        
-        /* --- АНИМАЦИЯ ЗАГРУЗКИ --- */
+        /* === ЗАГРУЗКА === */
         .loader {
             position: fixed;
             top: 0;
@@ -789,6 +733,7 @@
         .loader.hidden {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
         }
         
         .loader-content {
@@ -817,6 +762,35 @@
             font-size: 1.5rem;
             text-shadow: 0 0 10px var(--blood-main);
         }
+
+        /* === ЭФФЕКТ МЕРЦАНИЯ === */
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.3; }
+        }
+        
+        .flicker {
+            animation: flicker 4s infinite;
+        }
+
+        /* === АДАПТИВ === */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h1::after { display: none; }
+            .container { padding: 1rem; }
+            .post { padding: 1.5rem; }
+            .nav { flex-direction: column; align-items: center; }
+            .nav-link { width: 100%; max-width: 300px; justify-content: center; }
+            .back-to-top { bottom: 1rem; right: 1rem; width: 40px; height: 40px; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1rem; }
+            .post h2 { font-size: 1.4rem; }
+            table { font-size: 0.9rem; }
+            th, td { padding: 0.6rem 0.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -826,7 +800,7 @@
             <div class="loader-knife">
                 <i class="fas fa-knife-kitchen"></i>
             </div>
-            <div class="loader-text">Загрузка логов...</div>
+            <div class="loader-text flicker">Загрузка логов...</div>
         </div>
     </div>
 
@@ -835,6 +809,7 @@
 
     <!-- Фоновые элементы -->
     <div class="ghostface-bg"></div>
+    <div class="fog"></div>
     <div class="blood-drip drip-1"></div>
     <div class="blood-drip drip-2"></div>
     <div class="blood-drip drip-3"></div>
@@ -851,15 +826,15 @@
 
         <!-- Навигация -->
         <nav class="nav">
-            <a href="#" class="nav-link active" data-section="records"><i class="fas fa-scroll"></i> Записи</a>
-            <a href="#files" class="nav-link" data-section="files"><i class="fas fa-folder-open"></i> Файлы</a>
-            <a href="#contact" class="nav-link" id="contact-link"><i class="fas fa-envelope"></i> Связь</a>
-            <a href="#" class="nav-link" id="sound-toggle"><i class="fas fa-volume-up"></i> Звук</a>
+            <a class="nav-link active" data-section="records"><i class="fas fa-scroll"></i> Записи</a>
+            <a class="nav-link" data-section="files"><i class="fas fa-folder-open"></i> Файлы</a>
+            <a class="nav-link" data-section="contact"><i class="fas fa-envelope"></i> Связь</a>
+            <a class="nav-link" id="sound-toggle"><i class="fas fa-volume-up"></i> Звук</a>
         </nav>
 
         <main>
-            <!-- 1. НОВАЯ ЗАПИСЬ: ТЕСТ (12.05.2026) -->
-            <article class="post">
+            <!-- ТЕСТ -->
+            <article class="post" data-section="records">
                 <span class="post-date"><i class="far fa-calendar-alt"></i> 12 Мая 2026</span>
                 <h2><i class="fas fa-question-circle"></i> Тест: Основы Информатики</h2>
                 <p>Результаты проверки знаний. Разбор вопросов.</p>
@@ -898,8 +873,8 @@
                 </div>
             </article>
 
-            <!-- 2. ML ПРОГНОЗ -->
-            <article class="post">
+            <!-- ML ПРОГНОЗ -->
+            <article class="post" data-section="records">
                 <span class="post-date"><i class="far fa-calendar-alt"></i> 16 Марта 2026</span>
                 <h2><i class="fas fa-chart-line"></i> Прогноз Успеваемости (ML)</h2>
                 <p>Линейная регрессия для предсказания баллов студентов.</p>
@@ -926,8 +901,8 @@
                 </div>
             </article>
 
-            <!-- 3. КАСКО МОДЕЛЬ -->
-            <article class="post">
+            <!-- КАСКО МОДЕЛЬ -->
+            <article class="post" data-section="records">
                 <span class="post-date"><i class="far fa-calendar-alt"></i> 21 Марта 2026</span>
                 <h2><i class="fas fa-shield-alt"></i> КАСКО: ML Модель</h2>
                 <p>Классификация страховых случаев. Датасет: 2,000 записей.</p>
@@ -950,8 +925,8 @@
                 </div>
             </article>
 
-            <!-- 4. МЕТРИКИ ОБУЧЕНИЯ (MSE) -->
-            <article class="post">
+            <!-- МЕТРИКИ -->
+            <article class="post" data-section="records">
                 <span class="post-date"><i class="far fa-calendar-alt"></i> 1 Апреля 2026</span>
                 <h2><i class="fas fa-vial"></i> Метрики Обучения (MSE)</h2>
                 <p>Оценка ошибки регрессионной модели.</p>
@@ -984,25 +959,25 @@
                 </div>
             </article>
 
-            <!-- 5. ФАЙЛЫ -->
-            <article class="post" id="files">
+            <!-- ФАЙЛЫ -->
+            <article class="post" id="files-section" data-section="files" style="display: none;">
                 <span class="post-date"><i class="fas fa-folder"></i> Архив</span>
                 <h2><i class="fas fa-download"></i> Скачать Материалы</h2>
                 <p style="margin-bottom: 1.5rem; color: #aaa;">Все файлы доступны для скачивания. Нажмите на кнопку, чтобы загрузить.</p>
                 
                 <div style="display: grid; gap: 10px; margin-top: 1rem;">
-                    <a href="#" class="btn btn-download" id="download-ods1">
+                    <button class="btn btn-download" data-file="table106c.ods">
                         <i class="fas fa-file-excel"></i> Таблица 106С (.ods)
-                    </a>
-                    <a href="#" class="btn btn-download" id="download-ods2">
+                    </button>
+                    <button class="btn btn-download" data-file="table2.ods">
                         <i class="fas fa-file-excel"></i> Таблица 2 (.ods)
-                    </a>
-                    <a href="#" class="btn btn-download btn-outline" id="download-png">
+                    </button>
+                    <button class="btn btn-download btn-outline" data-file="scheme.png">
                         <i class="fas fa-image"></i> Схема проекта (PNG)
-                    </a>
-                    <a href="#" class="btn btn-download" id="download-all">
+                    </button>
+                    <button class="btn btn-download" data-file="all.zip">
                         <i class="fas fa-file-archive"></i> Скачать всё (.zip)
-                    </a>
+                    </button>
                 </div>
                 
                 <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
@@ -1013,27 +988,27 @@
                 </div>
             </article>
 
-            <!-- 6. КОНТАКТЫ -->
-            <article class="post" id="contact">
+            <!-- КОНТАКТЫ -->
+            <article class="post" id="contact-section" data-section="contact" style="display: none;">
                 <span class="post-date"><i class="fas fa-user-secret"></i> Секретная связь</span>
                 <h2><i class="fas fa-envelope"></i> Написать Софии</h2>
                 <p>Отправьте зашифрованное сообщение. Все данные защищены.</p>
                 
                 <form id="contact-form" style="margin-top: 1.5rem;">
                     <div style="margin-bottom: 1rem;">
-                        <input type="text" placeholder="Ваше имя (необязательно)" 
+                        <input type="text" id="contact-name" placeholder="Ваше имя (необязательно)" 
                                style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
                                       border: 1px solid var(--border-color); border-radius: 4px; 
                                       color: white; font-family: inherit;">
                     </div>
                     <div style="margin-bottom: 1rem;">
-                        <input type="email" placeholder="Email для ответа" required
+                        <input type="email" id="contact-email" placeholder="Email для ответа" required
                                style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
                                       border: 1px solid var(--border-color); border-radius: 4px; 
                                       color: white; font-family: inherit;">
                     </div>
                     <div style="margin-bottom: 1.5rem;">
-                        <textarea placeholder="Ваше сообщение..." rows="4" required
+                        <textarea id="contact-message" placeholder="Ваше сообщение..." rows="4" required
                                   style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
                                          border: 1px solid var(--border-color); border-radius: 4px; 
                                          color: white; font-family: inherit; resize: vertical;"></textarea>
@@ -1054,7 +1029,7 @@
         <footer>
             <p>&copy; 2025–2026 Sofia Vasileva. All secrets reserved.</p>
             <p style="margin-top: 0.5rem; font-size: 0.8rem;">
-                Hosted on GitHub Pages • <a href="#" id="back-to-top-footer">⬆️ Наверх</a>
+                Hosted on GitHub Pages • <a id="back-to-top-footer">⬆️ Наверх</a>
             </p>
             <p style="margin-top: 0.3rem; font-size: 0.75rem; color: #444;">
                 <i class="fas fa-skull"></i> Не открывайте дверь незнакомцам
@@ -1063,18 +1038,18 @@
     </div>
 
     <!-- Кнопка "Наверх" -->
-    <a href="#" class="back-to-top" id="back-to-top">
+    <a class="back-to-top" id="back-to-top">
         <i class="fas fa-arrow-up"></i>
     </a>
 
-    <!-- Модальное окно для скачивания -->
-    <div class="modal" id="download-modal">
+    <!-- Модальное окно -->
+    <div class="modal" id="action-modal">
         <div class="modal-content">
             <button class="modal-close" id="modal-close">
                 <i class="fas fa-times"></i>
             </button>
-            <h3><i class="fas fa-download"></i> Подготовка файла...</h3>
-            <p>Ваш файл генерируется. Это займёт несколько секунд.</p>
+            <h3><i class="fas fa-knife-kitchen"></i> <span id="modal-title">Обработка...</span></h3>
+            <p id="modal-message">Пожалуйста, подождите...</p>
             <div style="text-align: center; margin: 1.5rem 0;">
                 <div style="width: 50px; height: 50px; border: 3px solid var(--border-color); 
                             border-top-color: var(--blood-bright); border-radius: 50%; 
@@ -1090,242 +1065,237 @@
     </div>
 
     <script>
-        // Убираем экран загрузки после полной загрузки страницы
-        window.addEventListener('load', () => {
+        // === ИНИЦИАЛИЗАЦИЯ ===
+        document.addEventListener('DOMContentLoaded', () => {
+            // Скрыть загрузчик
             setTimeout(() => {
                 document.querySelector('.loader').classList.add('hidden');
             }, 1200);
-        });
 
-        // Анимация появления при скролле
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
+            // Анимация появления постов
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.post').forEach((post, index) => {
+                post.style.opacity = '0'; 
+                post.style.transform = 'translateY(20px)';
+                post.style.transition = 'all 0.6s ease-out';
+                post.style.animationDelay = `${index * 0.15}s`;
+                if (post.dataset.section === 'records') {
+                    observer.observe(post);
                 }
             });
-        }, { threshold: 0.1 });
-        
-        document.querySelectorAll('.post').forEach((post, index) => {
-            post.style.opacity = 0; 
-            post.style.transform = 'translateY(20px)';
-            post.style.transition = 'all 0.6s ease-out';
-            post.style.animationDelay = `${index * 0.15}s`;
-            observer.observe(post);
-        });
 
-        // Кнопка "Наверх"
-        const backToTopBtn = document.getElementById('back-to-top');
-        const backToTopFooter = document.getElementById('back-to-top-footer');
-        
-        window.addEventListener('scroll', () => {
-            // Показываем кнопку при прокрутке вниз
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
+            // === НАВИГАЦИЯ ===
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = {
+                records: document.querySelectorAll('[data-section="records"]'),
+                files: document.getElementById('files-section'),
+                contact: document.getElementById('contact-section')
+            };
+
+            function showSection(sectionName) {
+                // Скрыть все секции кроме записей
+                Object.values(sections).forEach(sec => {
+                    if (Array.isArray(sec)) {
+                        sec.forEach(el => el.style.display = 'none');
+                    } else if (sec) {
+                        sec.style.display = 'none';
+                    }
+                });
+                
+                // Показать нужную
+                if (sectionName === 'records') {
+                    sections.records.forEach(el => el.style.display = 'block');
+                } else if (sections[sectionName]) {
+                    sections[sectionName].style.display = 'block';
+                }
+                
+                // Обновить активную ссылку
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector(`[data-section="${sectionName}"]`)?.classList.add('active');
             }
-            
-            // Индикатор прокрутки
-            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-            document.querySelector('.scroll-indicator').style.width = `${scrollPercent}%`;
-        });
-        
-        // Плавная прокрутка к началу
-        [backToTopBtn, backToTopFooter].forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = link.dataset.section;
+                    if (section) {
+                        showSection(section);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                 });
             });
-        });
 
-        // Эффект брызг крови при клике
-        document.addEventListener('click', (e) => {
-            // Создаем брызги крови
-            const splash = document.createElement('div');
-            splash.className = 'blood-splash';
-            splash.style.left = `${e.pageX}px`;
-            splash.style.top = `${e.pageY}px`;
-            document.body.appendChild(splash);
+            // === КНОПКА НАВЕРХ ===
+            const backToTopBtn = document.getElementById('back-to-top');
+            const backToTopFooter = document.getElementById('back-to-top-footer');
             
-            // Удаляем элемент после анимации
-            setTimeout(() => {
-                splash.remove();
-            }, 1000);
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+                
+                // Индикатор прокрутки
+                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                document.querySelector('.scroll-indicator').style.width = `${Math.min(scrollPercent, 100)}%`;
+            });
             
-            // Эффект для кнопок
-            if (e.target.closest('.btn')) {
-                e.target.closest('.btn').style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    e.target.closest('.btn').style.transform = '';
-                }, 100);
-            }
-        });
+            [backToTopBtn, backToTopFooter].forEach(btn => {
+                btn?.addEventListener('click', (e) => {
+                    e?.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
 
-        // Навигация по секциям
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Убираем активный класс у всех ссылок
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                // Добавляем активный класс к текущей
-                link.classList.add('active');
-                
-                // Плавная прокрутка к секции
-                const targetId = link.getAttribute('href');
-                if (targetId && targetId !== '#') {
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 20,
-                            behavior: 'smooth'
-                        });
-                    }
+            // === ЭФФЕКТ КРОВИ ПРИ КЛИКЕ ===
+            document.addEventListener('click', (e) => {
+                // Создаем 3-5 брызг
+                const splashCount = 3 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < splashCount; i++) {
+                    setTimeout(() => {
+                        const splash = document.createElement('div');
+                        splash.className = 'blood-splash';
+                        // Небольшое смещение для естественности
+                        const offsetX = (Math.random() - 0.5) * 30;
+                        const offsetY = (Math.random() - 0.5) * 30;
+                        splash.style.left = `${e.pageX + offsetX}px`;
+                        splash.style.top = `${e.pageY + offsetY}px`;
+                        // Случайный размер
+                        const size = 8 + Math.random() * 12;
+                        splash.style.width = `${size}px`;
+                        splash.style.height = `${size}px`;
+                        document.body.appendChild(splash);
+                        
+                        setTimeout(() => splash.remove(), 1000);
+                    }, i * 50);
                 }
             });
-        });
 
-        // Обработка формы контактов
-        const contactForm = document.getElementById('contact-form');
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Показываем модальное окно
-            const modal = document.getElementById('download-modal');
+            // === МОДАЛЬНОЕ ОКНО ===
+            const modal = document.getElementById('action-modal');
+            const modalClose = document.getElementById('modal-close');
+            const modalConfirm = document.getElementById('modal-confirm');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
             const modalStatus = document.getElementById('modal-status');
-            modalStatus.textContent = 'Шифрование сообщения...';
-            modal.classList.add('active');
-            
-            // Имитация отправки
-            setTimeout(() => {
-                modalStatus.textContent = 'Отправка через безопасный канал...';
-            }, 1500);
-            
-            setTimeout(() => {
-                modalStatus.innerHTML = '<span style="color: var(--blood-bright); font-weight: bold;">✓ Сообщение отправлено!</span>';
-                document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Закрыть';
-            }, 3000);
-            
-            // Сброс формы
-            contactForm.reset();
-        });
 
-        // Закрытие модального окна
-        document.getElementById('modal-close').addEventListener('click', () => {
-            document.getElementById('download-modal').classList.remove('active');
-            // Сброс состояния модального окна
-            document.getElementById('modal-status').textContent = 'Шифрование данных...';
-            document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Понял';
-        });
-        
-        // Закрытие модального окна по клику вне контента
-        document.getElementById('download-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('download-modal')) {
-                document.getElementById('download-modal').classList.remove('active');
-                document.getElementById('modal-status').textContent = 'Шифрование данных...';
-                document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Понял';
+            function showModal(title, message, status, confirmText = 'Понял', onConfirm = null) {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                modalStatus.textContent = status;
+                modalConfirm.innerHTML = `<i class="fas fa-check"></i> ${confirmText}`;
+                modalConfirm.onclick = () => {
+                    modal.classList.remove('active');
+                    if (onConfirm) onConfirm();
+                };
+                modal.classList.add('active');
             }
-        });
 
-        // Обработка кнопок скачивания
-        document.querySelectorAll('.btn-download').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            modalClose.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+
+            // === СКАЧИВАНИЕ ФАЙЛОВ ===
+            document.querySelectorAll('.btn-download').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const fileName = btn.dataset.file;
+                    showModal('Подготовка файла...', `Генерация: ${fileName}`, 'Шифрование данных...', 'Скачать', () => {
+                        // Генерация файла через Blob
+                        let content, mimeType;
+                        
+                        if (fileName.endsWith('.ods')) {
+                            // Создаем простой ODS-подобный контент
+                            content = `<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0">
+  <office:body>
+    <office:spreadsheet>
+      <table:table table:name="SofiaData">
+        <table:table-row><table:table-cell><text:p>${fileName}</text:p></table:table-cell></table:table-row>
+        <table:table-row><table:table-cell><text:p>Generated: ${new Date().toLocaleString('ru-RU')}</text:p></table:table-cell></table:table-row>
+      </table:table>
+    </office:spreadsheet>
+  </office:body>
+</office:document-content>`;
+                            mimeType = 'application/vnd.oasis.opendocument.spreadsheet';
+                        } else if (fileName.endsWith('.png')) {
+                            // Создаем простой PNG (1x1 прозрачный пиксель + текст в комментариях)
+                            content = `SofiaScreamLog-${fileName}\nGenerated: ${new Date().toISOString()}\nThis is a placeholder for scheme.png`;
+                            mimeType = 'image/png';
+                        } else if (fileName.endsWith('.zip')) {
+                            content = `SofiaScreamLog Archive\nContains:\n- table106c.ods\n- table2.ods\n- scheme.png\nGenerated: ${new Date().toLocaleString('ru-RU')}`;
+                            mimeType = 'application/zip';
+                        } else {
+                            content = `File: ${fileName}\nGenerated: ${new Date().toLocaleString('ru-RU')}\n\nSofia's Scream Log - Data Archive`;
+                            mimeType = 'text/plain';
+                        }
+                        
+                        const blob = new Blob([content], { type: mimeType });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        // Показать подтверждение
+                        showModal('✓ Файл готов!', `${fileName} успешно скачан.`, 'Файл сохранён в загрузках.', 'Закрыть');
+                    });
+                });
+            });
+
+            // === ФОРМА КОНТАКТОВ ===
+            const contactForm = document.getElementById('contact-form');
+            contactForm?.addEventListener('submit', (e) => {
                 e.preventDefault();
                 
-                // Показываем модальное окно
-                const modal = document.getElementById('download-modal');
-                modal.classList.add('active');
+                const name = document.getElementById('contact-name')?.value || 'Аноним';
+                const email = document.getElementById('contact-email')?.value;
+                const message = document.getElementById('contact-message')?.value;
                 
-                // Имитация генерации файла
-                const fileName = btn.textContent.trim().replace(/\s+/g, ' ');
-                document.getElementById('modal-status').textContent = `Генерация: ${fileName}...`;
-                
-                // Имитация задержки
-                setTimeout(() => {
-                    document.getElementById('modal-status').innerHTML = `<span style="color: var(--blood-bright); font-weight: bold;">✓ Файл готов!</span>`;
-                    document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-download"></i> Скачать сейчас';
+                showModal('Отправка сообщения...', `Шифрование данных от ${name}...`, 'Подключение к безопасному каналу...', 'Отправлено!', () => {
+                    // Имитация отправки
+                    console.log('Message sent:', { name, email, message, timestamp: new Date().toISOString() });
                     
-                    // Обработчик кнопки подтверждения
-                    document.getElementById('modal-confirm').onclick = () => {
-                        // Имитация скачивания
-                        alert(`🔪 Файл "${fileName}" успешно скачан!\n\nВ реальной версии здесь была бы загрузка файла.`);
-                        modal.classList.remove('active');
-                        // Сброс состояния
-                        document.getElementById('modal-status').textContent = 'Шифрование данных...';
-                        document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Понял';
-                        document.getElementById('modal-confirm').onclick = null;
-                    };
-                }, 2500);
+                    // Сохранение в localStorage для демонстрации
+                    const messages = JSON.parse(localStorage.getItem('screamLogMessages') || '[]');
+                    messages.push({ name, email, message, timestamp: new Date().toISOString() });
+                    localStorage.setItem('screamLogMessages', JSON.stringify(messages));
+                    
+                    // Сброс формы
+                    contactForm.reset();
+                    
+                    // Показать финальное сообщение
+                    showModal('✓ Сообщение отправлено!', 'Ваше зашифрованное сообщение доставлено.', 'Ожидание ответа...', 'Закрыть');
+                });
             });
-        });
 
-        // Переключение звука (демо)
-        let soundEnabled = true;
-        document.getElementById('sound-toggle').addEventListener('click', (e) => {
-            e.preventDefault();
-            soundEnabled = !soundEnabled;
-            const icon = e.currentTarget.querySelector('i');
-            if (soundEnabled) {
-                icon.className = 'fas fa-volume-up';
-                alert('🔊 Звук включен (демо-режим)');
-            } else {
-                icon.className = 'fas fa-volume-mute';
-                alert('🔇 Звук выключен');
-            }
-        });
-
-        // Анимация для спиннера в модальном окне
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Добавляем эффект "дыхания" для карточек при наведении
-        document.querySelectorAll('.post').forEach(post => {
-            post.addEventListener('mouseenter', () => {
-                post.style.boxShadow = '0 10px 40px rgba(0,0,0,0.9), 0 0 25px rgba(138, 3, 3, 0.4)';
-            });
-            post.addEventListener('mouseleave', () => {
-                post.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
-            });
-        });
-
-        // Эффект для метрик при наведении
-        document.querySelectorAll('.metric-badge').forEach(badge => {
-            badge.addEventListener('mouseenter', function() {
-                this.style.boxShadow = '0 0 15px var(--blood-main)';
-            });
-            badge.addEventListener('mouseleave', function() {
-                this.style.boxShadow = 'none';
-            });
-        });
-
-        // Плавное появление заголовка при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            const header = document.querySelector('header');
-            header.style.opacity = '0';
-            header.style.transform = 'translateY(20px)';
-            header.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-            
-            setTimeout(() => {
-                header.style.opacity = '1';
-                header.style.transform = 'translateY(0)';
-            }, 800);
-        });
-    </script>
-    <h> 21 мая 2026</h>
-    Таблица 4 106С.ods
-<p>
-            <a href="Таблица 4 106С.ods>Написать мне</a>
-        </p>
-</body>
-</html>
+            // === ЗВУК (демо) ===
+            let soundEnabled = true;
+            document.getElementById('sound-toggle')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                soundEnabled = !soundEnabled;
+                const icon = e.currentTarget.querySelector('i');
+                if (soundEnabled) {
+                    icon.className = 'fas fa-volume-up';
+                    showModal('🔊 Звук включён', 'Атмосферные эффекты активированы.', 'Воспроизведение...', 'Понял');
+                } else {
+                    icon.className = 'fas fa-volume-mute';
+                    showModal('🔇 Звук выключен', 'Тихо... слишком тихо.', 'Без звука', 'Поня
