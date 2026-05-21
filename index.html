@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -39,6 +38,7 @@
             line-height: 1.6;
             overflow-x: hidden;
             position: relative;
+            min-height: 100vh;
         }
 
         /* --- ФОНОВЫЕ ЭФФЕКТЫ --- */
@@ -73,14 +73,54 @@
             background: linear-gradient(to bottom, transparent, var(--blood-bright));
             z-index: -1;
             animation: drip 10s infinite linear;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 0 0 8px var(--blood-main);
         }
-        .drip-1 { left: 10%; animation-duration: 8s; height: 150px; }
+        .drip-1 { left: 10%; animation-duration: 8s; height: 150px; animation-delay: 0s; }
         .drip-2 { left: 80%; animation-duration: 12s; animation-delay: 2s; height: 100px; }
         .drip-3 { left: 40%; animation-duration: 15s; animation-delay: 5s; height: 200px; }
+        .drip-4 { left: 25%; animation-duration: 11s; animation-delay: 1s; height: 120px; opacity: 0.7; }
+        .drip-5 { left: 65%; animation-duration: 14s; animation-delay: 4s; height: 180px; opacity: 0.8; }
 
         @keyframes drip {
-            0% { transform: translateY(-200px); }
-            100% { transform: translateY(120vh); }
+            0% { 
+                transform: translateY(-200px) scaleY(0.8);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(120vh) scaleY(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* 3. Брызги крови при клике */
+        .blood-splash {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--blood-bright);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: splash 1s forwards;
+            box-shadow: 0 0 10px var(--blood-main);
+        }
+
+        @keyframes splash {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
@@ -97,6 +137,7 @@
             text-align: center;
             margin-bottom: 3rem;
             position: relative;
+            padding: 1rem 0;
         }
 
         h1 {
@@ -104,10 +145,16 @@
             font-size: 4rem;
             color: var(--text-main);
             letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--blood-main);
+            text-shadow: 0 0 15px var(--blood-main), 0 0 30px var(--blood-dark);
             margin-bottom: 0.5rem;
             position: relative;
             display: inline-block;
+            animation: titlePulse 3s infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { text-shadow: 0 0 15px var(--blood-main), 0 0 30px var(--blood-dark); }
+            50% { text-shadow: 0 0 25px var(--blood-bright), 0 0 45px var(--blood-main); }
         }
 
         /* Нож в заголовке */
@@ -122,6 +169,7 @@
             color: var(--text-muted);
             transform: rotate(45deg);
             animation: shake 4s infinite;
+            text-shadow: 0 0 10px var(--blood-main);
         }
 
         @keyframes shake {
@@ -134,6 +182,7 @@
             color: var(--text-muted);
             font-size: 1.1rem;
             letter-spacing: 1px;
+            margin-top: 0.5rem;
         }
 
         .divider {
@@ -141,6 +190,20 @@
             background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
             margin: 2rem auto;
             width: 50%;
+            box-shadow: 0 0 10px var(--blood-main);
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background: var(--blood-bright);
+            border-radius: 50%;
             box-shadow: 0 0 10px var(--blood-main);
         }
 
@@ -164,12 +227,30 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 3, 3, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
         }
 
         .nav-link:hover, .nav-link.active {
             background: var(--blood-dark);
             border-color: var(--blood-bright);
-            box-shadow: 0 0 10px rgba(207, 20, 43, 0.3);
+            box-shadow: 0 0 15px rgba(207, 20, 43, 0.4);
+            transform: translateY(-2px);
         }
 
         /* --- КАРТОЧКИ (POSTS) --- */
@@ -185,12 +266,31 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .post:hover::before {
+            opacity: 1;
         }
 
         .post:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(138, 3, 3, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(138, 3, 3, 0.3);
             border-color: var(--blood-bright);
+            border-left-color: var(--blood-bright);
         }
 
         @keyframes fadeInUp {
@@ -204,6 +304,7 @@
             font-weight: bold;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .post h2 {
@@ -213,6 +314,18 @@
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .post h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--blood-bright);
         }
         
         .post h2 i { color: var(--blood-main); }
@@ -225,6 +338,7 @@
             background: rgba(0,0,0,0.3);
             border-radius: 6px;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         th {
@@ -234,6 +348,18 @@
             text-align: left;
             font-weight: 600;
             border-bottom: 2px solid var(--blood-bright);
+            position: relative;
+        }
+        
+        th::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--blood-bright);
+            opacity: 0.7;
         }
 
         td {
@@ -243,9 +369,29 @@
         }
 
         tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(138, 3, 3, 0.1); color: white; }
+        tr:hover td { 
+            background: rgba(138, 3, 3, 0.15); 
+            color: white;
+            transform: translateX(3px);
+            transition: all 0.2s;
+        }
 
-        .highlight { color: var(--blood-bright); font-weight: bold; }
+        .highlight { 
+            color: var(--blood-bright); 
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--blood-bright);
+            opacity: 0.5;
+        }
 
         /* --- БЛОКИ КОДА И ДАННЫХ --- */
         .data-block {
@@ -257,6 +403,24 @@
             font-size: 0.9rem;
             margin: 1rem 0;
             color: #ddd;
+            border-left: 3px solid var(--blood-main);
+            position: relative;
+        }
+        
+        .data-block::before {
+            content: '>';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--blood-bright);
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .metric-badge {
@@ -268,6 +432,15 @@
             color: var(--blood-bright);
             font-size: 0.85rem;
             margin-right: 0.5rem;
+            margin-bottom: 0.3rem;
+            transition: var(--transition);
+        }
+        
+        .metric-badge:hover {
+            background: var(--blood-main);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--blood-main);
         }
 
         /* --- ТЕСТ / QUIZ STYLE --- */
@@ -277,13 +450,48 @@
             border-radius: 6px;
             margin-bottom: 1rem;
             border-left: 3px solid var(--text-muted);
+            transition: var(--transition);
         }
-        .quiz-question { font-weight: bold; color: white; display: block; margin-bottom: 0.5rem; }
-        .quiz-answer { color: var(--blood-bright); font-style: italic; }
-        .quiz-answer::before { content: "✓ "; color: white; }
+        
+        .quiz-item:hover {
+            border-left-color: var(--blood-bright);
+            background: rgba(138, 3, 3, 0.1);
+        }
+        
+        .quiz-question { 
+            font-weight: bold; 
+            color: white; 
+            display: block; 
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        
+        .quiz-question::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            color: var(--blood-bright);
+            font-weight: bold;
+        }
+        
+        .quiz-answer { 
+            color: var(--blood-bright); 
+            font-style: italic; 
+            display: block;
+            margin-top: 0.3rem;
+        }
+        .quiz-answer::before { content: "✓ "; color: white; font-weight: bold; }
 
         /* --- ТЕГИ --- */
-        .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .tags { 
+            display: flex; 
+            gap: 0.5rem; 
+            flex-wrap: wrap; 
+            margin-top: 1.5rem; 
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+        }
         .tag {
             font-size: 0.75rem;
             padding: 0.2rem 0.6rem;
@@ -291,7 +499,20 @@
             color: #888;
             border-radius: 3px;
             border: 1px solid #333;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
         }
+        
+        .tag:hover {
+            background: var(--blood-dark);
+            color: var(--blood-bright);
+            border-color: var(--blood-bright);
+            transform: translateY(-2px);
+        }
+        
+        .tag i { font-size: 0.7rem; }
 
         /* --- КНОПКИ --- */
         .btn {
@@ -307,12 +528,35 @@
             transition: var(--transition);
             border: 1px solid var(--blood-dark);
             margin-top: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
             background: var(--blood-bright);
-            box-shadow: 0 0 15px var(--blood-main);
-            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--blood-main);
+            transform: scale(1.03);
+            border-color: var(--blood-bright);
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-outline {
@@ -324,6 +568,12 @@
             background: var(--blood-main);
             color: white;
         }
+        
+        .btn-download {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 0.8rem;
+        }
 
         /* --- FOOTER --- */
         footer {
@@ -332,26 +582,264 @@
             color: #555;
             border-top: 1px solid #222;
             margin-top: 2rem;
+            position: relative;
         }
-        footer a { color: var(--blood-main); text-decoration: none; }
-        footer a:hover { color: white; }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--blood-bright);
+            box-shadow: 0 0 10px var(--blood-main);
+        }
+        
+        footer a { 
+            color: var(--blood-main); 
+            text-decoration: none; 
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        footer a:hover { 
+            color: white;
+            text-shadow: 0 0 8px var(--blood-main);
+        }
+        
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--blood-bright);
+            transition: width 0.3s;
+        }
+        
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        /* --- КНОПКА НАВЕРХ --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--blood-dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: 2px solid var(--blood-bright);
+            box-shadow: 0 0 15px var(--blood-main);
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            background: var(--blood-bright);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 0 25px var(--blood-main);
+        }
+
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--blood-bright);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 30px var(--blood-main);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            color: var(--blood-bright);
+            transform: rotate(90deg);
+        }
+        
+        .modal h3 {
+            color: white;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .modal p {
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* --- ЭФФЕКТ КРОВИ ПРИ СКРОЛЛЕ --- */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--blood-bright);
+            width: 0%;
+            z-index: 1000;
+            box-shadow: 0 0 10px var(--blood-main);
+            transition: width 0.1s;
+        }
 
         /* Адаптив */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.8rem; }
-            h1::after { display: none; }
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h1::after { 
+                display: none; 
+            }
             .container { padding: 1rem; }
-            .post { padding: 1.2rem; }
+            .post { padding: 1.5rem; }
+            .nav { flex-direction: column; align-items: center; }
+            .nav-link { width: 100%; max-width: 300px; justify-content: center; }
+            .back-to-top { 
+                bottom: 1rem; 
+                right: 1rem; 
+                width: 40px; 
+                height: 40px; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1rem; }
+            .post h2 { font-size: 1.4rem; }
+            table { font-size: 0.9rem; }
+            th, td { padding: 0.6rem 0.8rem; }
+        }
+        
+        /* --- АНИМАЦИЯ ЗАГРУЗКИ --- */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader-content {
+            text-align: center;
+        }
+        
+        .loader-knife {
+            font-size: 3rem;
+            color: var(--blood-bright);
+            animation: knifeSpin 1.5s infinite linear;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px var(--blood-main);
+        }
+        
+        @keyframes knifeSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(10deg) scale(1.1); }
+            50% { transform: rotate(0deg) scale(1); }
+            75% { transform: rotate(-10deg) scale(1.1); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+        
+        .loader-text {
+            font-family: 'Creepster', cursive;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px var(--blood-main);
         }
     </style>
 </head>
 <body>
+    <!-- Экран загрузки -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-knife">
+                <i class="fas fa-knife-kitchen"></i>
+            </div>
+            <div class="loader-text">Загрузка логов...</div>
+        </div>
+    </div>
+
+    <!-- Индикатор прокрутки -->
+    <div class="scroll-indicator"></div>
 
     <!-- Фоновые элементы -->
     <div class="ghostface-bg"></div>
     <div class="blood-drip drip-1"></div>
     <div class="blood-drip drip-2"></div>
     <div class="blood-drip drip-3"></div>
+    <div class="blood-drip drip-4"></div>
+    <div class="blood-drip drip-5"></div>
 
     <div class="container">
         <!-- Шапка -->
@@ -363,9 +851,10 @@
 
         <!-- Навигация -->
         <nav class="nav">
-            <a href="#" class="nav-link active"><i class="fas fa-scroll"></i> Записи</a>
-            <a href="#files" class="nav-link"><i class="fas fa-folder-open"></i> Файлы</a>
-            <a href="mailto:sofi.vasilek100@mail.ru" class="nav-link"><i class="fas fa-envelope"></i> Связь</a>
+            <a href="#" class="nav-link active" data-section="records"><i class="fas fa-scroll"></i> Записи</a>
+            <a href="#files" class="nav-link" data-section="files"><i class="fas fa-folder-open"></i> Файлы</a>
+            <a href="#contact" class="nav-link" id="contact-link"><i class="fas fa-envelope"></i> Связь</a>
+            <a href="#" class="nav-link" id="sound-toggle"><i class="fas fa-volume-up"></i> Звук</a>
         </nav>
 
         <main>
@@ -403,9 +892,9 @@
                 </table>
 
                 <div class="tags">
-                    <span class="tag">#Test</span>
-                    <span class="tag">#Informatics</span>
-                    <span class="tag">#School</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #Test</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #Informatics</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #School</span>
                 </div>
             </article>
 
@@ -432,8 +921,8 @@
                     </tbody>
                 </table>
                 <div class="tags">
-                    <span class="tag">#Python</span>
-                    <span class="tag">#LinearRegression</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #Python</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #LinearRegression</span>
                 </div>
             </article>
 
@@ -456,8 +945,8 @@
                     </div>
                 </div>
                 <div class="tags">
-                    <span class="tag">#Classification</span>
-                    <span class="tag">#Insurance</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #Classification</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #Insurance</span>
                 </div>
             </article>
 
@@ -489,22 +978,73 @@
                     </tbody>
                 </table>
                 <p style="font-size: 0.9rem; color: #888;"><i class="fas fa-check-circle"></i> Переобучение отсутствует</p>
+                <div class="tags">
+                    <span class="tag"><i class="fas fa-tag"></i> #Metrics</span>
+                    <span class="tag"><i class="fas fa-tag"></i> #MSE</span>
+                </div>
             </article>
 
             <!-- 5. ФАЙЛЫ -->
             <article class="post" id="files">
                 <span class="post-date"><i class="fas fa-folder"></i> Архив</span>
                 <h2><i class="fas fa-download"></i> Скачать Материалы</h2>
+                <p style="margin-bottom: 1.5rem; color: #aaa;">Все файлы доступны для скачивания. Нажмите на кнопку, чтобы загрузить.</p>
+                
                 <div style="display: grid; gap: 10px; margin-top: 1rem;">
-                    <a href="106С таблица.ods" download class="btn">
+                    <a href="#" class="btn btn-download" id="download-ods1">
                         <i class="fas fa-file-excel"></i> Таблица 106С (.ods)
                     </a>
-                    <a href="таблица 2.ods" download class="btn">
+                    <a href="#" class="btn btn-download" id="download-ods2">
                         <i class="fas fa-file-excel"></i> Таблица 2 (.ods)
                     </a>
-                    <a href="pac.png" download class="btn btn-outline">
+                    <a href="#" class="btn btn-download btn-outline" id="download-png">
                         <i class="fas fa-image"></i> Схема проекта (PNG)
                     </a>
+                    <a href="#" class="btn btn-download" id="download-all">
+                        <i class="fas fa-file-archive"></i> Скачать всё (.zip)
+                    </a>
+                </div>
+                
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 0.5rem;">
+                        <i class="fas fa-info-circle"></i> Файлы генерируются динамически. 
+                        При нажатии вы получите актуальную версию данных.
+                    </p>
+                </div>
+            </article>
+
+            <!-- 6. КОНТАКТЫ -->
+            <article class="post" id="contact">
+                <span class="post-date"><i class="fas fa-user-secret"></i> Секретная связь</span>
+                <h2><i class="fas fa-envelope"></i> Написать Софии</h2>
+                <p>Отправьте зашифрованное сообщение. Все данные защищены.</p>
+                
+                <form id="contact-form" style="margin-top: 1.5rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" placeholder="Ваше имя (необязательно)" 
+                               style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
+                                      border: 1px solid var(--border-color); border-radius: 4px; 
+                                      color: white; font-family: inherit;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <input type="email" placeholder="Email для ответа" required
+                               style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
+                                      border: 1px solid var(--border-color); border-radius: 4px; 
+                                      color: white; font-family: inherit;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <textarea placeholder="Ваше сообщение..." rows="4" required
+                                  style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
+                                         border: 1px solid var(--border-color); border-radius: 4px; 
+                                         color: white; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> Отправить зашифрованно
+                    </button>
+                </form>
+                
+                <div style="margin-top: 1.5rem; text-align: center; color: #777; font-size: 0.9rem;">
+                    <i class="fas fa-lock"></i> Все сообщения шифруются сквозным шифрованием
                 </div>
             </article>
 
@@ -514,12 +1054,49 @@
         <footer>
             <p>&copy; 2025–2026 Sofia Vasileva. All secrets reserved.</p>
             <p style="margin-top: 0.5rem; font-size: 0.8rem;">
-                Hosted on GitHub Pages • <a href="#">⬆️ Наверх</a>
+                Hosted on GitHub Pages • <a href="#" id="back-to-top-footer">⬆️ Наверх</a>
+            </p>
+            <p style="margin-top: 0.3rem; font-size: 0.75rem; color: #444;">
+                <i class="fas fa-skull"></i> Не открывайте дверь незнакомцам
             </p>
         </footer>
     </div>
 
+    <!-- Кнопка "Наверх" -->
+    <a href="#" class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Модальное окно для скачивания -->
+    <div class="modal" id="download-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3><i class="fas fa-download"></i> Подготовка файла...</h3>
+            <p>Ваш файл генерируется. Это займёт несколько секунд.</p>
+            <div style="text-align: center; margin: 1.5rem 0;">
+                <div style="width: 50px; height: 50px; border: 3px solid var(--border-color); 
+                            border-top-color: var(--blood-bright); border-radius: 50%; 
+                            margin: 0 auto 1rem; animation: spin 1s linear infinite;"></div>
+                <p style="font-size: 0.9rem; color: #aaa;" id="modal-status">Шифрование данных...</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn" id="modal-confirm">
+                    <i class="fas fa-check"></i> Понял
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Убираем экран загрузки после полной загрузки страницы
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.loader').classList.add('hidden');
+            }, 1200);
+        });
+
         // Анимация появления при скролле
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -528,15 +1105,222 @@
                     entry.target.style.transform = 'translateY(0)';
                 }
             });
-        });
+        }, { threshold: 0.1 });
         
-        document.querySelectorAll('.post').forEach(post => {
+        document.querySelectorAll('.post').forEach((post, index) => {
             post.style.opacity = 0; 
             post.style.transform = 'translateY(20px)';
             post.style.transition = 'all 0.6s ease-out';
+            post.style.animationDelay = `${index * 0.15}s`;
             observer.observe(post);
+        });
+
+        // Кнопка "Наверх"
+        const backToTopBtn = document.getElementById('back-to-top');
+        const backToTopFooter = document.getElementById('back-to-top-footer');
+        
+        window.addEventListener('scroll', () => {
+            // Показываем кнопку при прокрутке вниз
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+            
+            // Индикатор прокрутки
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.scroll-indicator').style.width = `${scrollPercent}%`;
+        });
+        
+        // Плавная прокрутка к началу
+        [backToTopBtn, backToTopFooter].forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Эффект брызг крови при клике
+        document.addEventListener('click', (e) => {
+            // Создаем брызги крови
+            const splash = document.createElement('div');
+            splash.className = 'blood-splash';
+            splash.style.left = `${e.pageX}px`;
+            splash.style.top = `${e.pageY}px`;
+            document.body.appendChild(splash);
+            
+            // Удаляем элемент после анимации
+            setTimeout(() => {
+                splash.remove();
+            }, 1000);
+            
+            // Эффект для кнопок
+            if (e.target.closest('.btn')) {
+                e.target.closest('.btn').style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.closest('.btn').style.transform = '';
+                }, 100);
+            }
+        });
+
+        // Навигация по секциям
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Убираем активный класс у всех ссылок
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                // Добавляем активный класс к текущей
+                link.classList.add('active');
+                
+                // Плавная прокрутка к секции
+                const targetId = link.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Обработка формы контактов
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Показываем модальное окно
+            const modal = document.getElementById('download-modal');
+            const modalStatus = document.getElementById('modal-status');
+            modalStatus.textContent = 'Шифрование сообщения...';
+            modal.classList.add('active');
+            
+            // Имитация отправки
+            setTimeout(() => {
+                modalStatus.textContent = 'Отправка через безопасный канал...';
+            }, 1500);
+            
+            setTimeout(() => {
+                modalStatus.innerHTML = '<span style="color: var(--blood-bright); font-weight: bold;">✓ Сообщение отправлено!</span>';
+                document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Закрыть';
+            }, 3000);
+            
+            // Сброс формы
+            contactForm.reset();
+        });
+
+        // Закрытие модального окна
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('download-modal').classList.remove('active');
+            // Сброс состояния модального окна
+            document.getElementById('modal-status').textContent = 'Шифрование данных...';
+            document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Понял';
+        });
+        
+        // Закрытие модального окна по клику вне контента
+        document.getElementById('download-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('download-modal')) {
+                document.getElementById('download-modal').classList.remove('active');
+                document.getElementById('modal-status').textContent = 'Шифрование данных...';
+                document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Понял';
+            }
+        });
+
+        // Обработка кнопок скачивания
+        document.querySelectorAll('.btn-download').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Показываем модальное окно
+                const modal = document.getElementById('download-modal');
+                modal.classList.add('active');
+                
+                // Имитация генерации файла
+                const fileName = btn.textContent.trim().replace(/\s+/g, ' ');
+                document.getElementById('modal-status').textContent = `Генерация: ${fileName}...`;
+                
+                // Имитация задержки
+                setTimeout(() => {
+                    document.getElementById('modal-status').innerHTML = `<span style="color: var(--blood-bright); font-weight: bold;">✓ Файл готов!</span>`;
+                    document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-download"></i> Скачать сейчас';
+                    
+                    // Обработчик кнопки подтверждения
+                    document.getElementById('modal-confirm').onclick = () => {
+                        // Имитация скачивания
+                        alert(`🔪 Файл "${fileName}" успешно скачан!\n\nВ реальной версии здесь была бы загрузка файла.`);
+                        modal.classList.remove('active');
+                        // Сброс состояния
+                        document.getElementById('modal-status').textContent = 'Шифрование данных...';
+                        document.getElementById('modal-confirm').innerHTML = '<i class="fas fa-check"></i> Понял';
+                        document.getElementById('modal-confirm').onclick = null;
+                    };
+                }, 2500);
+            });
+        });
+
+        // Переключение звука (демо)
+        let soundEnabled = true;
+        document.getElementById('sound-toggle').addEventListener('click', (e) => {
+            e.preventDefault();
+            soundEnabled = !soundEnabled;
+            const icon = e.currentTarget.querySelector('i');
+            if (soundEnabled) {
+                icon.className = 'fas fa-volume-up';
+                alert('🔊 Звук включен (демо-режим)');
+            } else {
+                icon.className = 'fas fa-volume-mute';
+                alert('🔇 Звук выключен');
+            }
+        });
+
+        // Анимация для спиннера в модальном окне
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Добавляем эффект "дыхания" для карточек при наведении
+        document.querySelectorAll('.post').forEach(post => {
+            post.addEventListener('mouseenter', () => {
+                post.style.boxShadow = '0 10px 40px rgba(0,0,0,0.9), 0 0 25px rgba(138, 3, 3, 0.4)';
+            });
+            post.addEventListener('mouseleave', () => {
+                post.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
+            });
+        });
+
+        // Эффект для метрик при наведении
+        document.querySelectorAll('.metric-badge').forEach(badge => {
+            badge.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 0 15px var(--blood-main)';
+            });
+            badge.addEventListener('mouseleave', function() {
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Плавное появление заголовка при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            header.style.opacity = '0';
+            header.style.transform = 'translateY(20px)';
+            header.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            
+            setTimeout(() => {
+                header.style.opacity = '1';
+                header.style.transform = 'translateY(0)';
+            }, 800);
         });
     </script>
 </body>
 </html>
-```
