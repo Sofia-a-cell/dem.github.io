@@ -1,1061 +1,399 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>🔪 Sofia's Scream Log</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-
-<style>
-
-:root{
-    --bg:#030303;
-    --card:#0f0f0fdd;
-    --blood:#8b0000;
-    --blood2:#ff1a1a;
-    --text:#f0f0f0;
-    --muted:#888;
-    --border:rgba(255,0,0,.2);
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    font-family:'Inter',sans-serif;
-    background:#000;
-    color:var(--text);
-    overflow-x:hidden;
-    min-height:100vh;
-    position:relative;
-}
-
-/* =========================
-BACKGROUND
-========================= */
-
-body::before{
-    content:'';
-    position:fixed;
-    inset:0;
-    background:
-        radial-gradient(circle at center,
-        rgba(255,0,0,.08),
-        transparent 60%);
-    z-index:-4;
-}
-
-body::after{
-    content:'';
-    position:fixed;
-    inset:0;
-    background:rgba(255,255,255,.015);
-    animation:flicker 5s infinite;
-    pointer-events:none;
-    z-index:999;
-}
-
-@keyframes flicker{
-    0%,100%{opacity:.02}
-    10%{opacity:.08}
-    11%{opacity:.01}
-    12%{opacity:.08}
-    70%{opacity:.02}
-}
-
-.ghostface{
-    position:fixed;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:-3;
-    pointer-events:none;
-}
-
-.ghostface i{
-    font-size:38rem;
-    color:white;
-    opacity:.03;
-    filter:drop-shadow(0 0 40px red);
-    animation:breathe 6s infinite ease-in-out;
-}
-
-@keyframes breathe{
-    0%,100%{
-        transform:scale(1);
-        opacity:.03;
-    }
-    50%{
-        transform:scale(1.03);
-        opacity:.06;
-    }
-}
-
-/* BLOOD DRIPS */
-
-.drip{
-    position:fixed;
-    top:-300px;
-    width:3px;
-    background:linear-gradient(to bottom,
-    transparent,
-    red);
-    z-index:-2;
-    animation:drip linear infinite;
-    border-radius:20px;
-    opacity:.7;
-}
-
-.drip:nth-child(1){
-    left:10%;
-    height:300px;
-    animation-duration:8s;
-}
-
-.drip:nth-child(2){
-    left:25%;
-    height:200px;
-    animation-duration:11s;
-}
-
-.drip:nth-child(3){
-    left:50%;
-    height:350px;
-    animation-duration:13s;
-}
-
-.drip:nth-child(4){
-    left:75%;
-    height:240px;
-    animation-duration:9s;
-}
-
-.drip:nth-child(5){
-    left:90%;
-    height:180px;
-    animation-duration:15s;
-}
-
-@keyframes drip{
-    from{
-        transform:translateY(-300px);
-    }
-    to{
-        transform:translateY(150vh);
-    }
-}
-
-/* VHS */
-
-.vhs{
-    position:fixed;
-    inset:0;
-    background:
-    repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,.02),
-        rgba(255,255,255,.02) 1px,
-        transparent 1px,
-        transparent 4px
-    );
-    pointer-events:none;
-    z-index:1000;
-    mix-blend-mode:overlay;
-}
-
-/* =========================
-INTRO
-========================= */
-
-.intro{
-    position:fixed;
-    inset:0;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:5000;
-    animation:introFade 5s forwards;
-}
-
-.intro h1{
-    font-family:'Creepster',cursive;
-    font-size:4rem;
-    color:white;
-    text-align:center;
-    text-shadow:0 0 30px red;
-    animation:glitch 2s infinite;
-}
-
-@keyframes introFade{
-    0%,70%{
-        opacity:1;
-    }
-    100%{
-        opacity:0;
-        visibility:hidden;
-    }
-}
-
-@keyframes glitch{
-    0%{transform:translate(0)}
-    20%{transform:translate(-2px,2px)}
-    40%{transform:translate(2px,-2px)}
-    60%{transform:translate(-1px,1px)}
-    80%{transform:translate(1px,-1px)}
-    100%{transform:translate(0)}
-}
-
-/* =========================
-LAYOUT
-========================= */
-
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:40px 20px;
-    position:relative;
-    z-index:5;
-}
-
-header{
-    text-align:center;
-    margin-bottom:50px;
-}
-
-header h1{
-    font-family:'Creepster',cursive;
-    font-size:5rem;
-    color:white;
-    text-shadow:
-    0 0 20px red,
-    0 0 50px darkred;
-    margin-bottom:15px;
-    animation:glitch 3s infinite;
-}
-
-header p{
-    color:#aaa;
-    letter-spacing:2px;
-}
-
-.divider{
-    width:300px;
-    height:2px;
-    background:linear-gradient(90deg,
-    transparent,
-    red,
-    transparent);
-    margin:25px auto;
-    box-shadow:0 0 20px red;
-}
-
-/* NAV */
-
-.nav{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
-    margin-bottom:40px;
-}
-
-.nav button{
-    background:#111;
-    color:white;
-    border:1px solid rgba(255,0,0,.3);
-    padding:14px 22px;
-    border-radius:12px;
-    cursor:pointer;
-    transition:.3s;
-    font-weight:600;
-}
-
-.nav button:hover{
-    background:darkred;
-    transform:translateY(-5px);
-    box-shadow:0 0 20px red;
-}
-
-/* =========================
-CARDS
-========================= */
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:rgba(10,10,10,.7);
-    border:1px solid rgba(255,0,0,.2);
-    border-radius:20px;
-    padding:25px;
-    position:relative;
-    overflow:hidden;
-    backdrop-filter:blur(10px);
-    transition:.4s;
-}
-
-.card::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:-100%;
-    width:100%;
-    height:100%;
-    background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,0,0,.2),
-    transparent
-    );
-    transition:.8s;
-}
-
-.card:hover::before{
-    left:100%;
-}
-
-.card:hover{
-    transform:
-    perspective(1000px)
-    rotateX(2deg)
-    rotateY(-2deg)
-    translateY(-10px);
-
-    box-shadow:
-    0 10px 40px rgba(255,0,0,.2),
-    0 0 30px rgba(255,0,0,.15);
-}
-
-.card h2{
-    margin-bottom:15px;
-    color:white;
-    font-size:1.5rem;
-}
-
-.card p{
-    color:#bbb;
-    line-height:1.7;
-}
-
-.card .icon{
-    font-size:2rem;
-    color:red;
-    margin-bottom:15px;
-}
-
-/* =========================
-TABLE
-========================= */
-
-table{
-    width:100%;
-    margin-top:20px;
-    border-collapse:collapse;
-    overflow:hidden;
-    border-radius:12px;
-}
-
-th{
-    background:#550000;
-    padding:15px;
-    text-align:left;
-}
-
-td{
-    padding:14px;
-    border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-tr:hover{
-    background:rgba(255,0,0,.08);
-}
-
-/* =========================
-BUTTONS
-========================= */
-
-.btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    width:100%;
-    margin-top:20px;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:darkred;
-    color:white;
-    font-weight:700;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.btn:hover{
-    background:red;
-    transform:scale(1.03);
-    box-shadow:0 0 20px red;
-}
-
-/* =========================
-CONTACT
-========================= */
-
-input,
-textarea{
-    width:100%;
-    margin-top:15px;
-    padding:15px;
-    background:#111;
-    border:1px solid rgba(255,0,0,.2);
-    color:white;
-    border-radius:10px;
-    outline:none;
-}
-
-textarea{
-    resize:vertical;
-}
-
-/* =========================
-FOOTER
-========================= */
-
-footer{
-    margin-top:80px;
-    text-align:center;
-    color:#666;
-}
-
-/* =========================
-BACK TO TOP
-========================= */
-
-.top{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    background:darkred;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    cursor:pointer;
-    z-index:200;
-    box-shadow:0 0 20px red;
-    transition:.3s;
-}
-
-.top:hover{
-    transform:translateY(-5px) scale(1.1);
-}
-
-/* =========================
-MODAL
-========================= */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.9);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:6000;
-}
-
-.modal.active{
-    display:flex;
-}
-
-.modal-box{
-    width:90%;
-    max-width:500px;
-    background:#111;
-    border:1px solid red;
-    border-radius:20px;
-    padding:30px;
-    text-align:center;
-    box-shadow:0 0 40px rgba(255,0,0,.4);
-}
-
-.modal-box h3{
-    margin-bottom:15px;
-    color:white;
-}
-
-.modal-box p{
-    color:#aaa;
-}
-
-/* =========================
-BLOOD SPLASH
-========================= */
-
-.splash{
-    position:fixed;
-    width:12px;
-    height:12px;
-    border-radius:50%;
-    background:red;
-    pointer-events:none;
-    z-index:9999;
-    animation:splash .8s forwards;
-}
-
-@keyframes splash{
-    from{
-        transform:scale(0);
-        opacity:1;
-    }
-    to{
-        transform:scale(2);
-        opacity:0;
-    }
-}
-
-/* =========================
-RESPONSIVE
-========================= */
-
-@media(max-width:768px){
-
-    header h1{
-        font-size:3rem;
-    }
-
-    .intro h1{
-        font-size:2.5rem;
-        padding:20px;
-    }
-
-    .ghostface i{
-        font-size:20rem;
-    }
-
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог Софьи | Sofia's Tech Space</title>
+    <!-- Подключаем современные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6366f1; /* Индиго */
+            --secondary-color: #a855f7; /* Фиолетовый */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --accent-green: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        header a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: -2rem auto 2rem;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Card Styles */
+        article {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease;
+            border-left: 5px solid transparent;
+        }
+
+        article:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--primary-color);
+        }
+
+        /* Date Badge */
+        .date-badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        /* Content Styling */
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted var(--primary-color);
+        }
+
+        a:hover {
+            color: var(--secondary-color);
+            border-bottom-style: solid;
+        }
+
+        /* Code & Data Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        .crypto-key {
+            word-break: break-all;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #ef4444;
+            background: #fee2e2;
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .log-entry {
+            border-left: 3px solid var(--accent-green);
+            padding-left: 1rem;
+            margin: 0.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
+        blockquote {
+            background: #f1f5f9;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin: 1rem 0;
+        }
+
+        /* Image styling */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Specific overrides for the user's messy data */
+        .cipher-list {
+            list-style: none;
+        }
+        .cipher-list li {
+            background: #fff1f2;
+            margin: 5px 0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
 </head>
 <body>
 
-<!-- INTRO -->
-
-<div class="intro">
-    <h1>What's your favorite scary movie?</h1>
-</div>
-
-<!-- VHS -->
-
-<div class="vhs"></div>
-
-<!-- GHOSTFACE -->
-
-<div class="ghostface">
-    <i class="fas fa-mask"></i>
-</div>
-
-<!-- BLOOD -->
-
-<div class="drip"></div>
-<div class="drip"></div>
-<div class="drip"></div>
-<div class="drip"></div>
-<div class="drip"></div>
-
-<!-- AUDIO -->
-
-<audio id="knifeSound">
-<source src="https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3">
-</audio>
-
-<audio id="screamSound">
-<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">
-</audio>
+<header>
+    <h1>Sofia-a-cell.github.io</h1>
+    <p>Личный блог, эксперименты с данными и заметки</p>
+    <p style="font-size: 0.9rem; margin-top: 10px;">
+        <a href="mailto:sofi.vasilek100@mail.ru" style="color:white; border-color:white;">Написать мне</a>
+    </p>
+</header>
 
 <div class="container">
 
-<header>
+    <!-- Запись: 5 мая -->
+    <article>
+        <span class="date-badge">5 мая, 2026</span>
+        <h2>Обновление таблиц</h2>
+        <p>Новые данные доступны по ссылке:</p>
+        <a href="Таблица106CS.ods">📥 Скачать Таблица106CS.ods</a>
+    </article>
 
-<h1>Sofia's Scream Log</h1>
+    <!-- Запись: 27 апреля -->
+    <article>
+        <span class="date-badge">27 апреля, 2026</span>
+        <h2>Архив данных</h2>
+        <a href="таблица 2.ods">📥 Скачать таблицу 2.ods</a>
+    </article>
 
-<p>DATA • SECRETS • HORROR • ML</p>
+    <!-- Запись: 22 апреля -->
+    <article>
+        <span class="date-badge">22 апреля, 2026</span>
+        <h2>Работа с электронными таблицами</h2>
+        <a href="106С таблица.ods">📥 Скачать 106С таблица.ods</a>
+    </article>
 
-<div class="divider"></div>
+    <!-- Запись: 1 апреля -->
+    <article>
+        <span class="date-badge">1 апреля, 2026</span>
+        <h2>Результаты обучения модели (MSE)</h2>
+        <div class="log-entry">
+            Ошибка на обучении (MSE): 0.13474115482825388<br>
+            Ошибка на тесте (MSE): 0.15051288344128164
+        </div>
+    </article>
 
-</header>
+    <!-- Запись: 21 марта -->
+    <article>
+        <span class="date-badge">21 марта, 2026</span>
+        <h2>Система страхования КАСКО: ML Модель</h2>
+        <p>Завершено обучение модели классификации.</p>
+        <pre>
+Датасет сохранен: kasko_dataset.csv
+Записей: 2000
+Одобрено: 1587 (79.3%)
 
-<!-- NAV -->
+ТОЧНОСТЬ МОДЕЛИ: 98.5%
+Precision: 98.43%
+Recall: 99.68%
+F1-Score: 99.05%
 
-<div class="nav">
+Метрики сохранены: metrics.json
+Модель сохранена: kasko_model.pkl
+Обучение завершено!
+        </pre>
+        <p><strong>Точность:</strong> 100.0% = 0.69 (коэффициент?)</p>
+    </article>
 
-<button onclick="scrollToSection('records')">
-<i class="fas fa-scroll"></i>
-Записи
-</button>
+    <!-- Запись: 16 марта -->
+    <article>
+        <span class="date-badge">16 марта, 2026</span>
+        <h2>Прогнозирование баллов студентов (Linear Regression)</h2>
+        <p>Использование pandas и sklearn для предсказания успеваемости.</p>
+        <pre>
+import pandas as pd
+from sklearn.linear_model import LinearRegression
 
-<button onclick="scrollToSection('files')">
-<i class="fas fa-folder"></i>
-Файлы
-</button>
+# Несколько прогнозов
+students = pd.DataFrame({'Часы': [1, 3, 5, 7, 10]})
+predictions = regressor.predict(students)
 
-<button onclick="scrollToSection('contact')">
-<i class="fas fa-envelope"></i>
-Контакты
-</button>
+results = pd.DataFrame({
+    'Часы подготовки': students['Часы'],
+    'Прогноз баллов': predictions
+})
+print(results)
+        </pre>
+        <div class="log-entry">
+             Часы подготовки  Прогноз баллов<br>
+            0                1       12.324896<br>
+            1                3       31.279327<br>
+            2                5       50.233758<br>
+            3                7       69.188190<br>
+            4               10       97.619836
+        </div>
+    </article>
 
-<button onclick="toggleSound()">
-<i class="fas fa-volume-up" id="soundIcon"></i>
-Звук
-</button>
+    <!-- Запись: 25 февраля -->
+    <article>
+        <span class="date-badge">25 февраля, 2026</span>
+        <h2>Чат-бот FAQ</h2>
+        <div class="log-entry">
+            <strong>Вопрос пользователя:</strong> Сколько ждать мой заказ?<br>
+            <strong>Найден FAQ-вопрос:</strong> Как быстро доставляется заказ? (sim=0.706)<br>
+            <strong>Ответ бот-FAQ:</strong> Наш стандартный срок доставки — 3–5 рабочих дней.
+        </div>
+    </article>
+
+    <!-- Запись: 18 февраля -->
+    <article>
+        <span class="date-badge">18 февраля, 2026</span>
+        <h2>Компьютерное зрение: Классификация</h2>
+        <p>Топ-3 предсказания нейросети для входного изображения:</p>
+        <ul>
+            <li>👟 running shoe: <strong>99.45%</strong></li>
+            <li>🏪 shoe store: 0.27%</li>
+            <li>🥿 clogs: 0.15%</li>
+        </ul>
+    </article>
+
+    <!-- Запись: 20 января (Основная) -->
+    <article>
+        <span class="date-badge">20 января, 2026</span>
+        <h2>Криптография и базы данных</h2>
+        
+        <p><strong>RSA Keys Example (Small n):</strong></p>
+        <div class="crypto-key">
+            Открытый ключ: (n,e)=(33,3)<br>
+            Закрытый ключ: (n,d)=(33,7)
+        </div>
+        
+        <p style="margin-top:10px;"><strong>Реальное большое число n:</strong></p>
+        <div class="crypto-key">
+            152348976102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938475610293847561029384756102938
+        </div>
+
+        <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #eee;">
+
+        <h3>Теория нейронных сетей</h3>
+        <p>Если линейная регрессия — это одна формула, а дерево решений — серия вопросов «если/то», то нейронная сеть — это команда виртуальных экспертов, каждый из которых ищет свой паттерн в данных.</p>
+        <blockquote>
+            Каждый нейрон взвешивает признаки, применяет нелинейный «фильтр» и передаёт мнение дальше, позволяя сети описывать сложные зависимости. Обучаясь, сеть автоматически настраивает влияние каждого эксперта, минимизируя ошибку прогноза.
+        </blockquote>
+        
+        <p style="margin-top: 1rem;">
+            <a href="pac.png">📂 Смотреть проект БД (pac.png)</a>
+        </p>
+    </article>
+
+    <!-- Запись: 19 января -->
+    <article>
+        <span class="date-badge">19 января, 2026</span>
+        <h2>Шифрованные сообщения (Цезарь/ROT)?</h2>
+        <ul class="cipher-list">
+            <li>АПЕЛЬСИН-САЦЬНВЩЮ-17</li>
+            <li>АБРИКОС-ЫЬЛГЕЙМ-27</li>
+            <li>ФХНЗКЧ-ПРИВЕТ-5</li>
+            <li>ЦЩЕБФ-ВЕСНА-20</li>
+            <li>Васильева-МКЫТХЖПМК-10</li>
+        </ul>
+    </article>
+
+    <!-- Запись: 14 января -->
+    <article>
+        <span class="date-badge">14 января, 2026</span>
+        <h2>Переход в Web</h2>
+        <p>Оставляю в прошлом скучную неинтересную локальную файловую систему ради Всемирной паутины.</p>
+        <p><small>Авторство иконок учтено.</small></p>
+    </article>
+
+    <!-- Запись: 1 декабря -->
+    <article>
+        <span class="date-badge">1 декабря, 2025</span>
+        <h2>Путешествие начинается</h2>
+        <blockquote>"Путешествие в тысячу миль начинается с одного шага" (Лао Цзы)</blockquote>
+        
+        <!-- Placeholder image since local file won't work for me, but works for you -->
+        <img src="Icons/tree.png" alt="Дерево" onerror="this.style.display='none'">
+        
+        <p>Поздравление с Наступающим 2026 годом читайте <a href="Congratulations2026.html">здесь</a>.</p>
+    </article>
+
+    <!-- Запись: 15 октября -->
+    <article>
+        <span class="date-badge">15 октября, 2025</span>
+        <h2>Коллаборация</h2>
+        <p>Я сделала Новогодние кроссворды для сайта моего друга.</p>
+        <a href="https://github.com/OLYAKL/dem.github.io/edit/main/index.html" target="_blank" title="Блог моего друга">Перейти на сайт друга &rarr;</a>
+    </article>
+
+    <!-- Запись: 1 сентября -->
+    <article>
+        <span class="date-badge">1 сентября, 2025</span>
+        <h2>Начало пути</h2>
+        <blockquote>"Путешествие в тысячу миль начинается с одного шага" (Лао Цзы)</blockquote>
+    </article>
 
 </div>
-
-<!-- RECORDS -->
-
-<section id="records">
-
-<div class="grid">
-
-<div class="card">
-
-<div class="icon">
-<i class="fas fa-question-circle"></i>
-</div>
-
-<h2>Тест по информатике</h2>
-
-<p>
-Разбор вопросов и ответы.
-</p>
-
-<table>
-
-<tr>
-<th>№</th>
-<th>Ответ</th>
-</tr>
-
-<tr>
-<td>4</td>
-<td>Информация может быть графической</td>
-</tr>
-
-<tr>
-<td>5</td>
-<td>Информацию можно передавать</td>
-</tr>
-
-<tr>
-<td>6</td>
-<td>Зрительные образы</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="card">
-
-<div class="icon">
-<i class="fas fa-chart-line"></i>
-</div>
-
-<h2>ML Прогноз</h2>
-
-<p>
-Линейная регрессия предсказания баллов.
-</p>
-
-<table>
-
-<tr>
-<th>Часы</th>
-<th>Баллы</th>
-</tr>
-
-<tr>
-<td>1</td>
-<td>12.3</td>
-</tr>
-
-<tr>
-<td>5</td>
-<td>50.2</td>
-</tr>
-
-<tr>
-<td>10</td>
-<td>97.6</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="card">
-
-<div class="icon">
-<i class="fas fa-shield-halved"></i>
-</div>
-
-<h2>КАСКО ML</h2>
-
-<p>
-Классификация страховых случаев.
-</p>
-
-<p style="margin-top:20px;">
-Accuracy: 98.5%
-<br>
-Precision: 98.4%
-<br>
-Recall: 99.6%
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- FILES -->
-
-<section id="files" style="margin-top:70px;">
-
-<div class="card">
-
-<div class="icon">
-<i class="fas fa-download"></i>
-</div>
-
-<h2>Файлы проекта</h2>
-
-<p>
-Скачать материалы.
-</p>
-
-<button class="btn" onclick="downloadFile('table106c.ods')">
-<i class="fas fa-file-excel"></i>
-table106c.ods
-</button>
-
-<button class="btn" onclick="downloadFile('table2.ods')">
-<i class="fas fa-file-excel"></i>
-table2.ods
-</button>
-
-<button class="btn" onclick="downloadFile('scheme.png')">
-<i class="fas fa-image"></i>
-scheme.png
-</button>
-
-<button class="btn" onclick="downloadFile('all.zip')">
-<i class="fas fa-file-archive"></i>
-all.zip
-</button>
-
-</div>
-
-</section>
-
-<!-- CONTACT -->
-
-<section id="contact" style="margin-top:70px;">
-
-<div class="card">
-
-<div class="icon">
-<i class="fas fa-user-secret"></i>
-</div>
-
-<h2>Связаться</h2>
-
-<p>
-Отправить сообщение.
-</p>
-
-<input type="text" placeholder="Имя">
-
-<input type="email" placeholder="Email">
-
-<textarea rows="5" placeholder="Сообщение"></textarea>
-
-<button class="btn" onclick="sendMessage()">
-<i class="fas fa-paper-plane"></i>
-Отправить
-</button>
-
-</div>
-
-</section>
 
 <footer>
-
-<p>
-© 2026 Sofia's Scream Log
-</p>
-
-<p style="margin-top:10px;">
-Don't answer the phone...
-</p>
-
+    <p>&copy; 2025-2026 Sofia Vasileva. All rights reserved.</p>
+    <p>Hosted on GitHub Pages</p>
 </footer>
-
-</div>
-
-<!-- BACK TO TOP -->
-
-<div class="top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-<i class="fas fa-arrow-up"></i>
-</div>
-
-<!-- MODAL -->
-
-<div class="modal" id="modal">
-
-<div class="modal-box">
-
-<h3 id="modalTitle">
-Обработка...
-</h3>
-
-<p id="modalText">
-Подождите...
-</p>
-
-<button class="btn" onclick="closeModal()">
-Закрыть
-</button>
-
-</div>
-
-</div>
-
-<script>
-
-/* =========================
-SCROLL
-========================= */
-
-function scrollToSection(id){
-
-    document.getElementById(id)
-    .scrollIntoView({
-        behavior:'smooth'
-    });
-
-}
-
-/* =========================
-SOUND
-========================= */
-
-let soundEnabled=true;
-
-function toggleSound(){
-
-    soundEnabled=!soundEnabled;
-
-    const icon=document.getElementById('soundIcon');
-
-    if(soundEnabled){
-
-        icon.className='fas fa-volume-up';
-
-        showModal(
-            '🔊 Звук включен',
-            'Хоррор эффекты активированы.'
-        );
-
-    }else{
-
-        icon.className='fas fa-volume-mute';
-
-        showModal(
-            '🔇 Звук выключен',
-            'Тишина...'
-        );
-
-    }
-
-}
-
-/* =========================
-MODAL
-========================= */
-
-function showModal(title,text){
-
-    document.getElementById('modalTitle')
-    .innerText=title;
-
-    document.getElementById('modalText')
-    .innerText=text;
-
-    document.getElementById('modal')
-    .classList.add('active');
-
-}
-
-function closeModal(){
-
-    document.getElementById('modal')
-    .classList.remove('active');
-
-}
-
-/* =========================
-DOWNLOAD
-========================= */
-
-function downloadFile(name){
-
-    showModal(
-        '📁 Подготовка файла',
-        'Скачивание: '+name
-    );
-
-    const blob=new Blob(
-        ['Sofia Scream Log'],
-        {type:'text/plain'}
-    );
-
-    const url=URL.createObjectURL(blob);
-
-    const a=document.createElement('a');
-
-    a.href=url;
-    a.download=name;
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-}
-
-/* =========================
-CONTACT
-========================= */
-
-function sendMessage(){
-
-    showModal(
-        '📨 Сообщение отправлено',
-        'Ваше сообщение зашифровано.'
-    );
-
-}
-
-/* =========================
-BLOOD SPLASH
-========================= */
-
-document.addEventListener('click',e=>{
-
-    for(let i=0;i<5;i++){
-
-        const splash=document.createElement('div');
-
-        splash.className='splash';
-
-        splash.style.left=
-        e.pageX+(Math.random()*40-20)+'px';
-
-        splash.style.top=
-        e.pageY+(Math.random()*40-20)+'px';
-
-        splash.style.width=
-        5+Math.random()*15+'px';
-
-        splash.style.height=
-        splash.style.width;
-
-        document.body.appendChild(splash);
-
-        setTimeout(()=>{
-            splash.remove();
-        },800);
-
-    }
-
-    if(soundEnabled){
-
-        const knife=
-        document.getElementById('knifeSound');
-
-        knife.currentTime=0;
-
-        knife.play();
-
-    }
-
-});
-
-/* =========================
-PARALLAX
-========================= */
-
-document.addEventListener('mousemove',e=>{
-
-    const ghost=
-    document.querySelector('.ghostface i');
-
-    const x=
-    (window.innerWidth/2-e.clientX)/60;
-
-    const y=
-    (window.innerHeight/2-e.clientY)/60;
-
-    ghost.style.transform=
-    `translate(${x}px,${y}px)`;
-
-});
-
-/* =========================
-RANDOM SCREAM
-========================= */
-
-setInterval(()=>{
-
-    if(soundEnabled && Math.random()>.85){
-
-        const scream=
-        document.getElementById('screamSound');
-
-        scream.volume=.15;
-
-        scream.play();
-
-    }
-
-},30000);
-
-</script>
 
 </body>
 </html>
+```
+Сделай сайт современным и красивым в красном цвете с эффектом цветов с рабочими ссылками и таблицами
