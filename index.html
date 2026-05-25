@@ -1,1301 +1,1061 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔪 Sofia's Scream Log | Data & Secrets</title>
-    
-    <!-- Шрифты -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Creepster&display=swap" rel="stylesheet">
-    
-    <!-- Иконки -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-black: #050505;
-            --card-bg: rgba(15, 15, 15, 0.95);
-            --blood-main: #8a0303;
-            --blood-bright: #cf142b;
-            --blood-dark: #4a0000;
-            --text-main: #e0e0e0;
-            --text-muted: #888;
-            --border-color: rgba(138, 3, 3, 0.3);
-            --shadow-glow: 0 0 20px rgba(138, 3, 3, 0.4);
-            --transition: all 0.3s ease;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<title>🔪 Sofia's Scream Log</title>
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-black);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-            cursor: crosshair;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        /* === ФОНОВЫЕ ЭФФЕКТЫ === */
-        
-        /* Маска Ghostface */
-        .ghostface-bg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath fill='%23ffffff' d='M565.1 37.9C584.6 55.8 592 83.4 583.4 108.6L529.6 266.3C522.2 288 502.6 303.1 480.3 303.1H448V416C448 451.3 419.3 480 384 480H192C156.7 480 128 451.3 128 416V303.1H95.7C73.4 303.1 53.8 288 46.4 266.3L-7.36 108.6C-15.96 83.4-8.586 55.8 10.91 37.9C30.41 20.03 58.76 14.53 83.63 24.35L185.3 64.5C215.6 76.47 236.4 104.6 238.3 137.1L240 165.1L240 32C240 14.33 254.3 0 272 0C289.7 0 304 14.33 304 32V165.1L305.7 137.1C307.6 104.6 328.4 76.47 358.7 64.5L460.4 24.35C485.2 14.53 513.6 20.03 533.1 37.9V37.9zM160 335.1V416C160 433.7 174.3 448 192 448H224V335.1H160zM352 448H384C401.7 448 416 433.7 416 416V335.1H352V448z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.03;
-            z-index: -2;
-            pointer-events: none;
-            animation: breathe 8s infinite ease-in-out;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        @keyframes breathe {
-            0%, 100% { opacity: 0.03; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.06; transform: translate(-50%, -50%) scale(1.05); }
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-        /* Капли крови */
-        .blood-drip {
-            position: fixed;
-            top: -100px;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--blood-bright));
-            z-index: -1;
-            animation: drip 10s infinite linear;
-            border-radius: 0 0 2px 2px;
-            box-shadow: 0 0 8px var(--blood-main);
-        }
-        .drip-1 { left: 10%; animation-duration: 8s; height: 150px; animation-delay: 0s; }
-        .drip-2 { left: 80%; animation-duration: 12s; animation-delay: 2s; height: 100px; }
-        .drip-3 { left: 40%; animation-duration: 15s; animation-delay: 5s; height: 200px; }
-        .drip-4 { left: 25%; animation-duration: 11s; animation-delay: 1s; height: 120px; opacity: 0.7; }
-        .drip-5 { left: 65%; animation-duration: 14s; animation-delay: 4s; height: 180px; opacity: 0.8; }
+<style>
 
-        @keyframes drip {
-            0% { transform: translateY(-200px) scaleY(0.8); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(120vh) scaleY(1.2); opacity: 0; }
-        }
+:root{
+    --bg:#030303;
+    --card:#0f0f0fdd;
+    --blood:#8b0000;
+    --blood2:#ff1a1a;
+    --text:#f0f0f0;
+    --muted:#888;
+    --border:rgba(255,0,0,.2);
+}
 
-        /* Брызги крови при клике */
-        .blood-splash {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: var(--blood-bright);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-            animation: splash 1s forwards;
-            box-shadow: 0 0 10px var(--blood-main);
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        @keyframes splash {
-            0% { transform: scale(0) rotate(0deg); opacity: 1; }
-            50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
-            100% { transform: scale(0) rotate(360deg); opacity: 0; }
-        }
+html{
+    scroll-behavior:smooth;
+}
 
-        /* Туман */
-        .fog {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at bottom, rgba(138,3,3,0.1) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: -1;
-            animation: fogMove 20s infinite linear;
-            opacity: 0.6;
-        }
+body{
+    font-family:'Inter',sans-serif;
+    background:#000;
+    color:var(--text);
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+}
 
-        @keyframes fogMove {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-10px) translateX(5px); }
-            100% { transform: translateY(0) translateX(0); }
-        }
+/* =========================
+BACKGROUND
+========================= */
 
-        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at center,
+        rgba(255,0,0,.08),
+        transparent 60%);
+    z-index:-4;
+}
 
-        /* === ШАПКА === */
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding: 1rem 0;
-        }
+body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.015);
+    animation:flicker 5s infinite;
+    pointer-events:none;
+    z-index:999;
+}
 
-        h1 {
-            font-family: 'Creepster', cursive;
-            font-size: 4rem;
-            color: var(--text-main);
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--blood-main), 0 0 30px var(--blood-dark);
-            margin-bottom: 0.5rem;
-            position: relative;
-            display: inline-block;
-            animation: titlePulse 3s infinite;
-        }
+@keyframes flicker{
+    0%,100%{opacity:.02}
+    10%{opacity:.08}
+    11%{opacity:.01}
+    12%{opacity:.08}
+    70%{opacity:.02}
+}
 
-        @keyframes titlePulse {
-            0%, 100% { text-shadow: 0 0 15px var(--blood-main), 0 0 30px var(--blood-dark); }
-            50% { text-shadow: 0 0 25px var(--blood-bright), 0 0 45px var(--blood-main); }
-        }
+.ghostface{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:-3;
+    pointer-events:none;
+}
 
-        /* Нож в заголовке */
-        h1::after {
-            content: '\f6ec';
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            position: absolute;
-            right: -40px;
-            top: 10px;
-            font-size: 2rem;
-            color: var(--text-muted);
-            transform: rotate(45deg);
-            animation: shake 4s infinite;
-            text-shadow: 0 0 10px var(--blood-main);
-        }
+.ghostface i{
+    font-size:38rem;
+    color:white;
+    opacity:.03;
+    filter:drop-shadow(0 0 40px red);
+    animation:breathe 6s infinite ease-in-out;
+}
 
-        @keyframes shake {
-            0%, 90%, 100% { transform: rotate(45deg); }
-            92%, 96% { transform: rotate(35deg) translate(-2px, 2px); }
-            94%, 98% { transform: rotate(55deg) translate(2px, -2px); }
-        }
+@keyframes breathe{
+    0%,100%{
+        transform:scale(1);
+        opacity:.03;
+    }
+    50%{
+        transform:scale(1.03);
+        opacity:.06;
+    }
+}
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            margin-top: 0.5rem;
-        }
+/* BLOOD DRIPS */
 
-        .divider {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
-            margin: 2rem auto;
-            width: 50%;
-            box-shadow: 0 0 10px var(--blood-main);
-            position: relative;
-        }
-        
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 10px;
-            background: var(--blood-bright);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--blood-main);
-        }
+.drip{
+    position:fixed;
+    top:-300px;
+    width:3px;
+    background:linear-gradient(to bottom,
+    transparent,
+    red);
+    z-index:-2;
+    animation:drip linear infinite;
+    border-radius:20px;
+    opacity:.7;
+}
 
-        /* === НАВИГАЦИЯ === */
-        .nav {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-            flex-wrap: wrap;
-        }
+.drip:nth-child(1){
+    left:10%;
+    height:300px;
+    animation-duration:8s;
+}
 
-        .nav-link {
-            color: var(--text-main);
-            text-decoration: none;
-            padding: 0.6rem 1.2rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            transition: var(--transition);
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(138, 3, 3, 0.3), transparent);
-            transition: 0.5s;
-        }
-        
-        .nav-link:hover::before {
-            left: 100%;
-        }
+.drip:nth-child(2){
+    left:25%;
+    height:200px;
+    animation-duration:11s;
+}
 
-        .nav-link:hover, .nav-link.active {
-            background: var(--blood-dark);
-            border-color: var(--blood-bright);
-            box-shadow: 0 0 15px rgba(207, 20, 43, 0.4);
-            transform: translateY(-2px);
-        }
+.drip:nth-child(3){
+    left:50%;
+    height:350px;
+    animation-duration:13s;
+}
 
-        /* === КАРТОЧКИ === */
-        .post {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-left: 4px solid var(--blood-main);
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: var(--transition);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s forwards;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .post::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .post:hover::before {
-            opacity: 1;
-        }
+.drip:nth-child(4){
+    left:75%;
+    height:240px;
+    animation-duration:9s;
+}
 
-        .post:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(138, 3, 3, 0.3);
-            border-color: var(--blood-bright);
-            border-left-color: var(--blood-bright);
-        }
+.drip:nth-child(5){
+    left:90%;
+    height:180px;
+    animation-duration:15s;
+}
 
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+@keyframes drip{
+    from{
+        transform:translateY(-300px);
+    }
+    to{
+        transform:translateY(150vh);
+    }
+}
 
-        .post-date {
-            display: inline-block;
-            font-size: 0.8rem;
-            color: var(--blood-bright);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+/* VHS */
 
-        .post h2 {
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-        
-        .post h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--blood-bright);
-        }
-        
-        .post h2 i { color: var(--blood-main); }
+.vhs{
+    position:fixed;
+    inset:0;
+    background:
+    repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.02),
+        rgba(255,255,255,.02) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+    pointer-events:none;
+    z-index:1000;
+    mix-blend-mode:overlay;
+}
 
-        /* === ТАБЛИЦЫ === */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
+/* =========================
+INTRO
+========================= */
 
-        th {
-            background: var(--blood-dark);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid var(--blood-bright);
-            position: relative;
-        }
-        
-        th::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--blood-bright);
-            opacity: 0.7;
-        }
+.intro{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:5000;
+    animation:introFade 5s forwards;
+}
 
-        td {
-            padding: 0.8rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #ccc;
-        }
+.intro h1{
+    font-family:'Creepster',cursive;
+    font-size:4rem;
+    color:white;
+    text-align:center;
+    text-shadow:0 0 30px red;
+    animation:glitch 2s infinite;
+}
 
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { 
-            background: rgba(138, 3, 3, 0.15); 
-            color: white;
-            transform: translateX(3px);
-            transition: all 0.2s;
-        }
+@keyframes introFade{
+    0%,70%{
+        opacity:1;
+    }
+    100%{
+        opacity:0;
+        visibility:hidden;
+    }
+}
 
-        .highlight { 
-            color: var(--blood-bright); 
-            font-weight: bold;
-            position: relative;
-        }
-        
-        .highlight::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--blood-bright);
-            opacity: 0.5;
-        }
+@keyframes glitch{
+    0%{transform:translate(0)}
+    20%{transform:translate(-2px,2px)}
+    40%{transform:translate(2px,-2px)}
+    60%{transform:translate(-1px,1px)}
+    80%{transform:translate(1px,-1px)}
+    100%{transform:translate(0)}
+}
 
-        /* === БЛОКИ КОДА === */
-        .data-block {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            padding: 1rem;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            margin: 1rem 0;
-            color: #ddd;
-            border-left: 3px solid var(--blood-main);
-            position: relative;
-        }
-        
-        .data-block::before {
-            content: '>';
-            position: absolute;
-            left: -12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--blood-bright);
-            font-weight: bold;
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
+/* =========================
+LAYOUT
+========================= */
 
-        .metric-badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            background: rgba(138, 3, 3, 0.2);
-            border: 1px solid var(--blood-main);
-            border-radius: 4px;
-            color: var(--blood-bright);
-            font-size: 0.85rem;
-            margin-right: 0.5rem;
-            margin-bottom: 0.3rem;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        
-        .metric-badge:hover {
-            background: var(--blood-main);
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 0 10px var(--blood-main);
-        }
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+    position:relative;
+    z-index:5;
+}
 
-        /* === ТЕГИ === */
-        .tags { 
-            display: flex; 
-            gap: 0.5rem; 
-            flex-wrap: wrap; 
-            margin-top: 1.5rem; 
-            padding-top: 1rem;
-            border-top: 1px dashed var(--border-color);
-        }
-        .tag {
-            font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
-            background: #1a1a1a;
-            color: #888;
-            border-radius: 3px;
-            border: 1px solid #333;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            cursor: pointer;
-        }
-        
-        .tag:hover {
-            background: var(--blood-dark);
-            color: var(--blood-bright);
-            border-color: var(--blood-bright);
-            transform: translateY(-2px);
-        }
-        
-        .tag i { font-size: 0.7rem; }
+header{
+    text-align:center;
+    margin-bottom:50px;
+}
 
-        /* === КНОПКИ === */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
-            background: var(--blood-main);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: var(--transition);
-            border: 1px solid var(--blood-dark);
-            margin-top: 0.5rem;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            width: 100%;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
+header h1{
+    font-family:'Creepster',cursive;
+    font-size:5rem;
+    color:white;
+    text-shadow:
+    0 0 20px red,
+    0 0 50px darkred;
+    margin-bottom:15px;
+    animation:glitch 3s infinite;
+}
 
-        .btn:hover {
-            background: var(--blood-bright);
-            box-shadow: 0 0 20px var(--blood-main);
-            transform: scale(1.03);
-            border-color: var(--blood-bright);
-        }
-        
-        .btn:active {
-            transform: scale(0.98);
-        }
+header p{
+    color:#aaa;
+    letter-spacing:2px;
+}
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--blood-main);
-            color: var(--blood-bright);
-        }
-        .btn-outline:hover {
-            background: var(--blood-main);
-            color: white;
-        }
-        
-        .btn-download {
-            width: 100%;
-            justify-content: center;
-            margin-bottom: 0.8rem;
-        }
+.divider{
+    width:300px;
+    height:2px;
+    background:linear-gradient(90deg,
+    transparent,
+    red,
+    transparent);
+    margin:25px auto;
+    box-shadow:0 0 20px red;
+}
 
-        /* === FOOTER === */
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            color: #555;
-            border-top: 1px solid #222;
-            margin-top: 2rem;
-            position: relative;
-        }
-        
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 2px;
-            background: var(--blood-bright);
-            box-shadow: 0 0 10px var(--blood-main);
-        }
-        
-        footer a { 
-            color: var(--blood-main); 
-            text-decoration: none; 
-            transition: var(--transition);
-            position: relative;
-            cursor: pointer;
-        }
-        
-        footer a:hover { 
-            color: white;
-            text-shadow: 0 0 8px var(--blood-main);
-        }
-        
-        footer a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--blood-bright);
-            transition: width 0.3s;
-        }
-        
-        footer a:hover::after {
-            width: 100%;
-        }
+/* NAV */
 
-        /* === КНОПКА НАВЕРХ === */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--blood-dark);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            border: 2px solid var(--blood-bright);
-            box-shadow: 0 0 15px var(--blood-main);
-            z-index: 100;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .back-to-top:hover {
-            background: var(--blood-bright);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 0 25px var(--blood-main);
-        }
+.nav{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:40px;
+}
 
-        /* === МОДАЛЬНОЕ ОКНО === */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
-        
-        .modal-content {
-            background: var(--card-bg);
-            border: 2px solid var(--blood-bright);
-            border-radius: 10px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 0 30px var(--blood-main);
-            transform: scale(0.9);
-            transition: transform 0.3s;
-        }
-        
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
-        
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .modal-close:hover {
-            color: var(--blood-bright);
-            transform: rotate(90deg);
-        }
-        
-        .modal h3 {
-            color: white;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .modal p {
-            margin-bottom: 1.5rem;
-            color: #ccc;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
+.nav button{
+    background:#111;
+    color:white;
+    border:1px solid rgba(255,0,0,.3);
+    padding:14px 22px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+}
 
-        /* === ИНДИКАТОР СКРОЛЛА === */
-        .scroll-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: var(--blood-bright);
-            width: 0%;
-            z-index: 1000;
-            box-shadow: 0 0 10px var(--blood-main);
-            transition: width 0.1s;
-        }
+.nav button:hover{
+    background:darkred;
+    transform:translateY(-5px);
+    box-shadow:0 0 20px red;
+}
 
-        /* === ЗАГРУЗКА === */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-black);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-        
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        
-        .loader-content {
-            text-align: center;
-        }
-        
-        .loader-knife {
-            font-size: 3rem;
-            color: var(--blood-bright);
-            animation: knifeSpin 1.5s infinite linear;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 15px var(--blood-main);
-        }
-        
-        @keyframes knifeSpin {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(10deg) scale(1.1); }
-            50% { transform: rotate(0deg) scale(1); }
-            75% { transform: rotate(-10deg) scale(1.1); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-        
-        .loader-text {
-            font-family: 'Creepster', cursive;
-            color: var(--text-main);
-            font-size: 1.5rem;
-            text-shadow: 0 0 10px var(--blood-main);
-        }
+/* =========================
+CARDS
+========================= */
 
-        /* === ЭФФЕКТ МЕРЦАНИЯ === */
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.3; }
-        }
-        
-        .flicker {
-            animation: flicker 4s infinite;
-        }
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
 
-        /* === АДАПТИВ === */
-        @media (max-width: 768px) {
-            h1 { font-size: 3rem; }
-            h1::after { display: none; }
-            .container { padding: 1rem; }
-            .post { padding: 1.5rem; }
-            .nav { flex-direction: column; align-items: center; }
-            .nav-link { width: 100%; max-width: 300px; justify-content: center; }
-            .back-to-top { bottom: 1rem; right: 1rem; width: 40px; height: 40px; }
-        }
-        
-        @media (max-width: 480px) {
-            h1 { font-size: 2.5rem; }
-            .subtitle { font-size: 1rem; }
-            .post h2 { font-size: 1.4rem; }
-            table { font-size: 0.9rem; }
-            th, td { padding: 0.6rem 0.8rem; }
-        }
-    </style>
+.card{
+    background:rgba(10,10,10,.7);
+    border:1px solid rgba(255,0,0,.2);
+    border-radius:20px;
+    padding:25px;
+    position:relative;
+    overflow:hidden;
+    backdrop-filter:blur(10px);
+    transition:.4s;
+}
+
+.card::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,0,0,.2),
+    transparent
+    );
+    transition:.8s;
+}
+
+.card:hover::before{
+    left:100%;
+}
+
+.card:hover{
+    transform:
+    perspective(1000px)
+    rotateX(2deg)
+    rotateY(-2deg)
+    translateY(-10px);
+
+    box-shadow:
+    0 10px 40px rgba(255,0,0,.2),
+    0 0 30px rgba(255,0,0,.15);
+}
+
+.card h2{
+    margin-bottom:15px;
+    color:white;
+    font-size:1.5rem;
+}
+
+.card p{
+    color:#bbb;
+    line-height:1.7;
+}
+
+.card .icon{
+    font-size:2rem;
+    color:red;
+    margin-bottom:15px;
+}
+
+/* =========================
+TABLE
+========================= */
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+th{
+    background:#550000;
+    padding:15px;
+    text-align:left;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+tr:hover{
+    background:rgba(255,0,0,.08);
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:darkred;
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:red;
+    transform:scale(1.03);
+    box-shadow:0 0 20px red;
+}
+
+/* =========================
+CONTACT
+========================= */
+
+input,
+textarea{
+    width:100%;
+    margin-top:15px;
+    padding:15px;
+    background:#111;
+    border:1px solid rgba(255,0,0,.2);
+    color:white;
+    border-radius:10px;
+    outline:none;
+}
+
+textarea{
+    resize:vertical;
+}
+
+/* =========================
+FOOTER
+========================= */
+
+footer{
+    margin-top:80px;
+    text-align:center;
+    color:#666;
+}
+
+/* =========================
+BACK TO TOP
+========================= */
+
+.top{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:darkred;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    cursor:pointer;
+    z-index:200;
+    box-shadow:0 0 20px red;
+    transition:.3s;
+}
+
+.top:hover{
+    transform:translateY(-5px) scale(1.1);
+}
+
+/* =========================
+MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:6000;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    width:90%;
+    max-width:500px;
+    background:#111;
+    border:1px solid red;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 0 40px rgba(255,0,0,.4);
+}
+
+.modal-box h3{
+    margin-bottom:15px;
+    color:white;
+}
+
+.modal-box p{
+    color:#aaa;
+}
+
+/* =========================
+BLOOD SPLASH
+========================= */
+
+.splash{
+    position:fixed;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:red;
+    pointer-events:none;
+    z-index:9999;
+    animation:splash .8s forwards;
+}
+
+@keyframes splash{
+    from{
+        transform:scale(0);
+        opacity:1;
+    }
+    to{
+        transform:scale(2);
+        opacity:0;
+    }
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    header h1{
+        font-size:3rem;
+    }
+
+    .intro h1{
+        font-size:2.5rem;
+        padding:20px;
+    }
+
+    .ghostface i{
+        font-size:20rem;
+    }
+
+}
+
+</style>
 </head>
 <body>
-    <!-- Экран загрузки -->
-    <div class="loader">
-        <div class="loader-content">
-            <div class="loader-knife">
-                <i class="fas fa-knife-kitchen"></i>
-            </div>
-            <div class="loader-text flicker">Загрузка логов...</div>
-        </div>
-    </div>
 
-    <!-- Индикатор прокрутки -->
-    <div class="scroll-indicator"></div>
+<!-- INTRO -->
 
-    <!-- Фоновые элементы -->
-    <div class="ghostface-bg"></div>
-    <div class="fog"></div>
-    <div class="blood-drip drip-1"></div>
-    <div class="blood-drip drip-2"></div>
-    <div class="blood-drip drip-3"></div>
-    <div class="blood-drip drip-4"></div>
-    <div class="blood-drip drip-5"></div>
+<div class="intro">
+    <h1>What's your favorite scary movie?</h1>
+</div>
 
-    <div class="container">
-        <!-- Шапка -->
-        <header>
-            <h1>Sofia's Scream Log</h1>
-            <p class="subtitle">Данные • Тайны • Информатика</p>
-            <div class="divider"></div>
-        </header>
+<!-- VHS -->
 
-        <!-- Навигация -->
-        <nav class="nav">
-            <a class="nav-link active" data-section="records"><i class="fas fa-scroll"></i> Записи</a>
-            <a class="nav-link" data-section="files"><i class="fas fa-folder-open"></i> Файлы</a>
-            <a class="nav-link" data-section="contact"><i class="fas fa-envelope"></i> Связь</a>
-            <a class="nav-link" id="sound-toggle"><i class="fas fa-volume-up"></i> Звук</a>
-        </nav>
+<div class="vhs"></div>
 
-        <main>
-            <!-- ТЕСТ -->
-            <article class="post" data-section="records">
-                <span class="post-date"><i class="far fa-calendar-alt"></i> 12 Мая 2026</span>
-                <h2><i class="fas fa-question-circle"></i> Тест: Основы Информатики</h2>
-                <p>Результаты проверки знаний. Разбор вопросов.</p>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 10%">№</th>
-                            <th>Вопрос</th>
-                            <th>Ответ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>4</td>
-                            <td>Какое утверждение <strong>неверно</strong>?</td>
-                            <td class="highlight">Информация не может быть в графическом виде</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Какое утверждение <strong>верно</strong>?</td>
-                            <td class="highlight">Информацию можно преобразовывать и передавать</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Какую форму информации человек научился хранить долговременно?</td>
-                            <td class="highlight">Зрительные образы</td>
-                        </tr>
-                    </tbody>
-                </table>
+<!-- GHOSTFACE -->
 
-                <div class="tags">
-                    <span class="tag"><i class="fas fa-tag"></i> #Test</span>
-                    <span class="tag"><i class="fas fa-tag"></i> #Informatics</span>
-                    <span class="tag"><i class="fas fa-tag"></i> #School</span>
-                </div>
-            </article>
+<div class="ghostface">
+    <i class="fas fa-mask"></i>
+</div>
 
-            <!-- ML ПРОГНОЗ -->
-            <article class="post" data-section="records">
-                <span class="post-date"><i class="far fa-calendar-alt"></i> 16 Марта 2026</span>
-                <h2><i class="fas fa-chart-line"></i> Прогноз Успеваемости (ML)</h2>
-                <p>Линейная регрессия для предсказания баллов студентов.</p>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Часы обучения</th>
-                            <th>Прогноз баллов</th>
-                            <th>Уровень</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1 ч</td><td>12.32</td><td>Начальный</td></tr>
-                        <tr><td>3 ч</td><td>31.28</td><td>Средний</td></tr>
-                        <tr><td>5 ч</td><td class="highlight">50.23</td><td>Хороший</td></tr>
-                        <tr><td>7 ч</td><td class="highlight">69.19</td><td>Отличный</td></tr>
-                        <tr><td>10 ч</td><td class="highlight">97.62</td><td>Превосходно</td></tr>
-                    </tbody>
-                </table>
-                <div class="tags">
-                    <span class="tag"><i class="fas fa-tag"></i> #Python</span>
-                    <span class="tag"><i class="fas fa-tag"></i> #LinearRegression</span>
-                </div>
-            </article>
+<!-- BLOOD -->
 
-            <!-- КАСКО МОДЕЛЬ -->
-            <article class="post" data-section="records">
-                <span class="post-date"><i class="far fa-calendar-alt"></i> 21 Марта 2026</span>
-                <h2><i class="fas fa-shield-alt"></i> КАСКО: ML Модель</h2>
-                <p>Классификация страховых случаев. Датасет: 2,000 записей.</p>
-                
-                <div class="data-block">
-                    <div style="margin-bottom: 0.5rem;">
-                        <strong>Accuracy:</strong> <span class="metric-badge">98.5%</span>
-                    </div>
-                    <div style="margin-bottom: 0.5rem;">
-                        <strong>Precision:</strong> <span class="metric-badge">98.43%</span>
-                        <strong>Recall:</strong> <span class="metric-badge">99.68%</span>
-                    </div>
-                    <div>
-                        <strong>F1-Score:</strong> <span class="metric-badge">99.05%</span>
-                    </div>
-                </div>
-                <div class="tags">
-                    <span class="tag"><i class="fas fa-tag"></i> #Classification</span>
-                    <span class="tag"><i class="fas fa-tag"></i> #Insurance</span>
-                </div>
-            </article>
+<div class="drip"></div>
+<div class="drip"></div>
+<div class="drip"></div>
+<div class="drip"></div>
+<div class="drip"></div>
 
-            <!-- МЕТРИКИ -->
-            <article class="post" data-section="records">
-                <span class="post-date"><i class="far fa-calendar-alt"></i> 1 Апреля 2026</span>
-                <h2><i class="fas fa-vial"></i> Метрики Обучения (MSE)</h2>
-                <p>Оценка ошибки регрессионной модели.</p>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Набор данных</th>
-                            <th>MSE (Ошибка)</th>
-                            <th>Delta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Train (Обучение)</td>
-                            <td>0.1347</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Test (Тест)</td>
-                            <td class="highlight">0.1505</td>
-                            <td class="highlight">+0.016</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="font-size: 0.9rem; color: #888;"><i class="fas fa-check-circle"></i> Переобучение отсутствует</p>
-                <div class="tags">
-                    <span class="tag"><i class="fas fa-tag"></i> #Metrics</span>
-                    <span class="tag"><i class="fas fa-tag"></i> #MSE</span>
-                </div>
-            </article>
+<!-- AUDIO -->
 
-            <!-- ФАЙЛЫ -->
-            <article class="post" id="files-section" data-section="files" style="display: none;">
-                <span class="post-date"><i class="fas fa-folder"></i> Архив</span>
-                <h2><i class="fas fa-download"></i> Скачать Материалы</h2>
-                <p style="margin-bottom: 1.5rem; color: #aaa;">Все файлы доступны для скачивания. Нажмите на кнопку, чтобы загрузить.</p>
-                
-                <div style="display: grid; gap: 10px; margin-top: 1rem;">
-                    <button class="btn btn-download" data-file="table106c.ods">
-                        <i class="fas fa-file-excel"></i> Таблица 106С (.ods)
-                    </button>
-                    <button class="btn btn-download" data-file="table2.ods">
-                        <i class="fas fa-file-excel"></i> Таблица 2 (.ods)
-                    </button>
-                    <button class="btn btn-download btn-outline" data-file="scheme.png">
-                        <i class="fas fa-image"></i> Схема проекта (PNG)
-                    </button>
-                    <button class="btn btn-download" data-file="all.zip">
-                        <i class="fas fa-file-archive"></i> Скачать всё (.zip)
-                    </button>
-                </div>
-                
-                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
-                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 0.5rem;">
-                        <i class="fas fa-info-circle"></i> Файлы генерируются динамически. 
-                        При нажатии вы получите актуальную версию данных.
-                    </p>
-                </div>
-            </article>
+<audio id="knifeSound">
+<source src="https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3">
+</audio>
 
-            <!-- КОНТАКТЫ -->
-            <article class="post" id="contact-section" data-section="contact" style="display: none;">
-                <span class="post-date"><i class="fas fa-user-secret"></i> Секретная связь</span>
-                <h2><i class="fas fa-envelope"></i> Написать Софии</h2>
-                <p>Отправьте зашифрованное сообщение. Все данные защищены.</p>
-                
-                <form id="contact-form" style="margin-top: 1.5rem;">
-                    <div style="margin-bottom: 1rem;">
-                        <input type="text" id="contact-name" placeholder="Ваше имя (необязательно)" 
-                               style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
-                                      border: 1px solid var(--border-color); border-radius: 4px; 
-                                      color: white; font-family: inherit;">
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <input type="email" id="contact-email" placeholder="Email для ответа" required
-                               style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
-                                      border: 1px solid var(--border-color); border-radius: 4px; 
-                                      color: white; font-family: inherit;">
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <textarea id="contact-message" placeholder="Ваше сообщение..." rows="4" required
-                                  style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); 
-                                         border: 1px solid var(--border-color); border-radius: 4px; 
-                                         color: white; font-family: inherit; resize: vertical;"></textarea>
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%;">
-                        <i class="fas fa-paper-plane"></i> Отправить зашифрованно
-                    </button>
-                </form>
-                
-                <div style="margin-top: 1.5rem; text-align: center; color: #777; font-size: 0.9rem;">
-                    <i class="fas fa-lock"></i> Все сообщения шифруются сквозным шифрованием
-                </div>
-            </article>
+<audio id="screamSound">
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">
+</audio>
 
-        </main>
+<div class="container">
 
-        <!-- Футер -->
-        <footer>
-            <p>&copy; 2025–2026 Sofia Vasileva. All secrets reserved.</p>
-            <p style="margin-top: 0.5rem; font-size: 0.8rem;">
-                Hosted on GitHub Pages • <a id="back-to-top-footer">⬆️ Наверх</a>
-            </p>
-            <p style="margin-top: 0.3rem; font-size: 0.75rem; color: #444;">
-                <i class="fas fa-skull"></i> Не открывайте дверь незнакомцам
-            </p>
-        </footer>
-    </div>
+<header>
 
-    <!-- Кнопка "Наверх" -->
-    <a class="back-to-top" id="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+<h1>Sofia's Scream Log</h1>
 
-    <!-- Модальное окно -->
-    <div class="modal" id="action-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <h3><i class="fas fa-knife-kitchen"></i> <span id="modal-title">Обработка...</span></h3>
-            <p id="modal-message">Пожалуйста, подождите...</p>
-            <div style="text-align: center; margin: 1.5rem 0;">
-                <div style="width: 50px; height: 50px; border: 3px solid var(--border-color); 
-                            border-top-color: var(--blood-bright); border-radius: 50%; 
-                            margin: 0 auto 1rem; animation: spin 1s linear infinite;"></div>
-                <p style="font-size: 0.9rem; color: #aaa;" id="modal-status">Шифрование данных...</p>
-            </div>
-            <div class="modal-buttons">
-                <button class="btn" id="modal-confirm">
-                    <i class="fas fa-check"></i> Понял
-                </button>
-            </div>
-        </div>
-    </div>
+<p>DATA • SECRETS • HORROR • ML</p>
 
-    <script>
-        // === ИНИЦИАЛИЗАЦИЯ ===
-        document.addEventListener('DOMContentLoaded', () => {
-            // Скрыть загрузчик
-            setTimeout(() => {
-                document.querySelector('.loader').classList.add('hidden');
-            }, 1200);
+<div class="divider"></div>
 
-            // Анимация появления постов
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.post').forEach((post, index) => {
-                post.style.opacity = '0'; 
-                post.style.transform = 'translateY(20px)';
-                post.style.transition = 'all 0.6s ease-out';
-                post.style.animationDelay = `${index * 0.15}s`;
-                if (post.dataset.section === 'records') {
-                    observer.observe(post);
-                }
-            });
+</header>
 
-            // === НАВИГАЦИЯ ===
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = {
-                records: document.querySelectorAll('[data-section="records"]'),
-                files: document.getElementById('files-section'),
-                contact: document.getElementById('contact-section')
-            };
+<!-- NAV -->
 
-            function showSection(sectionName) {
-                // Скрыть все секции кроме записей
-                Object.values(sections).forEach(sec => {
-                    if (Array.isArray(sec)) {
-                        sec.forEach(el => el.style.display = 'none');
-                    } else if (sec) {
-                        sec.style.display = 'none';
-                    }
-                });
-                
-                // Показать нужную
-                if (sectionName === 'records') {
-                    sections.records.forEach(el => el.style.display = 'block');
-                } else if (sections[sectionName]) {
-                    sections[sectionName].style.display = 'block';
-                }
-                
-                // Обновить активную ссылку
-                navLinks.forEach(link => link.classList.remove('active'));
-                document.querySelector(`[data-section="${sectionName}"]`)?.classList.add('active');
-            }
+<div class="nav">
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const section = link.dataset.section;
-                    if (section) {
-                        showSection(section);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                });
-            });
+<button onclick="scrollToSection('records')">
+<i class="fas fa-scroll"></i>
+Записи
+</button>
 
-            // === КНОПКА НАВЕРХ ===
-            const backToTopBtn = document.getElementById('back-to-top');
-            const backToTopFooter = document.getElementById('back-to-top-footer');
-            
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTopBtn.classList.add('visible');
-                } else {
-                    backToTopBtn.classList.remove('visible');
-                }
-                
-                // Индикатор прокрутки
-                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-                document.querySelector('.scroll-indicator').style.width = `${Math.min(scrollPercent, 100)}%`;
-            });
-            
-            [backToTopBtn, backToTopFooter].forEach(btn => {
-                btn?.addEventListener('click', (e) => {
-                    e?.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            });
+<button onclick="scrollToSection('files')">
+<i class="fas fa-folder"></i>
+Файлы
+</button>
 
-            // === ЭФФЕКТ КРОВИ ПРИ КЛИКЕ ===
-            document.addEventListener('click', (e) => {
-                // Создаем 3-5 брызг
-                const splashCount = 3 + Math.floor(Math.random() * 3);
-                for (let i = 0; i < splashCount; i++) {
-                    setTimeout(() => {
-                        const splash = document.createElement('div');
-                        splash.className = 'blood-splash';
-                        // Небольшое смещение для естественности
-                        const offsetX = (Math.random() - 0.5) * 30;
-                        const offsetY = (Math.random() - 0.5) * 30;
-                        splash.style.left = `${e.pageX + offsetX}px`;
-                        splash.style.top = `${e.pageY + offsetY}px`;
-                        // Случайный размер
-                        const size = 8 + Math.random() * 12;
-                        splash.style.width = `${size}px`;
-                        splash.style.height = `${size}px`;
-                        document.body.appendChild(splash);
-                        
-                        setTimeout(() => splash.remove(), 1000);
-                    }, i * 50);
-                }
-            });
+<button onclick="scrollToSection('contact')">
+<i class="fas fa-envelope"></i>
+Контакты
+</button>
 
-            // === МОДАЛЬНОЕ ОКНО ===
-            const modal = document.getElementById('action-modal');
-            const modalClose = document.getElementById('modal-close');
-            const modalConfirm = document.getElementById('modal-confirm');
-            const modalTitle = document.getElementById('modal-title');
-            const modalMessage = document.getElementById('modal-message');
-            const modalStatus = document.getElementById('modal-status');
+<button onclick="toggleSound()">
+<i class="fas fa-volume-up" id="soundIcon"></i>
+Звук
+</button>
 
-            function showModal(title, message, status, confirmText = 'Понял', onConfirm = null) {
-                modalTitle.textContent = title;
-                modalMessage.textContent = message;
-                modalStatus.textContent = status;
-                modalConfirm.innerHTML = `<i class="fas fa-check"></i> ${confirmText}`;
-                modalConfirm.onclick = () => {
-                    modal.classList.remove('active');
-                    if (onConfirm) onConfirm();
-                };
-                modal.classList.add('active');
-            }
+</div>
 
-            modalClose.addEventListener('click', () => {
-                modal.classList.remove('active');
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
+<!-- RECORDS -->
 
-            // === СКАЧИВАНИЕ ФАЙЛОВ ===
-            document.querySelectorAll('.btn-download').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const fileName = btn.dataset.file;
-                    showModal('Подготовка файла...', `Генерация: ${fileName}`, 'Шифрование данных...', 'Скачать', () => {
-                        // Генерация файла через Blob
-                        let content, mimeType;
-                        
-                        if (fileName.endsWith('.ods')) {
-                            // Создаем простой ODS-подобный контент
-                            content = `<?xml version="1.0" encoding="UTF-8"?>
-<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0">
-  <office:body>
-    <office:spreadsheet>
-      <table:table table:name="SofiaData">
-        <table:table-row><table:table-cell><text:p>${fileName}</text:p></table:table-cell></table:table-row>
-        <table:table-row><table:table-cell><text:p>Generated: ${new Date().toLocaleString('ru-RU')}</text:p></table:table-cell></table:table-row>
-      </table:table>
-    </office:spreadsheet>
-  </office:body>
-</office:document-content>`;
-                            mimeType = 'application/vnd.oasis.opendocument.spreadsheet';
-                        } else if (fileName.endsWith('.png')) {
-                            // Создаем простой PNG (1x1 прозрачный пиксель + текст в комментариях)
-                            content = `SofiaScreamLog-${fileName}\nGenerated: ${new Date().toISOString()}\nThis is a placeholder for scheme.png`;
-                            mimeType = 'image/png';
-                        } else if (fileName.endsWith('.zip')) {
-                            content = `SofiaScreamLog Archive\nContains:\n- table106c.ods\n- table2.ods\n- scheme.png\nGenerated: ${new Date().toLocaleString('ru-RU')}`;
-                            mimeType = 'application/zip';
-                        } else {
-                            content = `File: ${fileName}\nGenerated: ${new Date().toLocaleString('ru-RU')}\n\nSofia's Scream Log - Data Archive`;
-                            mimeType = 'text/plain';
-                        }
-                        
-                        const blob = new Blob([content], { type: mimeType });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = fileName;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                        
-                        // Показать подтверждение
-                        showModal('✓ Файл готов!', `${fileName} успешно скачан.`, 'Файл сохранён в загрузках.', 'Закрыть');
-                    });
-                });
-            });
+<section id="records">
 
-            // === ФОРМА КОНТАКТОВ ===
-            const contactForm = document.getElementById('contact-form');
-            contactForm?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const name = document.getElementById('contact-name')?.value || 'Аноним';
-                const email = document.getElementById('contact-email')?.value;
-                const message = document.getElementById('contact-message')?.value;
-                
-                showModal('Отправка сообщения...', `Шифрование данных от ${name}...`, 'Подключение к безопасному каналу...', 'Отправлено!', () => {
-                    // Имитация отправки
-                    console.log('Message sent:', { name, email, message, timestamp: new Date().toISOString() });
-                    
-                    // Сохранение в localStorage для демонстрации
-                    const messages = JSON.parse(localStorage.getItem('screamLogMessages') || '[]');
-                    messages.push({ name, email, message, timestamp: new Date().toISOString() });
-                    localStorage.setItem('screamLogMessages', JSON.stringify(messages));
-                    
-                    // Сброс формы
-                    contactForm.reset();
-                    
-                    // Показать финальное сообщение
-                    showModal('✓ Сообщение отправлено!', 'Ваше зашифрованное сообщение доставлено.', 'Ожидание ответа...', 'Закрыть');
-                });
-            });
+<div class="grid">
 
-            // === ЗВУК (демо) ===
-            let soundEnabled = true;
-            document.getElementById('sound-toggle')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                soundEnabled = !soundEnabled;
-                const icon = e.currentTarget.querySelector('i');
-                if (soundEnabled) {
-                    icon.className = 'fas fa-volume-up';
-                    showModal('🔊 Звук включён', 'Атмосферные эффекты активированы.', 'Воспроизведение...', 'Понял');
-                } else {
-                    icon.className = 'fas fa-volume-mute';
-                    showModal('🔇 Звук выключен', 'Тихо... слишком тихо.', 'Без звука', 'Поня
+<div class="card">
+
+<div class="icon">
+<i class="fas fa-question-circle"></i>
+</div>
+
+<h2>Тест по информатике</h2>
+
+<p>
+Разбор вопросов и ответы.
+</p>
+
+<table>
+
+<tr>
+<th>№</th>
+<th>Ответ</th>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Информация может быть графической</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Информацию можно передавать</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Зрительные образы</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<div class="icon">
+<i class="fas fa-chart-line"></i>
+</div>
+
+<h2>ML Прогноз</h2>
+
+<p>
+Линейная регрессия предсказания баллов.
+</p>
+
+<table>
+
+<tr>
+<th>Часы</th>
+<th>Баллы</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>12.3</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>50.2</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>97.6</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+
+<div class="icon">
+<i class="fas fa-shield-halved"></i>
+</div>
+
+<h2>КАСКО ML</h2>
+
+<p>
+Классификация страховых случаев.
+</p>
+
+<p style="margin-top:20px;">
+Accuracy: 98.5%
+<br>
+Precision: 98.4%
+<br>
+Recall: 99.6%
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FILES -->
+
+<section id="files" style="margin-top:70px;">
+
+<div class="card">
+
+<div class="icon">
+<i class="fas fa-download"></i>
+</div>
+
+<h2>Файлы проекта</h2>
+
+<p>
+Скачать материалы.
+</p>
+
+<button class="btn" onclick="downloadFile('table106c.ods')">
+<i class="fas fa-file-excel"></i>
+table106c.ods
+</button>
+
+<button class="btn" onclick="downloadFile('table2.ods')">
+<i class="fas fa-file-excel"></i>
+table2.ods
+</button>
+
+<button class="btn" onclick="downloadFile('scheme.png')">
+<i class="fas fa-image"></i>
+scheme.png
+</button>
+
+<button class="btn" onclick="downloadFile('all.zip')">
+<i class="fas fa-file-archive"></i>
+all.zip
+</button>
+
+</div>
+
+</section>
+
+<!-- CONTACT -->
+
+<section id="contact" style="margin-top:70px;">
+
+<div class="card">
+
+<div class="icon">
+<i class="fas fa-user-secret"></i>
+</div>
+
+<h2>Связаться</h2>
+
+<p>
+Отправить сообщение.
+</p>
+
+<input type="text" placeholder="Имя">
+
+<input type="email" placeholder="Email">
+
+<textarea rows="5" placeholder="Сообщение"></textarea>
+
+<button class="btn" onclick="sendMessage()">
+<i class="fas fa-paper-plane"></i>
+Отправить
+</button>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>
+© 2026 Sofia's Scream Log
+</p>
+
+<p style="margin-top:10px;">
+Don't answer the phone...
+</p>
+
+</footer>
+
+</div>
+
+<!-- BACK TO TOP -->
+
+<div class="top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+<i class="fas fa-arrow-up"></i>
+</div>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+<div class="modal-box">
+
+<h3 id="modalTitle">
+Обработка...
+</h3>
+
+<p id="modalText">
+Подождите...
+</p>
+
+<button class="btn" onclick="closeModal()">
+Закрыть
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+SCROLL
+========================= */
+
+function scrollToSection(id){
+
+    document.getElementById(id)
+    .scrollIntoView({
+        behavior:'smooth'
+    });
+
+}
+
+/* =========================
+SOUND
+========================= */
+
+let soundEnabled=true;
+
+function toggleSound(){
+
+    soundEnabled=!soundEnabled;
+
+    const icon=document.getElementById('soundIcon');
+
+    if(soundEnabled){
+
+        icon.className='fas fa-volume-up';
+
+        showModal(
+            '🔊 Звук включен',
+            'Хоррор эффекты активированы.'
+        );
+
+    }else{
+
+        icon.className='fas fa-volume-mute';
+
+        showModal(
+            '🔇 Звук выключен',
+            'Тишина...'
+        );
+
+    }
+
+}
+
+/* =========================
+MODAL
+========================= */
+
+function showModal(title,text){
+
+    document.getElementById('modalTitle')
+    .innerText=title;
+
+    document.getElementById('modalText')
+    .innerText=text;
+
+    document.getElementById('modal')
+    .classList.add('active');
+
+}
+
+function closeModal(){
+
+    document.getElementById('modal')
+    .classList.remove('active');
+
+}
+
+/* =========================
+DOWNLOAD
+========================= */
+
+function downloadFile(name){
+
+    showModal(
+        '📁 Подготовка файла',
+        'Скачивание: '+name
+    );
+
+    const blob=new Blob(
+        ['Sofia Scream Log'],
+        {type:'text/plain'}
+    );
+
+    const url=URL.createObjectURL(blob);
+
+    const a=document.createElement('a');
+
+    a.href=url;
+    a.download=name;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+}
+
+/* =========================
+CONTACT
+========================= */
+
+function sendMessage(){
+
+    showModal(
+        '📨 Сообщение отправлено',
+        'Ваше сообщение зашифровано.'
+    );
+
+}
+
+/* =========================
+BLOOD SPLASH
+========================= */
+
+document.addEventListener('click',e=>{
+
+    for(let i=0;i<5;i++){
+
+        const splash=document.createElement('div');
+
+        splash.className='splash';
+
+        splash.style.left=
+        e.pageX+(Math.random()*40-20)+'px';
+
+        splash.style.top=
+        e.pageY+(Math.random()*40-20)+'px';
+
+        splash.style.width=
+        5+Math.random()*15+'px';
+
+        splash.style.height=
+        splash.style.width;
+
+        document.body.appendChild(splash);
+
+        setTimeout(()=>{
+            splash.remove();
+        },800);
+
+    }
+
+    if(soundEnabled){
+
+        const knife=
+        document.getElementById('knifeSound');
+
+        knife.currentTime=0;
+
+        knife.play();
+
+    }
+
+});
+
+/* =========================
+PARALLAX
+========================= */
+
+document.addEventListener('mousemove',e=>{
+
+    const ghost=
+    document.querySelector('.ghostface i');
+
+    const x=
+    (window.innerWidth/2-e.clientX)/60;
+
+    const y=
+    (window.innerHeight/2-e.clientY)/60;
+
+    ghost.style.transform=
+    `translate(${x}px,${y}px)`;
+
+});
+
+/* =========================
+RANDOM SCREAM
+========================= */
+
+setInterval(()=>{
+
+    if(soundEnabled && Math.random()>.85){
+
+        const scream=
+        document.getElementById('screamSound');
+
+        scream.volume=.15;
+
+        scream.play();
+
+    }
+
+},30000);
+
+</script>
+
+</body>
+</html>
